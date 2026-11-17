@@ -9,7 +9,11 @@
     "start": "node server.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "build:pages": "cp index.source.html index.html && vite build --base=/ayadati-halan-0.2/ && cp dist/index.html index.html && rm -rf assets && cp -r dist/assets assets",
+    "restore:dev": "cp index.source.html index.html",
+    "predev": "cp index.source.html index.html",
+    "prebuild": "cp index.source.html index.html"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
