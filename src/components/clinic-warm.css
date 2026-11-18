@@ -1,0 +1,95 @@
+/* Review-only warm palette. One isolated file makes the direction easy to remove. */
+.clinic-site {
+  --bg: #f8f6f0;
+  --surface: #fffefa;
+  --ink: #173b36;
+  --ink-soft: #536b60;
+  --brand: #214f45;
+  --brand-deep: #173b36;
+  --accent: #ae8735;
+  --line: #dce3d7;
+  background: var(--bg);
+  color: var(--ink);
+}
+.clinic-site .clinic-hero {
+  background: radial-gradient(ellipse at 12% 20%, #e3ecdf 0, transparent 48%), radial-gradient(ellipse at 85% 100%, #f0e2bd 0, transparent 48%), #f8f6f0;
+  color: #173b36;
+  padding-block: 48px;
+  overflow: clip;
+}
+.clinic-site .hero-grid { grid-template-columns: 1.05fr 1fr; gap: 64px; align-items: center; }
+.clinic-site .hero-copy em { color: #647d62; }
+.clinic-site .hero-copy > p { color: #536b60; }
+.clinic-site .hero-eyebrow { border-color: #d8dfcf; background: #fffaf0a8; color: #52674f; }
+.clinic-site .hero-eyebrow > span,.clinic-site .status-dot { background: #ae8735; }
+.clinic-site .hero-primary,.clinic-site .clinic-button.primary { background: #e5bc62; color: #193d36 !important; border-color: #d8ad52; box-shadow: 0 7px 18px #ae873515; }
+.clinic-site .hero-primary:hover,.clinic-site .clinic-button.primary:hover { background: #dcb05a; }
+.clinic-site .hero-secondary,.clinic-site .clinic-button.secondary { background: #fffefa; color: #214f45; border-color: #c8d4c3; }
+.clinic-site .hero-secondary:hover,.clinic-site .clinic-button.secondary:hover { background: #edf1e7; }
+.clinic-site .hero-micro { color: #536b60 !important; }
+.clinic-site .hero-micro svg { color: #527c64; }
+.clinic-site .hero-quick { border-color: #d8dfcf; color: #536b60; }
+.clinic-site .hero-quick button { border-color: #ced8c8; color: #345348; background: #fffefa80; }
+.clinic-site .hero-quick button:hover { background: #e9efe2; }
+.clinic-site .hero-orbit { border-color: #c0cdb840; box-shadow: 0 0 0 70px #d3ddc823,0 0 0 140px #d3ddc815; background: transparent; animation: warm-orbit 16s ease-in-out infinite alternate; }
+@keyframes warm-orbit { from { transform: translateY(-12px) scale(.96); } to { transform: translateY(14px) scale(1.03); } }
+.clinic-site .preview-banner { background: #edf1e7; color: #425d4a; border-color: #dce3d7; }
+.clinic-site .clinic-header { background: #fffefaeb; border-color: #dce3d7; }
+.clinic-site .brand-mark { background: #214f45; color: #f7d991; }
+.clinic-site .section-tint,.clinic-site .booking-section { background: #eaf0e6; }
+.clinic-site .journey-strip,.clinic-site .clinic-card,.clinic-site .booking-card { background: #fffefa; }
+.clinic-site .journey-tabs button[aria-selected="true"] { background: #214f45; border-color: #214f45; color: #fffefa; }
+.clinic-site .journey-tabs button[aria-selected="true"] b { color: #e5bc62; }
+.clinic-site .text-link,.clinic-site .eyebrow,.clinic-site .booking-intro em { color: #476b53 !important; }
+.clinic-site .clinic-footer { background: #e5ecdf; color: #173b36; border-top: 1px solid #ced9c7; }
+.clinic-site .clinic-footer .clinic-brand { color: #173b36; }
+.clinic-site .clinic-footer .brand-mark { background: #d6e1cd; color: #315c49; }
+.clinic-site .clinic-footer p,.clinic-site .footer-links button,.clinic-site .footer-bottom { color: #4b6355; }
+.clinic-site .footer-links button:hover { color: #173b36; }
+.clinic-site .footer-bottom,.clinic-site .footer-care-note { border-color: #c9d4c1; }
+.clinic-site .footer-care-note svg { color: #527347; }
+.clinic-site .mobile-book-bar { background: #fffefaef; border-color: #dce3d7; }
+.clinic-site .a11y-trigger { color: #214f45; border-color: #c8d4c3; }
+.clinic-site :focus-visible { outline-color: #85651e; }
+/* This is the real local-only request flow, not an illustrated calendar. */
+.clinic-site .hero-booking { padding: 26px; max-width: 490px; width: 100%; background: #fffefa; border: 1px solid #d1dcc9; border-radius: 24px; box-shadow: 0 22px 55px #3c503014; scroll-margin-top: 110px; }
+.booking-panel-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.clinic-site .hero-booking .illustration-icon { background: #e8efdf; color: #476d50; width: 48px; height: 48px; }
+.clinic-site .hero-booking .preview-tag { display: inline-flex; align-items: center; gap: 7px; background: #faf3df; color: #75591d; border: 1px solid #eddbad; font-size: .65rem; }
+.hero-booking .status-dot { animation: status-breathe 2.8s ease-in-out infinite; }
+@keyframes status-breathe { 50% { box-shadow: 0 0 0 5px #ae87351a; } }
+.clinic-site .hero-booking h2 { font-size: 1.7rem; margin: 14px 0 6px; }
+.clinic-site .hero-booking .booking-panel-intro { font-size: .78rem; line-height: 1.8; margin-bottom: 16px; }
+.clinic-site .hero-booking .booking-stepper { color: #173b36; }
+.clinic-site .hero-booking .notice { padding: 10px 12px; background: #f1f4eb; border-color: #dbe3d1; color: #496344; font-size: .66rem; }
+.clinic-site .hero-booking .notice p { color: inherit; }
+.clinic-site .hero-booking .booking-progress { margin-block: 16px; }
+.clinic-site .hero-booking .booking-progress li.active { color: #214f45; }
+.clinic-site .hero-booking .booking-progress li.active > span { background: #214f45; color: #fffefa; }
+.clinic-site .hero-booking .step-heading { font-size: 1rem; margin-block: 12px; }
+.clinic-site .hero-booking .form-stack { gap: 8px; }
+.clinic-site .hero-booking .form-stack fieldset { margin-block: 0 12px; }
+.clinic-site .hero-booking .empty-branch { padding: 12px; background: #f7f7ef; border-color: #d1dcc9; }
+.clinic-site .hero-booking .empty-branch p { font-size: .67rem; }
+.clinic-site .hero-booking .empty-branch strong { font-size: .74rem; }
+.clinic-site .hero-booking input[type="radio"] { accent-color: #476d50; }
+.clinic-site .hero-booking .choice.selected,.clinic-site .hero-booking .branch-option.selected { border-color: #567a51; background: #edf2e6; }
+.clinic-site .hero-booking .booking-controls { margin-top: 16px; }
+.clinic-site .hero-booking .booking-panel-footnote { font-size: .65rem; display: flex; align-items: flex-start; gap: 7px; margin: 16px 0 0; padding-top: 12px; border-top: 1px solid #e0e6d9; }
+.booking-panel-footnote svg { flex-shrink: 0; margin-top: 4px; }
+.hero-booking form { animation: request-step-in .28s ease-out both; }
+@keyframes request-step-in { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@media(max-width:1000px) { .clinic-site .hero-grid { gap: 28px; } .clinic-site .hero-booking { padding: 22px; } }
+@media(max-width:760px) {
+  .clinic-site .clinic-hero { padding-block: 30px; }
+  .clinic-site .hero-grid { grid-template-columns: 1fr; gap: 30px; }
+  .clinic-site .hero-copy h1 { font-size: 2.15rem; line-height: 1.4; margin-block: 14px; }
+  .clinic-site .hero-copy > p { font-size: .82rem; line-height: 1.85; }
+  .clinic-site .hero-actions { margin-block: 18px 14px; }
+  .clinic-site .hero-quick { margin-top: 18px; padding-top: 14px; }
+  .clinic-site .hero-booking { max-width: 490px; padding: 22px 18px; border-radius: 20px; scroll-margin-top: 92px; }
+  .clinic-site .hero-booking h2 { font-size: 1.45rem; }
+  .clinic-site .hero-booking .preview-tag { font-size: .6rem; }
+  .clinic-site .hero-booking .booking-progress b { font-size: .65rem; }
+}
+@media(prefers-reduced-motion:reduce) { .clinic-site .hero-orbit,.hero-booking form,.hero-booking .status-dot { animation: none; } }
