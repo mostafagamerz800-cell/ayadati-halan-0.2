@@ -20,7 +20,7 @@ import { useAuth } from '../context/AuthContext';
 
 const SAAS_LOGO_URL = "https://i.postimg.cc/HkFdgvmz/Screenshot-2026-11-05-062500.png";
 
-export const AuthScreen: React.FC = () => {
+export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPreviewClinic }) => {
   const { login, signup, signInWithGoogle, demoLogin, error, clearError, isPlaceholderAuth } = useAuth();
 
   const [isSignUp, setIsSignUp] = useState(false);
@@ -123,16 +123,18 @@ export const AuthScreen: React.FC = () => {
           </p>
         </div>
 
-        {/* Firebase Live Status Badge */}
+        {onPreviewClinic && <button type="button" onClick={onPreviewClinic} className="w-full mb-4 min-h-12 rounded-full bg-[#0F4C81] text-white text-sm font-bold px-5 py-3">استكشف واجهة العيادة الجديدة · Clinic preview</button>}
+
+        {/* Connection configuration is not proof of backend security or live bookings. */}
         {!isPlaceholderAuth ? (
           <div className="mb-4 bg-white/80 border border-sky-200 text-sky-800 p-3 rounded-2xl text-xs flex items-center justify-between shadow-sm backdrop-blur-md">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse"></span>
-              <span className="font-semibold text-sky-900">Firebase Active:</span>
+              <span className="font-semibold text-sky-900">Firebase configured:</span>
               <code className="bg-sky-50 px-2 py-0.5 rounded text-sky-700 font-mono text-[11px] border border-sky-200">calm-plate-hkm2h</code>
             </div>
             <span className="text-[10px] bg-sky-100 text-sky-700 font-bold px-2.5 py-0.5 rounded-full border border-sky-200">
-              Live Cloud Firestore
+              الاتصال لا يثبت جاهزية الحجز
             </span>
           </div>
         ) : (
