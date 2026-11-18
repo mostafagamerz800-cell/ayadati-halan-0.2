@@ -2037,3 +2037,21 @@
     bottom: 88px;
   }
 }
+
+/* Footer care notice */
+.footer-care-note {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0 0 16px;
+  padding-top: 20px;
+  border-top: 1px solid #ffffff19;
+  color: #b7c8d8;
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+.footer-care-note svg {
+  flex: none;
+  margin-top: 6px;
+  color: #12a594;
+}
