@@ -234,5 +234,8 @@
   "text_3125eac018": "What would you like to understand?",
   "text_7be00c7a00": "View details",
   "text_9b968864a9": "Clinic procedures",
-  "text_care_notice": "Content here is for general information and does not replace a medical examination. In an emergency, call the ambulance on 123 or go to the nearest emergency department."
+  "text_care_notice": "Content here is for general information and does not replace a medical examination. In an emergency, call the ambulance on 123 or go to the nearest emergency department.",
+  "hero_interactive_tag": "Try the steps yourself",
+  "hero_interactive_intro": "Choose a visit, enter test details, then review your request.",
+  "hero_interactive_note": "Interactive demo only. No request is sent and no appointment is booked."
 }
