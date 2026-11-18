@@ -2007,3 +2007,75 @@
     gap: 40px;
   }
   }
+
+/* Sticky mobile booking bar (revert: git revert this commit) */
+.mobile-book-bar {
+  display: none;
+}
+@media (max-width: 760px) {
+  .mobile-book-bar {
+    display: block;
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 53;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(255, 255, 255, 0.97);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -8px 24px #0b12200f;
+  }
+  .mobile-book-bar .clinic-button {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+  .clinic-site {
+    padding-bottom: 76px;
+  }
+  .a11y-controls,
+  .clinic-floating-contact {
+    bottom: 88px;
+  }
+}
+
+/* Footer care notice */
+.footer-care-note {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0 0 16px;
+  padding-top: 20px;
+  border-top: 1px solid #ffffff19;
+  color: #b7c8d8;
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+.footer-care-note svg {
+  flex: none;
+  margin-top: 6px;
+  color: #12a594;
+}
+
+/* Header gains a soft shadow once the page scrolls */
+.clinic-header {
+  transition: box-shadow 200ms ease-out;
+}
+.clinic-header.is-scrolled {
+  box-shadow: 0 6px 24px #0b12200f;
+}
+@media (prefers-reduced-motion: reduce) {
+  .clinic-header {
+    transition: none;
+  }
+}
+
+/* Shorter phone hero: keep the illustration but drop the dot calendar and second step */
+@media (max-width: 760px) {
+  .illustration-calendar .calendar-dots,
+  .illustration-step + .illustration-step {
+    display: none;
+  }
+  .illustration-calendar {
+    margin-bottom: 8px;
+  }
+}

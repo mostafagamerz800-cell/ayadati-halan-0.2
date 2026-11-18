@@ -25,6 +25,7 @@ import { getClinicConfig, type Language } from "../lib/clinic.config";
 import { AccessibleDialog } from "./AccessibleDialog";
 import { BookingStepper } from "./BookingStepper";
 import "./clinic.css";
+import "./clinic-warm.css";
 import {
   ConditionPicker,
   SpecialtyRows,
@@ -65,6 +66,23 @@ export function ClinicExperience({
   const [paused, setPaused] = useState(false);
   const [largeText, setLargeText] = useState(false);
   const [showA11y, setShowA11y] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [heroBookingInView, setHeroBookingInView] = useState(false);
+  useEffect(() => {
+    const panel = document.getElementById("hero-booking");
+    if (!panel) { setHeroBookingInView(false); return; }
+    const observer = new IntersectionObserver(([entry]) => {
+      setHeroBookingInView(entry.intersectionRatio >= 0.4);
+    }, { threshold: [0, 0.4, 1], rootMargin: "-90px 0px -20px 0px" });
+    observer.observe(panel);
+    return () => observer.disconnect();
+  }, [route]);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const pageTitle = useRef<HTMLHeadingElement>(null);
   const name = config.verified
@@ -117,7 +135,10 @@ export function ClinicExperience({
     else window.scrollTo({ top: 0 });
   };
   const book = () => {
-    if (route === "book") document.getElementById("booking")?.scrollIntoView();
+    if (route === "home") {
+      document.getElementById("hero-booking")?.scrollIntoView({ behavior: paused ? "instant" : "smooth", block: "start" });
+      requestAnimationFrame(() => document.getElementById("hero-booking-title")?.focus({ preventScroll: true }));
+    } else if (route === "book") document.getElementById("booking")?.scrollIntoView();
     else setModal("booking");
   };
   const Arrow = lang === "ar" ? ArrowLeft : ArrowRight;
@@ -460,6 +481,10 @@ export function ClinicExperience({
             </button>
           </div>
         </div>
+        <p className="footer-care-note">
+          <ShieldCheck size={16} />
+          {translate(lang, "text_care_notice")}
+        </p>
         <div className="footer-bottom">
           <span>
             © {new Date().getFullYear()} {name}
@@ -500,14 +525,14 @@ export function ClinicExperience({
       <div className="preview-banner">
         <div className="clinic-container">
           <Info size={15} />
-          <span>{translate(lang, "text_73e9f953c2")}</span>
+          <span>v2 · {translate(lang, "text_73e9f953c2")}</span>
           <button onClick={() => go("portal")}>
             {translate(lang, "text_6e62fc3569")}
             <Arrow size={13} />
           </button>
         </div>
       </div>
-      <header className="clinic-header">
+      <header className={`clinic-header${scrolled ? " is-scrolled" : ""}`}>
         <div className="clinic-container header-inner">
           <a
             href="#/clinic/home"
@@ -628,72 +653,16 @@ export function ClinicExperience({
                     ))}
                   </div>
                 </div>
-                <div
-                  className="hero-visual"
-                  aria-label={translate(lang, "text_19ca9af14d")}
-                >
-                  <div className="visual-caption">
-                    <span className="status-dot" />
-                    {translate(lang, "text_e73b6938a3")}
+                <section className="hero-visual hero-booking" id="hero-booking" aria-labelledby="hero-booking-title">
+                  <div className="booking-panel-top">
+                    <span className="illustration-icon"><HeartPulse size={26} /></span>
+                    <span className="preview-tag"><span className="status-dot" />{translate(lang, "hero_interactive_tag")}</span>
                   </div>
-                  <div className="visit-illustration">
-                    <div className="illustration-top">
-                      <span className="illustration-icon">
-                        <HeartPulse size={30} />
-                      </span>
-                      <span className="preview-tag">
-                        {translate(lang, "text_5c315b59b0")}
-                      </span>
-                    </div>
-                    <h2>{translate(lang, "text_266589dfb1")}</h2>
-                    <p>{translate(lang, "text_4eede28280")}</p>
-                    <div className="illustration-calendar">
-                      <div>
-                        <CalendarDays size={18} />
-                        <strong>{translate(lang, "text_6bc30df0df")}</strong>
-                        <span>01 / 03</span>
-                      </div>
-                      <div className="calendar-dots" aria-hidden="true">
-                        {Array.from({ length: 14 }, (_, index) => (
-                          <i
-                            className={index === 9 ? "chosen" : ""}
-                            key={index}
-                          >
-                            {index === 9 ? <Heart size={14} /> : index + 1}
-                          </i>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="illustration-step">
-                      <span>
-                        <Check size={16} />
-                      </span>
-                      <div>
-                        <b>{translate(lang, "text_0716d59eae")}</b>
-                        <small>{translate(lang, "text_1b49ed27c5")}</small>
-                      </div>
-                      <Arrow size={17} />
-                    </div>
-                    <div className="illustration-step">
-                      <span>2</span>
-                      <div>
-                        <b>{translate(lang, "text_43abecafb9")}</b>
-                        <small>{translate(lang, "text_ebdc5bc575")}</small>
-                      </div>
-                      <Arrow size={17} />
-                    </div>
-                  </div>
-                  <div className="floating-note">
-                    <ShieldCheck size={22} />
-                    <span>
-                      <b>{translate(lang, "text_804e0582d1")}</b>
-                      <small>{translate(lang, "text_a0ca777e07")}</small>
-                    </span>
-                  </div>
-                  <div className="visual-footnote">
-                    {translate(lang, "text_1be279dd6e")}
-                  </div>
-                </div>
+                  <h2 id="hero-booking-title" tabIndex={-1}>{translate(lang, "text_266589dfb1")}</h2>
+                  <p className="booking-panel-intro">{translate(lang, "hero_interactive_intro")}</p>
+                  <BookingStepper lang={lang} config={config} />
+                  <p className="booking-panel-footnote"><ShieldCheck size={15} />{translate(lang, "hero_interactive_note")}</p>
+                </section>
               </div>
             </section>
             <VerifiedTrustStrip config={config} lang={lang} />
@@ -1088,14 +1057,14 @@ export function ClinicExperience({
                 <div className="clinic-container">
                   <div className="design-swatches">
                     {[
-                      ["Background", "#F7F9FC"],
-                      ["Surface", "#FFFFFF"],
-                      ["Ink", "#0B1220"],
-                      ["Muted", "#51607A"],
-                      ["Brand", "#0F4C81"],
-                      ["Navy", "#070D18"],
-                      ["Accent", "#12A594"],
-                      ["Line", "#E3E8F0"],
+                      ["Background", "#F8F6F0"],
+                      ["Surface", "#FFFEFA"],
+                      ["Ink", "#173B36"],
+                      ["Muted", "#536B60"],
+                      ["Brand", "#214F45"],
+                      ["Gold", "#E5BC62"],
+                      ["Accent", "#AE8735"],
+                      ["Line", "#DCE3D7"],
                     ].map(([label, color]) => (
                       <div className="clinic-card" key={label}>
                         <span style={{ background: color }} />
@@ -1222,6 +1191,14 @@ export function ClinicExperience({
           <ContactButtons />
         </div>
       )}
+      {route !== "book" && !modal && !(route === "home" && heroBookingInView) && (
+        <div className="mobile-book-bar">
+          <button className="clinic-button primary" onClick={book}>
+            {translate(lang, "text_27dd340fe5")}
+            <Arrow size={18} />
+          </button>
+        </div>
+      )}
       {modal === "booking" && (
         <AccessibleDialog
           title={translate(lang, "text_0316d47de8")}
@@ -1261,4 +1238,4 @@ export function ClinicExperience({
       )}
     </div>
   );
-                                    }
+}

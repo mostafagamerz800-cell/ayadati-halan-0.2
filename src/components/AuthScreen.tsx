@@ -457,42 +457,42 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
               <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
-                  onClick={() => demoLogin('doctor', 'Dr. Alexander Wright', 'Internal Medicine')}
+                  onClick={() => demoLogin('doctor', 'Demo doctor', 'Internal Medicine')}
                   className="p-2.5 bg-white hover:bg-sky-50/60 border border-sky-200/80 rounded-xl text-left transition flex items-center gap-2 group cursor-pointer shadow-sm hover:border-sky-300"
                 >
                   <div className="w-7 h-7 rounded-lg bg-sky-500 text-white flex items-center justify-center shrink-0 shadow-sm">
                     <Stethoscope size={14} />
                   </div>
                   <div className="overflow-hidden">
-                    <p className="text-[11px] font-bold text-sky-950 truncate">Dr. Wright</p>
+                    <p className="text-[11px] font-bold text-sky-950 truncate">Demo user</p>
                     <p className="text-[10px] text-sky-600">Doctor</p>
                   </div>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => demoLogin('receptionist', 'Maryam Ahmed', 'Front Desk & Reception')}
+                  onClick={() => demoLogin('receptionist', 'Demo receptionist', 'Front Desk & Reception')}
                   className="p-2.5 bg-white hover:bg-sky-50/60 border border-sky-200/80 rounded-xl text-left transition flex items-center gap-2 group cursor-pointer shadow-sm hover:border-sky-300"
                 >
                   <div className="w-7 h-7 rounded-lg bg-sky-400 text-white flex items-center justify-center shrink-0 shadow-sm">
                     <Users size={14} />
                   </div>
                   <div className="overflow-hidden">
-                    <p className="text-[11px] font-bold text-sky-950 truncate">Maryam</p>
+                    <p className="text-[11px] font-bold text-sky-950 truncate">Demo user</p>
                     <p className="text-[10px] text-sky-600">Reception</p>
                   </div>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => demoLogin('patient', 'Samir Mansour', 'Outpatient Consultation')}
+                  onClick={() => demoLogin('patient', 'Demo patient', 'Outpatient Consultation')}
                   className="p-2.5 bg-white hover:bg-sky-50/60 border border-sky-200/80 rounded-xl text-left transition flex items-center gap-2 group cursor-pointer shadow-sm hover:border-sky-300"
                 >
                   <div className="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-sm">
                     <User size={14} />
                   </div>
                   <div className="overflow-hidden">
-                    <p className="text-[11px] font-bold text-sky-950 truncate">Samir M.</p>
+                    <p className="text-[11px] font-bold text-sky-950 truncate">Demo user</p>
                     <p className="text-[10px] text-sky-600">Patient</p>
                   </div>
                 </button>
