@@ -127,7 +127,7 @@ export function BookingStepper({
           </li>
         ))}
       </ol>
-      <form
+      <form key={step}
         onSubmit={(event) => {
           event.preventDefault();
           if (step < 2) advance();
