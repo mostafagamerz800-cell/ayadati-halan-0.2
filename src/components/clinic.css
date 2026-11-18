@@ -2055,3 +2055,27 @@
   margin-top: 6px;
   color: #12a594;
 }
+
+/* Header gains a soft shadow once the page scrolls */
+.clinic-header {
+  transition: box-shadow 200ms ease-out;
+}
+.clinic-header.is-scrolled {
+  box-shadow: 0 6px 24px #0b12200f;
+}
+@media (prefers-reduced-motion: reduce) {
+  .clinic-header {
+    transition: none;
+  }
+}
+
+/* Shorter phone hero: keep the illustration but drop the dot calendar and second step */
+@media (max-width: 760px) {
+  .illustration-calendar .calendar-dots,
+  .illustration-step + .illustration-step {
+    display: none;
+  }
+  .illustration-calendar {
+    margin-bottom: 8px;
+  }
+}
