@@ -61,6 +61,8 @@ import { AmbientDemoTab } from './components/AmbientDemoTab';
 import { useAuth } from './context/AuthContext';
 import { AuthScreen } from './components/AuthScreen';
 import { DynamicCursor } from './components/DynamicCursor';
+import { ClinicExperience } from './components/ClinicExperience';
+import { ClinicDirectory } from './components/ClinicDirectory';
 
 // ==========================================
 // 0. INITIAL SAAS TENANTS & STRUCTURE
@@ -606,691 +608,7 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
 // ==========================================
 // 2. GLOBAL LANDING PAGE PORTAL
 // ==========================================
-interface LandingPortalProps {
-  onSelectPortal: (portal: string) => void;
-  tenant: Tenant;
-  onOpenSaasModal: (tab?: 'doctor' | 'receptionist' | 'patient') => void;
-}
-
-const LandingPortal: React.FC<LandingPortalProps> = ({ onSelectPortal, tenant, onOpenSaasModal }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [loginModalRole, setLoginModalRole] = useState<string | null>(null);
-
-  // Fix: Use useEffect for handling the modal timeout and portal navigation safely
-  useEffect(() => {
-    if (!loginModalRole) return;
-    const timer = setTimeout(() => {
-      onSelectPortal(loginModalRole.toLowerCase());
-      setLoginModalRole(null);
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, [loginModalRole, onSelectPortal]);
-
-  const handleLoginClick = (role: string) => {
-    setLoginModalRole(role);
-  };
-
-  return (
-    <div className="font-sans antialiased text-sky-950 bg-white selection:bg-sky-200 selection:text-sky-900 min-h-screen">
-
-      {/* Navigation Bar */}
-      <nav className="fixed w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-sky-100 z-50 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <div 
-              className="flex-shrink-0 flex items-center gap-3 cursor-pointer" 
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              <div className="w-12 h-12 rounded-2xl bg-white p-1.5 shadow border border-sky-100 flex items-center justify-center overflow-hidden">
-                <img src={SAAS_LOGO_URL} alt="Logo" className="w-full h-full object-contain" />
-              </div>
-              <div>
-                <span className="font-bold text-xl sm:text-2xl tracking-tight text-sky-950 block leading-none">{tenant.clinicName}</span>
-                <span className="text-xs text-sky-600 font-medium">عيادتي حالا • منصة العيادات الرقمية</span>
-              </div>
-            </div>
-            
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-6">
-              <a href="#doctor-profile" className="text-sky-800 hover:text-sky-600 font-medium transition-colors">Our Specialist</a>
-              <a href="#clinic-info" className="text-sky-800 hover:text-sky-600 font-medium transition-colors">Information</a>
-              <button
-                onClick={() => onOpenSaasModal('doctor')}
-                className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full bg-sky-500 hover:bg-sky-600 text-white shadow-md shadow-sky-500/20 transition-all cursor-pointer"
-              >
-                <Layers size={14} />
-                <span>Sign Up / Sign In</span>
-              </button>
-              <a href="#login-hub" className="bg-white text-sky-800 hover:bg-sky-50 border border-sky-200 px-6 py-2.5 rounded-full font-semibold transition-all shadow-sm">
-                Login Hub
-              </a>
-            </div>
-            
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center">
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-sky-900 p-2">
-                {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-sky-100 px-4 py-4 space-y-3 text-center shadow-lg">
-            <a href="#doctor-profile" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sky-900 font-medium">Our Specialist</a>
-            <a href="#clinic-info" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sky-900 font-medium">Information</a>
-            <button
-              onClick={() => { setMobileMenuOpen(false); onOpenSaasModal('doctor'); }}
-              className="w-full py-2.5 bg-sky-500 text-white rounded-lg font-bold text-xs"
-            >
-              <span>Sign Up / Sign In</span>
-            </button>
-            <a href="#login-hub" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 bg-sky-50 text-sky-800 rounded-lg font-medium border border-sky-200">Login Hub</a>
-          </div>
-        )}
-      </nav>
-
-
-      {/* Hero Section */}
-      <section id="hero" className="pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-b from-[#F0F8FF] via-[#E8F4FC] to-white text-sky-950 border-b border-sky-100 overflow-hidden relative">
-        {/* Soft Ambient Light Blue Background Elements */}
-        <div className="absolute top-1/4 left-10 w-96 h-96 bg-sky-200/40 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-sky-100/60 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="z-10 text-center lg:text-left">
-              <span className="inline-block py-1.5 px-4 rounded-full bg-white text-sky-700 border border-sky-200 text-xs font-bold tracking-wider mb-6 shadow-sm">
-                منظومة العيادات الرقمية • عيادتي حالا
-              </span>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-sky-950 leading-tight mb-6">
-                عيادتي حالا — الرعاية الطبية الرقمية المتكاملة
-              </h1>
-              <p className="text-lg sm:text-xl text-sky-800/80 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
-                منصة افتراضية حديثة تجمع نخبة من الأطباء والاستشاريين المعتمدين، وتوفر نظاماً ذكياً لإدارة عيادات الأطباء، ومكاتب الاستقبال، وحجز المواعيد وتتبع أدوار الكشف للمرضى.
-              </p>
-
-              {/* Display Signup as Doctor, Receptionist, or Patient */}
-              <div className="bg-white/80 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-sky-200 shadow-[0_15px_35px_rgba(14,165,233,0.08)] mb-6">
-                <p className="text-xs uppercase tracking-wider text-sky-800 font-bold mb-3 text-center lg:text-left flex items-center justify-center lg:justify-start gap-2">
-                  <Sparkles size={14} className="text-sky-500" />
-                  <span>انضم إلينا الآن — اختر نوع الحساب (Sign Up):</span>
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <button
-                    onClick={() => onOpenSaasModal('doctor')}
-                    className="p-3.5 bg-white text-sky-950 hover:bg-sky-50 rounded-2xl font-bold text-xs shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center gap-1.5 border border-sky-200 hover:border-sky-400 hover:scale-[1.02] cursor-pointer"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-sm">
-                      <Stethoscope size={18} />
-                    </div>
-                    <span className="font-bold text-xs text-sky-950">Sign Up as Doctor</span>
-                    <span className="text-[10px] text-sky-600 font-semibold">تسجيل طبيب جديد</span>
-                  </button>
-
-                  <button
-                    onClick={() => onOpenSaasModal('receptionist')}
-                    className="p-3.5 bg-white text-sky-950 hover:bg-sky-50 rounded-2xl font-bold text-xs shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center gap-1.5 border border-sky-200 hover:border-sky-400 hover:scale-[1.02] cursor-pointer"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-sky-400 text-white flex items-center justify-center shadow-sm">
-                      <Monitor size={18} />
-                    </div>
-                    <span className="font-bold text-xs text-sky-950">Sign Up as Reception</span>
-                    <span className="text-[10px] text-sky-600 font-semibold">تسجيل سكرتارية عيادة</span>
-                  </button>
-
-                  <button
-                    onClick={() => onOpenSaasModal('patient')}
-                    className="p-3.5 bg-white text-sky-950 hover:bg-sky-50 rounded-2xl font-bold text-xs shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center gap-1.5 border border-sky-200 hover:border-sky-400 hover:scale-[1.02] cursor-pointer"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-sky-600 text-white flex items-center justify-center shadow-sm">
-                      <User size={18} />
-                    </div>
-                    <span className="font-bold text-xs text-sky-950">Sign Up as Patient</span>
-                    <span className="text-[10px] text-sky-600 font-semibold">حجز كشف لمريض</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                <a href="#login-hub" className="bg-sky-500 hover:bg-sky-600 text-white px-7 py-3.5 rounded-full font-bold text-sm shadow-md shadow-sky-500/25 transition-all inline-flex items-center gap-2">
-                  <span>Login Hub</span> <ArrowRight size={16} />
-                </a>
-                <a href="#doctor-profile" className="border-2 border-sky-200 bg-white hover:bg-sky-50 text-sky-800 px-7 py-3.5 rounded-full font-bold text-sm shadow-sm transition-all">
-                  Our Specialists
-                </a>
-              </div>
-            </div>
-            
-            {/* Hero Visual Card displaying the specified logo */}
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="absolute inset-0 bg-sky-300/30 rounded-full blur-3xl transform scale-95 pointer-events-none"></div>
-              
-              <div className="relative z-10 w-full max-w-md bg-white rounded-3xl p-6 shadow-xl border border-sky-100 overflow-hidden flex flex-col items-center text-center">
-                <div className="w-full bg-gradient-to-b from-sky-50 to-white rounded-2xl p-6 border border-sky-100 mb-4 flex items-center justify-center min-h-[260px]">
-                  <img 
-                    src="https://i.postimg.cc/HkFdgvmz/Screenshot-2026-11-05-062500.png" 
-                    alt="عيادتي حالا Logo" 
-                    className="max-h-56 max-w-full object-contain rounded-xl drop-shadow-sm" 
-                  />
-                </div>
-
-                <div className="w-full text-left bg-sky-50/60 p-4 rounded-2xl border border-sky-100">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-sky-900 flex items-center gap-1.5">
-                      <Shield size={16} className="text-sky-600" /> Virtual Health Network
-                    </span>
-                    <span className="text-[11px] bg-sky-100 text-sky-800 font-bold px-2.5 py-0.5 rounded-full border border-sky-200">
-                      Verified
-                    </span>
-                  </div>
-                  <p className="text-xs text-sky-800/80 leading-relaxed">
-                    منصة افتراضية سريعة وموثوقة لربط الأطباء بالمرضى، وإدارة الاستشارات والمواعيد بأحدث التقنيات.
-                  </p>
-                </div>
-
-                {/* Stable Consultation / Access badge */}
-                <div className="mt-4 w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white p-3.5 rounded-2xl shadow-sm border border-sky-400/30 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white">
-                      <Star size={18} className="fill-white text-white" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[11px] text-white/80 font-medium">الاستشارات & الكشوفات</p>
-                      <p className="font-bold text-sm text-white">حجز إلكتروني فوري</p>
-                    </div>
-                  </div>
-                  <span className="text-xs bg-white text-sky-700 font-bold px-3 py-1.5 rounded-xl shadow-xs">
-                    متاح 24/7
-                  </span>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      {/* Doctor Profile Section */}
-      <section id="doctor-profile" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-sky-950 mb-4">Our Specialist</h2>
-            <div className="w-24 h-1 bg-sky-400 mx-auto rounded-full mb-3"></div>
-            <p className="text-sky-800/80 text-sm max-w-xl mx-auto">
-              نخبة من الاستشاريين والأطباء المعتمدين ذوي الكفاءة العالية لتقديم أفضل رعاية طبية متكاملة
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white border border-sky-150 p-8 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all">
-              <div className="w-14 h-14 bg-sky-500 rounded-xl flex items-center justify-center text-white mb-6 shadow-sm">
-                <Shield size={28} />
-              </div>
-              <h3 className="text-2xl font-bold text-sky-950 mb-2">Verified Doctor Quality</h3>
-              <p className="text-xs font-bold text-sky-600 mb-4">معايير دقيقة لاعتماد الأطباء والاستشاريين</p>
-              <p className="text-sky-800/80 mb-6 leading-relaxed text-sm">
-                يتم فحص وتدقيق كافة الأطباء والاستشاريين المسجلين في منصة <strong>عيادتي حالا</strong> بعناية فائقة لضمان حصولك على أعلى مستويات التشخيص والعلاج الموثوق.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm font-medium text-sky-900">
-                  <CheckCircle2 className="text-sky-500 shrink-0" size={18} /> أطباء واستشاريون معتمدون ومرخصون من نقابة الأطباء
-                </li>
-                <li className="flex items-center gap-3 text-sm font-medium text-sky-900">
-                  <CheckCircle2 className="text-sky-500 shrink-0" size={18} /> شهادات عليا وزمالات طبية دولية ومحلية معترف بها
-                </li>
-                <li className="flex items-center gap-3 text-sm font-medium text-sky-900">
-                  <CheckCircle2 className="text-sky-500 shrink-0" size={18} /> تقييم مستمر للجودة والرضا الطبي من واقع كشوفات المرضى
-                </li>
-                <li className="flex items-center gap-3 text-sm font-medium text-sky-900">
-                  <CheckCircle2 className="text-sky-500 shrink-0" size={18} /> تغطية شاملة لكافة التخصصات الطبية بأحدث المعايير
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-white border border-sky-150 p-8 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all">
-              <div className="w-14 h-14 bg-sky-400 rounded-xl flex items-center justify-center text-white mb-6 shadow-sm">
-                <MessageCircle size={28} />
-              </div>
-              <h3 className="text-2xl font-bold text-sky-950 mb-4">Patient Reviews</h3>
-              <div className="flex items-center gap-1.5 mb-4 text-amber-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={20} className="fill-amber-400 text-amber-400" />
-                ))}
-                <span className="text-sky-950 font-bold ml-2 text-lg">{tenant.reviewScore}</span>
-              </div>
-              <div className="space-y-4">
-                {tenant.reviews.map((rev: string, idx: number) => (
-                  <div key={idx} className="bg-sky-50/60 p-4 rounded-xl italic text-sky-900 text-sm border-l-4 border-sky-400">
-                    {rev}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-sky-500 to-sky-600 text-white p-8 rounded-2xl shadow-md flex flex-col">
-              <div className="w-14 h-14 bg-white text-sky-600 rounded-xl flex items-center justify-center mb-6 shadow-sm">
-                <FileText size={28} />
-              </div>
-              <h3 className="text-2xl font-bold mb-4">Doctor's Daily Tips</h3>
-              <div className="space-y-4 flex-grow">
-                <div className="flex items-start gap-3">
-                  <Droplet className="mt-1 text-sky-200 shrink-0" size={18} />
-                  <p className="text-sm text-white/95">{tenant.tips[0]}</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Heart className="mt-1 text-sky-200 shrink-0" size={18} />
-                  <p className="text-sm text-white/95">{tenant.tips[1]}</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Moon className="mt-1 text-sky-200 shrink-0" size={18} />
-                  <p className="text-sm text-white/95">{tenant.tips[2]}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Clinic Information Section */}
-      <section id="clinic-info" className="py-24 bg-[#F0F9FF] text-sky-950 border-t border-sky-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="inline-block py-1 px-3 rounded-full bg-white text-sky-700 border border-sky-200 text-xs font-semibold tracking-wider mb-3 shadow-xs">
-              100% VIRTUAL HEALTH PLATFORM
-            </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-sky-950 mb-3">عيادتي حالا — المنصة الافتراضية والدفع</h2>
-            <div className="w-24 h-1 bg-sky-400 mx-auto rounded-full mb-4"></div>
-            <p className="text-sky-800/80 max-w-2xl mx-auto text-sm">
-              نظام رعاية وعيادات رقمي متكامل — تواصل مباشر عبر البريد الإلكتروني مع دعم شامل لكافة وسائل الدفع المعتمدة.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
-            {/* Left Column: Virtual Platform Contact */}
-            <div className="bg-white rounded-3xl p-8 border border-sky-200 shadow-md flex flex-col justify-between text-sky-950">
-              <div>
-                <div className="w-14 h-14 bg-sky-500 text-white rounded-2xl flex items-center justify-center mb-6 shadow-sm">
-                  <Mail size={28} />
-                </div>
-                <h3 className="text-2xl font-bold mb-2 text-sky-950">Virtual Platform Contact</h3>
-                <p className="text-sky-700 text-xs mb-6">تواصل رقمي مباشر لخدمة المرضى والأطباء والعيادات المسجلة</p>
-
-                <div className="space-y-4">
-                  <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-100">
-                    <span className="text-xs text-sky-600 block mb-1">البريد الإلكتروني الرسمي (Official Email)</span>
-                    <a href="mailto:contact@ayadatihala.com" className="text-lg font-bold text-sky-900 hover:text-sky-600 transition-colors flex items-center gap-2">
-                      <Mail size={18} className="text-sky-500" /> contact@ayadatihala.com
-                    </a>
-                  </div>
-
-                  <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-100">
-                    <span className="text-xs text-sky-600 block mb-1">خدمة المساعدين والاستفسارات (Secretary Hotline)</span>
-                    <p className="text-base font-bold text-sky-900 flex items-center gap-2">
-                      <Phone size={18} className="text-sky-600" /> {tenant.secretaryPhone || '+20 100 123 4567'}
-                    </p>
-                  </div>
-
-                  <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-150">
-                    <span className="text-xs text-sky-700 font-bold block mb-1">نظام عمل افتراضي (Virtual Operation)</span>
-                    <p className="text-xs text-sky-800 leading-relaxed">
-                      نحن موقع ومنظومة افتراضية تتيح تنسيق المواعيد وتنظيم الحجز والدور إلكترونياً مع الأطباء المسجلين على مستوى الجمهورية دون الحاجة إلى مقر مادي ثابت.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Supported Payment Methods */}
-            <div className="bg-white rounded-3xl p-8 border border-sky-200 shadow-md flex flex-col justify-between text-sky-950">
-              <div>
-                <div className="w-14 h-14 bg-sky-500 text-white rounded-2xl flex items-center justify-center mb-6 shadow-sm">
-                  <CreditCard size={28} />
-                </div>
-                <h3 className="text-2xl font-bold mb-2 text-sky-950">Supported Payment Methods</h3>
-                <p className="text-sky-700 text-xs mb-6">وسائل الدفع المدعومة والمعتمدة في المنصة</p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-100 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm">
-                      VF
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-sky-950">Vodafone Cash</h4>
-                      <p className="text-[11px] text-sky-600">فودافون كاش ومحافظ المحمول</p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-100 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm">
-                      IP
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-sky-950">InstaPay</h4>
-                      <p className="text-[11px] text-sky-600">تحويل لحظي انستاباي</p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-100 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm">
-                      💳
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-sky-950">Credit / Debit Cards</h4>
-                      <p className="text-[11px] text-sky-600">فيزا وماستركارد وميزة</p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-100 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm">
-                      💵
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-sky-950">Cash at Clinic</h4>
-                      <p className="text-[11px] text-sky-600">الدفع نقداً عند تأكيد الحضور</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-5 p-4 bg-sky-50/70 rounded-2xl border border-sky-150 text-xs text-sky-800 flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-sky-600 shrink-0" />
-                  <span>فواتير إلكترونية معتمدة وإشعارات فورية عبر البريد والواتساب فور السداد.</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Login Hub Section */}
-      <section id="login-hub" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-sky-950 mb-4">Central Login Hub</h2>
-            <div className="w-24 h-1 bg-sky-400 mx-auto rounded-full mb-6"></div>
-            <p className="text-sky-800/80 max-w-2xl mx-auto">Select your portal entry point below to securely access your personalized dashboard.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
-            <button onClick={() => handleLoginClick('Patient')} className="group relative bg-white border-2 border-sky-100 hover:border-sky-400 rounded-3xl p-10 text-center shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center cursor-pointer">
-              <div className="w-20 h-20 bg-sky-50 rounded-full flex items-center justify-center text-sky-600 mb-6 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-                <User size={32} />
-              </div>
-              <h3 className="text-2xl font-bold text-sky-950 mb-3">Patient Portal</h3>
-              <p className="text-sky-700/80 text-sm mb-8">Book appointments, view records, and message your doctor securely.</p>
-              <div className="mt-auto inline-flex items-center gap-2 text-sky-600 font-bold group-hover:text-sky-700">
-                Login as Patient <ArrowRight size={18} />
-              </div>
-            </button>
-
-            <button onClick={() => handleLoginClick('Doctor')} className="group relative bg-white border-2 border-sky-300 hover:border-sky-500 rounded-3xl p-10 text-center shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col items-center cursor-pointer">
-              <div className="w-20 h-20 bg-sky-500 rounded-full flex items-center justify-center text-white mb-6 group-hover:bg-sky-600 transition-colors shadow-sm">
-                <Stethoscope size={32} />
-              </div>
-              <h3 className="text-2xl font-bold text-sky-950 mb-3">Doctor Portal</h3>
-              <p className="text-sky-700/80 text-sm mb-8">Manage patient files, schedules, and clinical notes in one place.</p>
-              <div className="mt-auto inline-flex items-center gap-2 text-sky-600 font-bold group-hover:text-sky-700">
-                Login as Doctor <ArrowRight size={18} />
-              </div>
-            </button>
-
-            <button onClick={() => handleLoginClick('Reception')} className="group relative bg-white border-2 border-sky-100 hover:border-sky-400 rounded-3xl p-10 text-center shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center cursor-pointer">
-              <div className="w-20 h-20 bg-sky-50 rounded-full flex items-center justify-center text-sky-500 mb-6 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-                <Monitor size={32} />
-              </div>
-              <h3 className="text-2xl font-bold text-sky-950 mb-3">Reception Desk</h3>
-              <p className="text-sky-700/80 text-sm mb-8">Handle scheduling, billing, and front desk patient management.</p>
-              <div className="mt-auto inline-flex items-center gap-2 text-sky-600 font-bold group-hover:text-sky-700">
-                Login as Reception <ArrowRight size={18} />
-              </div>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-sky-50 border-t border-sky-100 text-sky-700 py-8 text-center">
-        <div className="max-w-7xl mx-auto px-4">
-          <p className="text-sm">&copy; {new Date().getFullYear()} عيادتي حالاً — {tenant.clinicName}. All rights reserved.</p>
-        </div>
-      </footer>
-
-      {loginModalRole && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-sky-950/40 backdrop-blur-sm">
-          <div className="bg-white text-sky-950 p-8 rounded-2xl shadow-2xl max-w-sm w-full mx-4 text-center border border-sky-100">
-            <Shield className="text-sky-500 mx-auto mb-4" size={36} />
-            <h3 className="text-2xl font-bold mb-2">Authentication</h3>
-            <p className="text-sky-700 mb-6">Redirecting to the <span className="font-bold">{loginModalRole}</span> portal...</p>
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500 mx-auto"></div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-
-// ==========================================
-// 3. PATIENT SPECIALTY & DOCTOR DISCOVERY VIEW
-// (Step 3: اختيار التخصص -> عرض الدكاترة -> اختيار دكتور -> نافذة الحجز ومواعيد وأماكن العيادات)
-// ==========================================
-interface PatientDirectoryViewProps {
-  tenants: Tenant[];
-  onSelectTenant: (tenant: Tenant) => void;
-  onBackToHome: () => void;
-}
-
-const PatientDirectoryView: React.FC<PatientDirectoryViewProps> = ({ tenants, onSelectTenant, onBackToHome }) => {
-  const [selectedSpecialty, setSelectedSpecialty] = useState('All');
-  const [activeDoctorModal, setActiveDoctorModal] = useState<Tenant | null>(null);
-  const [patientBookingForm, setPatientBookingForm] = useState({ name: '', phone: '', date: '2026-11-15' });
-  const [bookingConfirmed, setBookingConfirmed] = useState(false);
-
-  const filteredTenants = selectedSpecialty === 'All' 
-    ? tenants 
-    : tenants.filter((t: Tenant) => t.specialty.toLowerCase() === selectedSpecialty.toLowerCase());
-
-  const handleBookAppointment = (e: React.FormEvent) => {
-    e.preventDefault();
-    setBookingConfirmed(true);
-    setTimeout(() => {
-      setBookingConfirmed(false);
-      setActiveDoctorModal(null);
-    }, 2500);
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F0F8FF] py-10 px-4 font-sans text-sky-950">
-      <div className="max-w-6xl mx-auto">
-        
-        {/* Top Header */}
-        <div className="flex items-center justify-between mb-8">
-          <button onClick={onBackToHome} className="inline-flex items-center gap-2 text-sm font-bold text-sky-800 hover:text-sky-600 transition cursor-pointer">
-            <ArrowLeft size={18} /> Back to Home
-          </button>
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-white p-1 shadow-sm border border-sky-100 flex items-center justify-center">
-              <img src={SAAS_LOGO_URL} alt="Logo" className="w-full h-full object-contain" />
-            </div>
-            <h1 className="text-xl font-bold text-sky-950">عيادتي حالاً — Patient Discovery</h1>
-          </div>
-        </div>
-
-        {/* 1. Specialty Selector (اختيار التخصص) */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 mb-8">
-          <h2 className="text-lg font-bold text-sky-950 mb-4 flex items-center gap-2">
-            <Search size={20} className="text-sky-500" /> اختر التخصص الطبي (Select Specialty)
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedSpecialty('All')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                selectedSpecialty === 'All' ? 'bg-sky-500 text-white shadow-sm' : 'bg-sky-50 text-sky-800 hover:bg-sky-100 border border-sky-200'
-              }`}
-            >
-              All Specialties (الكل)
-            </button>
-            {AVAILABLE_SPECIALTIES.map(sp => (
-              <button
-                key={sp}
-                onClick={() => setSelectedSpecialty(sp)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  selectedSpecialty === sp ? 'bg-sky-500 text-white shadow-sm' : 'bg-white text-sky-800 hover:bg-sky-50 border border-sky-200'
-                }`}
-              >
-                {sp}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 2. Display Doctors in Specialty (يعرض الدكاترة اللي موجودين فيه) */}
-        <div className="mb-6">
-          <h3 className="text-xl font-bold text-sky-950 mb-4">
-            Available Doctors ({filteredTenants.length})
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTenants.map((doc: Tenant) => (
-              <div key={doc.id} className="bg-white rounded-2xl shadow-sm border border-sky-100 overflow-hidden flex flex-col justify-between hover:shadow-lg hover:border-sky-300 transition-all">
-                <div className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <img 
-                      src={`https://placehold.co/100x100/0284c7/FFFFFF?text=${doc.doctorName.replace('Dr. ', '')}`} 
-                      alt={doc.doctorName} 
-                      className="w-16 h-16 rounded-2xl object-cover border-2 border-sky-400 shadow-sm" 
-                    />
-                    <div>
-                      <h4 className="font-bold text-lg text-sky-950">{doc.doctorName}</h4>
-                      <span className="text-xs bg-sky-50 text-sky-700 font-semibold px-2.5 py-0.5 rounded-full border border-sky-200">
-                        {doc.specialty}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-sky-900/70 mb-4 line-clamp-2 leading-relaxed">{doc.bio}</p>
-                  <div className="space-y-1.5 text-xs text-sky-800/80">
-                    <p className="flex items-center gap-1.5"><MapPin size={14} className="text-sky-500" /> {doc.address}</p>
-                    <p className="flex items-center gap-1.5"><DollarSign size={14} className="text-sky-500" /> Consultation Fee: <strong className="text-sky-950">{doc.consultationFee} EGP</strong></p>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-sky-50/50 border-t border-sky-100 flex gap-2">
-                  <button
-                    onClick={() => {
-                      onSelectTenant(doc);
-                    }}
-                    className="w-1/2 py-2.5 bg-white hover:bg-sky-50 text-sky-800 border border-sky-200 rounded-xl text-xs font-bold transition-colors shadow-sm"
-                  >
-                    Visit Clinic App
-                  </button>
-                  <button
-                    onClick={() => setActiveDoctorModal(doc)}
-                    className="w-1/2 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-xs font-bold transition-colors shadow-sm"
-                  >
-                    حجز موعد (Book)
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* 3. Doctor Booking & Clinic Locations Modal (نافذة الحجز ومواعيد وأماكن العيادات) */}
-        {activeDoctorModal && (
-          <div className="fixed inset-0 z-50 bg-sky-950/40 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-sky-200">
-              <div className="bg-gradient-to-r from-sky-500 to-sky-600 text-white p-6 flex justify-between items-center">
-                <div>
-                  <h3 className="font-bold text-xl">{activeDoctorModal.doctorName}</h3>
-                  <p className="text-xs text-sky-100">{activeDoctorModal.specialty} • {activeDoctorModal.clinicName}</p>
-                </div>
-                <button onClick={() => setActiveDoctorModal(null)} className="text-white/80 hover:text-white p-2">
-                  <X size={24} />
-                </button>
-              </div>
-
-              <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-                {bookingConfirmed ? (
-                  <div className="bg-sky-50 border border-sky-200 p-6 rounded-2xl text-center space-y-3">
-                    <CheckCircle size={48} className="text-sky-500 mx-auto" />
-                    <h4 className="font-bold text-sky-950 text-lg">Appointment Booked Successfully!</h4>
-                    <p className="text-xs text-sky-700">Your turn number has been issued. The clinic secretary will confirm via WhatsApp.</p>
-                  </div>
-                ) : (
-                  <>
-                    {/* Clinic Locations & Hours */}
-                    <div>
-                      <h4 className="font-bold text-sm text-sky-950 mb-3 flex items-center gap-2">
-                        <MapPin size={16} className="text-sky-500" /> أماكن ومواعيد العيادات (Clinic Locations & Hours)
-                      </h4>
-                      <div className="space-y-2">
-                        {activeDoctorModal.clinicLocations.map((loc: ClinicLocation) => (
-                          <div key={loc.id} className="bg-sky-50/60 border border-sky-200 p-3 rounded-xl text-xs space-y-1">
-                            <p className="font-bold text-sky-950">{loc.name}</p>
-                            <p className="text-sky-700 flex items-center gap-1"><Calendar size={13} className="text-sky-500" /> {loc.days} ({loc.hours})</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Booking Form */}
-                    <form onSubmit={handleBookAppointment} className="space-y-4 pt-4 border-t border-sky-100">
-                      <h4 className="font-bold text-sm text-sky-950">حجز موعد جديد (New Booking)</h4>
-                      <div>
-                        <label className="block text-xs font-bold text-sky-800 mb-1">Patient Full Name (اسم المريض)</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g., محمود سعيد"
-                          value={patientBookingForm.name}
-                          onChange={e => setPatientBookingForm({...patientBookingForm, name: e.target.value})}
-                          className="w-full p-2.5 border border-sky-200 rounded-lg text-sm focus:ring-2 focus:ring-sky-400 outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-sky-800 mb-1">Mobile Number (رقم المحمول)</label>
-                        <input
-                          type="tel"
-                          required
-                          placeholder="01000000000"
-                          value={patientBookingForm.phone}
-                          onChange={e => setPatientBookingForm({...patientBookingForm, phone: e.target.value})}
-                          className="w-full p-2.5 border border-sky-200 rounded-lg text-sm focus:ring-2 focus:ring-sky-400 outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-sky-800 mb-1">Preferred Date (تاريخ الحجز)</label>
-                        <input
-                          type="date"
-                          value={patientBookingForm.date}
-                          onChange={e => setPatientBookingForm({...patientBookingForm, date: e.target.value})}
-                          className="w-full p-2.5 border border-sky-200 rounded-lg text-sm focus:ring-2 focus:ring-sky-400 outline-none"
-                        />
-                      </div>
-                      <div className="p-3 bg-sky-50 border border-sky-200 rounded-xl text-xs flex justify-between items-center text-sky-950">
-                        <span>Consultation Fee:</span>
-                        <strong className="text-sm font-bold text-sky-600">{activeDoctorModal.consultationFee} EGP</strong>
-                      </div>
-                      <button
-                        type="submit"
-                        className="w-full py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold text-sm shadow-md transition-all cursor-pointer"
-                      >
-                        Confirm Booking & Get Turn Number
-                      </button>
-                    </form>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-      </div>
-    </div>
-  );
-};
+// Patient-facing clinic and directory are now reusable components.
 
 // ==========================================
 // 4. PATIENT PORTAL
@@ -3541,6 +2859,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
 // ==========================================
 export default function App() {
   const { currentUser, loading, logout } = useAuth();
+  const [guestPreview, setGuestPreview] = useState(false);
   const [activePortal, setActivePortal] = useState('landing'); // 'landing' | 'patient-directory' | 'patient' | 'reception' | 'doctor'
   const [demoBypassAuth, setDemoBypassAuth] = useState(true);
   const [tenants, setTenants] = useState(INITIAL_SAAS_TENANTS);
@@ -3616,6 +2935,8 @@ export default function App() {
     setIsAuthModalOpen(true);
   };
 
+  useEffect(() => { document.documentElement.lang = uiLang; document.documentElement.dir = uiLang === 'ar' ? 'rtl' : 'ltr'; }, [uiLang]);
+
   const activeTenant = tenants.find(t => t.id === activeTenantId) || tenants[0];
 
   // 4. Loading Spinner while Firebase checks Auth State & Firestore User Profile
@@ -3636,11 +2957,11 @@ export default function App() {
   }
 
   // 4. Redirect to AuthScreen if currentUser is null
-  if (!currentUser) {
+  if (!currentUser && !guestPreview) {
     return (
       <>
         <DynamicCursor />
-        <AuthScreen />
+        <AuthScreen onPreviewClinic={() => { setGuestPreview(true); setActivePortal('landing'); }} />
       </>
     );
   }
@@ -3650,8 +2971,8 @@ export default function App() {
       {/* Interactive modern dynamic cursor */}
       <DynamicCursor />
       
-      {/* Top Demo Bar + Firebase Active User Header */}
-      <div className="sticky top-0 z-[110] bg-white/95 text-sky-950 border-b border-sky-200 px-3 sm:px-6 py-2 shadow-sm backdrop-blur-md">
+      {/* Existing staff controls remain outside the patient-facing clinic shell. */}
+      {activePortal !== 'landing' && currentUser && <div className="sticky top-0 z-[110] bg-white/95 text-sky-950 border-b border-sky-200 px-3 sm:px-6 py-2 shadow-sm backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
           
           {/* Quick Role Switcher + Current User Identity */}
@@ -3759,10 +3080,10 @@ export default function App() {
 
         </div>
       </div>
+}
 
-
-      {/* Floating Onboarding & Switcher Widget ("عيادتي حالا") */}
-      <div className="fixed bottom-4 left-4 z-[95] bg-white/95 text-sky-950 p-2 rounded-2xl shadow-xl border border-sky-200 backdrop-blur-md flex items-center gap-2 text-xs">
+      {activePortal !== 'landing' && currentUser && <>
+      <div className="legacy-switcher fixed bottom-4 left-4 z-[95] bg-white/95 text-sky-950 p-2 rounded-2xl shadow-xl border border-sky-200 backdrop-blur-md flex items-center gap-2 text-xs">
         <div className="w-8 h-8 rounded-xl bg-sky-50 border border-sky-200 p-1 flex items-center justify-center shrink-0">
           <img src={SAAS_LOGO_URL} alt="Logo" className="w-full h-full object-contain" />
         </div>
@@ -3801,6 +3122,8 @@ export default function App() {
         </button>
       </div>
 
+      </>}
+
       {/* SaaS Auth & Onboarding Modal */}
       <SaasAuthModal
         isOpen={isAuthModalOpen}
@@ -3824,20 +3147,28 @@ export default function App() {
 
       {/* Portal Routing */}
       {activePortal === 'landing' && (
-        <LandingPortal 
-          tenant={activeTenant}
+        <ClinicExperience
+          tenantLabel={activeTenant.doctorName}
+          tenantId={activeTenant.id}
+          lang={uiLang}
+          onToggleLanguage={toggleUiLanguage}
+          onDirectory={() => setActivePortal('patient-directory')}
+          onLogout={() => { setGuestPreview(false); if (currentUser) logout(); }}
           onSelectPortal={(role: string) => {
+            if (!currentUser) { setGuestPreview(false); return; }
             setDemoBypassAuth(false);
             setActivePortal(role);
           }} 
-          onOpenSaasModal={(tab) => handleOpenAuthModal(tab || 'doctor')}
+          onOpenSaasModal={(tab) => { if (!currentUser) setGuestPreview(false); else handleOpenAuthModal(tab || 'doctor'); }}
         />
       )}
       {activePortal === 'patient-directory' && (
-        <PatientDirectoryView
+        <ClinicDirectory
+          lang={uiLang}
           tenants={tenants}
           onSelectTenant={(doc: Tenant) => {
             setActiveTenantId(doc.id);
+            window.location.hash = '/clinic/home';
             setActivePortal('landing');
           }}
           onBackToHome={() => setActivePortal('landing')}
@@ -3872,4 +3203,4 @@ export default function App() {
 
     </div>
   );
-}
+  }
