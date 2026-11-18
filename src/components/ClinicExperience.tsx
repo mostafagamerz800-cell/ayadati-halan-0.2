@@ -65,6 +65,13 @@ export function ClinicExperience({
   const [paused, setPaused] = useState(false);
   const [largeText, setLargeText] = useState(false);
   const [showA11y, setShowA11y] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const pageTitle = useRef<HTMLHeadingElement>(null);
   const name = config.verified
@@ -511,7 +518,7 @@ export function ClinicExperience({
           </button>
         </div>
       </div>
-      <header className="clinic-header">
+      <header className={`clinic-header${scrolled ? " is-scrolled" : ""}`}>
         <div className="clinic-container header-inner">
           <a
             href="#/clinic/home"
@@ -1273,4 +1280,4 @@ export function ClinicExperience({
       )}
     </div>
   );
-            }
+      }
