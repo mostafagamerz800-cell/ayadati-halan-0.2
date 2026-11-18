@@ -1222,6 +1222,14 @@ export function ClinicExperience({
           <ContactButtons />
         </div>
       )}
+      {route !== "book" && !modal && (
+        <div className="mobile-book-bar">
+          <button className="clinic-button primary" onClick={book}>
+            {translate(lang, "text_27dd340fe5")}
+            <Arrow size={18} />
+          </button>
+        </div>
+      )}
       {modal === "booking" && (
         <AccessibleDialog
           title={translate(lang, "text_0316d47de8")}
@@ -1261,4 +1269,4 @@ export function ClinicExperience({
       )}
     </div>
   );
-                                    }
+}
