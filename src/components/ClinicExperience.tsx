@@ -460,6 +460,10 @@ export function ClinicExperience({
             </button>
           </div>
         </div>
+        <p className="footer-care-note">
+          <ShieldCheck size={16} />
+          {translate(lang, "text_care_notice")}
+        </p>
         <div className="footer-bottom">
           <span>
             © {new Date().getFullYear()} {name}
@@ -1269,4 +1273,4 @@ export function ClinicExperience({
       )}
     </div>
   );
-}
+            }
