@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@font-face{font-family:Cairo;src:url('/fonts/8-cairo-400.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Cairo;src:url('/fonts/9-cairo-500.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:Cairo;src:url('/fonts/10-cairo-700.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
 
 @layer base {
   ::selection {
@@ -33,3 +36,6 @@
   border-color: #7dd3fc;
   transform: translateY(-2px);
 }
+
+/* Shared accessibility and responsive controls, without changing portal behavior. */
+html{font-family:'Cairo',Tahoma,Arial,sans-serif;scroll-padding-top:100px}body{margin:0}button,a,input,select,textarea{touch-action:manipulation}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #087f76;outline-offset:3px}.legacy-switcher{max-width:calc(100vw - 32px);overflow-x:auto}.directory-filter{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:white;border:1px solid #e3e8f0;padding:20px;border-radius:12px;font-size:.85rem;margin-bottom:24px}.directory-filter select{min-height:48px;border:1px solid #c9d3df;border-radius:8px;padding:8px 12px;max-width:100%;background:#fff;color:#0b1220;margin-inline-start:auto}.directory-count{font-size:.8rem;margin-bottom:20px!important}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
