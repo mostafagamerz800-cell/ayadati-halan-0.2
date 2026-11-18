@@ -109,38 +109,31 @@ const INITIAL_SAAS_TENANTS: Tenant[] = [
   {
     id: 'dr-wright',
     slug: 'dr-wright',
-    clinicName: 'عيادتي حالا',
-    doctorName: 'Dr. Alexander Wright',
+    clinicName: 'Demo clinic 1',
+    doctorName: 'Demo doctor 1',
     specialty: 'Internal Medicine',
     tagline: 'Excellence in Medical Care, Tailored for You.',
-    bio: 'Chief Medical Officer with over 15 years of experience in internal medicine, dedicated to providing holistic and preventative care.',
-    qualifications: [
-      'MD, Harvard Medical School',
-      'Board Certified in Internal Medicine',
-      'Fellow of the American College of Physicians'
-    ],
+    bio: 'Demo profile for interface testing only. Not a real doctor.',
+    qualifications: ['Demo qualification, not verified'],
     rating: '5.0 / 5.0',
     reviewScore: '4.9/5',
     consultationFee: 500,
-    address: 'Virtual Medical Platform (Online & Clinic Coordination)',
-    phone: '+20 100 123 4567 | Support: 19011',
-    secretaryPhone: '+20 100 987 6543',
-    email: 'contact@ayadatihala.com',
-    portraitText: 'Dr.+Alexander+Wright',
+    address: 'Demo location only',
+    phone: 'DEMO-NO-CONTACT',
+    secretaryPhone: 'DEMO-NO-CONTACT',
+    email: 'demo@example.invalid',
+    portraitText: 'Demo+doctor 1',
     paymentMethods: ['Cash', 'Vodafone Cash', 'Credit Card'],
     clinicLocations: [
-      { id: 1, name: 'Main Clinic (Maadi)', days: 'Mon, Wed, Thu', hours: '09:00 AM - 02:00 PM' },
-      { id: 2, name: 'Branch (Zayed)', days: 'Tue, Sat', hours: '04:00 PM - 09:00 PM' }
+      { id: 1, name: 'Demo branch 1', days: 'Mon, Wed, Thu', hours: '09:00 AM - 02:00 PM' },
+      { id: 2, name: 'Demo branch 2', days: 'Tue, Sat', hours: '04:00 PM - 09:00 PM' }
     ],
     links: {
-      facebook: 'facebook.com/drwrightclinic',
-      whatsapp: '01000000001',
-      telegram: 't.me/drwrightclinic'
+      facebook: 'example.invalid',
+      whatsapp: 'DEMO-NO-CONTACT',
+      telegram: 'example.invalid'
     },
-    reviews: [
-      '"Dr. Wright is incredibly attentive and takes the time to explain everything clearly. Highly recommend!"',
-      '"The best clinic experience I\'ve had. Professional, clean, and compassionate care."'
-    ],
+    reviews: ['Demo review for interface testing only'],
     tips: [
       'Drink at least 8 glasses of water daily to maintain optimal hydration and energy levels.',
       'Incorporate 30 minutes of moderate exercise into your daily routine to support heart health.',
@@ -150,38 +143,31 @@ const INITIAL_SAAS_TENANTS: Tenant[] = [
   {
     id: 'dr-youssef',
     slug: 'dr-youssef',
-    clinicName: 'Cairo Heart & Vascular Center',
-    doctorName: 'Dr. Youssef Ibrahim',
+    clinicName: 'Demo clinic 2',
+    doctorName: 'Demo doctor 2',
     specialty: 'Cardiology',
     tagline: 'Advanced Cardiac Care With Compassion.',
-    bio: 'Consultant Cardiologist with 18+ years specializing in interventional cardiology, preventative heart care, and echocardiography.',
-    qualifications: [
-      'MD & PhD in Cardiovascular Medicine, Cairo University',
-      'Fellow of the European Society of Cardiology (FESC)',
-      'Consultant of Interventional Cardiology'
-    ],
+    bio: 'Demo profile for interface testing only. Not a real doctor.',
+    qualifications: ['Demo qualification, not verified'],
     rating: '5.0 / 5.0',
     reviewScore: '5.0/5',
     consultationFee: 750,
-    address: '45 Corniche El Nil, Maadi, Cairo',
-    phone: '+20 100 123 4567 | Hotline: 19011',
-    secretaryPhone: '+20 100 999 8888',
-    email: 'info@cairoheartclinic.com',
-    portraitText: 'Dr.+Youssef+Ibrahim',
+    address: 'Demo location only',
+    phone: 'DEMO-NO-CONTACT',
+    secretaryPhone: 'DEMO-NO-CONTACT',
+    email: 'demo@example.invalid',
+    portraitText: 'Demo+doctor 2',
     paymentMethods: ['Cash', 'Vodafone Cash'],
     clinicLocations: [
-      { id: 1, name: 'Maadi Cardiac Center', days: 'Sun, Tue, Thu', hours: '10:00 AM - 03:00 PM' },
-      { id: 2, name: 'Sheikh Zayed Medical Hub', days: 'Mon, Wed', hours: '05:00 PM - 09:30 PM' }
+      { id: 1, name: 'Demo branch 3', days: 'Sun, Tue, Thu', hours: '10:00 AM - 03:00 PM' },
+      { id: 2, name: 'Demo branch 4', days: 'Mon, Wed', hours: '05:00 PM - 09:30 PM' }
     ],
     links: {
-      facebook: 'facebook.com/dryoussefcardio',
-      whatsapp: '01001234567',
-      telegram: 't.me/dryoussefclinic'
+      facebook: 'example.invalid',
+      whatsapp: 'DEMO-NO-CONTACT',
+      telegram: 'example.invalid'
     },
-    reviews: [
-      '"Dr. Youssef saved my father\'s life with an early diagnosis. Extremely thorough and kind."',
-      '"Very organized queue system and accurate appointment times at the Maadi branch."'
-    ],
+    reviews: ['Demo review for interface testing only'],
     tips: [
       'Monitor your blood pressure weekly and reduce daily sodium intake for optimal arterial health.',
       'A brisk 30-minute walk five times a week reduces cardiovascular risk by over 35%.',
@@ -191,38 +177,31 @@ const INITIAL_SAAS_TENANTS: Tenant[] = [
   {
     id: 'dr-laila',
     slug: 'dr-laila',
-    clinicName: 'Nour Kids & Family Clinic',
-    doctorName: 'Dr. Laila Mansour',
+    clinicName: 'Demo clinic 3',
+    doctorName: 'Demo doctor 3',
     specialty: 'Pediatrics',
     tagline: 'Gentle, Expert Healthcare for Your Little Ones.',
-    bio: 'Dedicated pediatrician focused on child growth, immunizations, pediatric nutrition, and newborn care in a stress-free environment.',
-    qualifications: [
-      'MD in Pediatrics, Ain Shams University',
-      'Member of the Royal College of Paediatrics (MRCPCH)',
-      'Certified Pediatric Nutrition Specialist'
-    ],
+    bio: 'Demo profile for interface testing only. Not a real doctor.',
+    qualifications: ['Demo qualification, not verified'],
     rating: '4.9 / 5.0',
     reviewScore: '4.9/5',
     consultationFee: 450,
-    address: '88 El-Merghany St, Heliopolis, Cairo',
-    phone: '+20 112 987 6543 | Emergency: 123',
-    secretaryPhone: '+20 112 333 4444',
-    email: 'care@nourkidsclinic.com',
-    portraitText: 'Dr.+Laila+Mansour',
+    address: 'Demo location only',
+    phone: 'DEMO-NO-CONTACT',
+    secretaryPhone: 'DEMO-NO-CONTACT',
+    email: 'demo@example.invalid',
+    portraitText: 'Demo+doctor 3',
     paymentMethods: ['Cash', 'InstaPay', 'Vodafone Cash'],
     clinicLocations: [
-      { id: 1, name: 'Heliopolis Main Clinic', days: 'Sat, Mon, Wed', hours: '11:00 AM - 04:00 PM' },
-      { id: 2, name: 'New Cairo Fifth Settlement', days: 'Sun, Tue, Thu', hours: '04:00 PM - 08:00 PM' }
+      { id: 1, name: 'Demo branch 5', days: 'Sat, Mon, Wed', hours: '11:00 AM - 04:00 PM' },
+      { id: 2, name: 'Demo branch 6', days: 'Sun, Tue, Thu', hours: '04:00 PM - 08:00 PM' }
     ],
     links: {
-      facebook: 'facebook.com/drlailapediatrics',
-      whatsapp: '01129876543',
-      telegram: 't.me/nourkidsclinic'
+      facebook: 'example.invalid',
+      whatsapp: 'DEMO-NO-CONTACT',
+      telegram: 'example.invalid'
     },
-    reviews: [
-      '"My kids actually love visiting Dr. Laila! She is so patient and reassuring with parents."',
-      '"The digital turn tracker lets us wait comfortably until our turn approaches."'
-    ],
+    reviews: ['Demo review for interface testing only'],
     tips: [
       'Keep your child\'s vaccination schedule up to date to build strong lifelong immunity.',
       'Limit screen time before bedtime to help children achieve deep, restorative growth sleep.',
@@ -808,9 +787,9 @@ const PatientPortal: React.FC<PatientPortalProps> = ({ onBackToHome, tenant, dem
 // 5. RECEPTION DESK PORTAL
 // ==========================================
 export const INITIAL_RECEPTION_PATIENTS = [
-  { id: 'P001', name: 'Ahmed Mahmoud', phone: '01012345678', address: 'Maadi, Cairo', time: '09:00 AM', status: 'waiting', turn: 1 },
-  { id: 'P002', name: 'Fatma Ali', phone: '01198765432', address: 'Zamalek, Cairo', time: '09:30 AM', status: 'waiting', turn: 2 },
-  { id: 'P003', name: 'Omar Hassan', phone: '01234567890', address: 'Mohandeseen, Giza', time: '10:00 AM', status: 'waiting', turn: 3 }
+  { id: 'P001', name: 'Demo patient 01', phone: 'DEMO-NO-CONTACT', address: 'Demo location only', time: '09:00 AM', status: 'waiting', turn: 1 },
+  { id: 'P002', name: 'Demo patient 02', phone: 'DEMO-NO-CONTACT', address: 'Demo location only', time: '09:30 AM', status: 'waiting', turn: 2 },
+  { id: 'P003', name: 'Demo patient 03', phone: 'DEMO-NO-CONTACT', address: 'Demo location only', time: '10:00 AM', status: 'waiting', turn: 3 }
 ];
 
 interface ReceptionPortalProps {
@@ -1187,20 +1166,20 @@ export const WEEK_DAYS_STRIP = [
 ];
 
 export const SEEDED_TODAY_APPOINTMENTS: TodayAppointment[] = [
-  { id: 'wa-1', name: 'أحمد محمود سالم', phone: '01012345678', time: '10:30 AM', dayKey: 'thu', dateLabel: '2026-11-05' },
-  { id: 'wa-2', name: 'سارة إبراهيم حسن', phone: '01123456789', time: '11:15 AM', dayKey: 'thu', dateLabel: '2026-11-05' },
-  { id: 'wa-3', name: 'محمد كمال عبد الرحمن', phone: '01234567890', time: '12:00 PM', dayKey: 'thu', dateLabel: '2026-11-05' },
-  { id: 'wa-4', name: 'منى يوسف الشريف', phone: '01512345678', time: '01:30 PM', dayKey: 'thu', dateLabel: '2026-11-05' },
-  { id: 'wa-5', name: 'عمر خالد الجندي', phone: '01098765432', time: '02:15 PM', dayKey: 'thu', dateLabel: '2026-11-05' },
+  { id: 'wa-1', name: 'Demo patient 01', phone: 'DEMO-NO-CONTACT', time: '10:30 AM', dayKey: 'thu', dateLabel: '2026-11-05' },
+  { id: 'wa-2', name: 'Demo patient 02', phone: 'DEMO-NO-CONTACT', time: '11:15 AM', dayKey: 'thu', dateLabel: '2026-11-05' },
+  { id: 'wa-3', name: 'Demo patient 03', phone: 'DEMO-NO-CONTACT', time: '12:00 PM', dayKey: 'thu', dateLabel: '2026-11-05' },
+  { id: 'wa-4', name: 'Demo patient 04', phone: 'DEMO-NO-CONTACT', time: '01:30 PM', dayKey: 'thu', dateLabel: '2026-11-05' },
+  { id: 'wa-5', name: 'Demo patient 05', phone: 'DEMO-NO-CONTACT', time: '02:15 PM', dayKey: 'thu', dateLabel: '2026-11-05' },
 ];
 
 export const SEEDED_WEEK_EXTRA_APPOINTMENTS: TodayAppointment[] = [
-  { id: 'wa-sat-1', name: 'هدى عبد العزيز منصور', phone: '01022334455', time: '11:00 AM', dayKey: 'sat', dateLabel: '2026-11-07' },
-  { id: 'wa-sat-2', name: 'طارق فؤاد المنياوي', phone: '01133445566', time: '12:30 PM', dayKey: 'sat', dateLabel: '2026-11-07' },
-  { id: 'wa-sun-1', name: 'ياسمين عادل الشاذلي', phone: '01244556677', time: '10:00 AM', dayKey: 'sun', dateLabel: '2026-11-08' },
-  { id: 'wa-mon-1', name: 'كريم مصطفى زكي', phone: '01555667788', time: '01:00 PM', dayKey: 'mon', dateLabel: '2026-11-09' },
-  { id: 'wa-tue-1', name: 'نهى سامي الجمل', phone: '01066778899', time: '04:30 PM', dayKey: 'tue', dateLabel: '2026-11-10' },
-  { id: 'wa-wed-1', name: 'محمود أشرف الدسوقي', phone: '01177889900', time: '06:00 PM', dayKey: 'wed', dateLabel: '2026-11-11' },
+  { id: 'wa-sat-1', name: 'Demo patient 01', phone: 'DEMO-NO-CONTACT', time: '11:00 AM', dayKey: 'sat', dateLabel: '2026-11-07' },
+  { id: 'wa-sat-2', name: 'Demo patient 02', phone: 'DEMO-NO-CONTACT', time: '12:30 PM', dayKey: 'sat', dateLabel: '2026-11-07' },
+  { id: 'wa-sun-1', name: 'Demo patient 03', phone: 'DEMO-NO-CONTACT', time: '10:00 AM', dayKey: 'sun', dateLabel: '2026-11-08' },
+  { id: 'wa-mon-1', name: 'Demo patient 04', phone: 'DEMO-NO-CONTACT', time: '01:00 PM', dayKey: 'mon', dateLabel: '2026-11-09' },
+  { id: 'wa-tue-1', name: 'Demo patient 05', phone: 'DEMO-NO-CONTACT', time: '04:30 PM', dayKey: 'tue', dateLabel: '2026-11-10' },
+  { id: 'wa-wed-1', name: 'Demo patient 06', phone: 'DEMO-NO-CONTACT', time: '06:00 PM', dayKey: 'wed', dateLabel: '2026-11-11' },
 ];
 
 export interface WhatsAppLogEntry {
@@ -3203,4 +3182,4 @@ export default function App() {
 
     </div>
   );
-  }
+      }
