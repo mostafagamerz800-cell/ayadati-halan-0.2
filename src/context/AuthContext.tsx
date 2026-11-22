@@ -93,7 +93,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Fetch or create user document in Firestore
   const fetchUserData = async (user: User): Promise<UserProfile> => {
-    if(PILOT) return {uid:user.uid,email:user.email,name:user.displayName||user.email?.split('@')[0]||'Pilot user',role:await loadPilotRole(user.uid),department:'تجربة ببيانات وهمية',photoURL:user.photoURL};
+    if(PILOT) {const role=await loadPilotRole(user.uid);return {uid:user.uid,email:user.email,name:user.displayName||user.email?.split('@')[0]||'Pilot user',role,department:'تجربة ببيانات وهمية',photoURL:user.photoURL};}
     try {
       const userDocRef = doc(db, 'users', user.uid);
       const userDocSnap = await getDoc(userDocRef);
@@ -275,7 +275,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // 1. Create Firebase Auth user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      if(PILOT) { await updateProfile(user,{displayName:(options?.name||email.split('@')[0]).slice(0,100)});return; }
+      if(PILOT) {const name=(options?.name||email.split('@')[0]).slice(0,100);await updateProfile(user,{displayName:name});if(auth.currentUser?.uid===user.uid)setCurrentUser(previous=>previous?.uid===user.uid?{...previous,name}:previous);return;}
 
       // 2. Prepare user profile fields (default role: "doctor", name: email prefix)
       const emailPrefix = email.includes('@') ? email.split('@')[0] : 'User';
