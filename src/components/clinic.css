@@ -12,7 +12,7 @@
   --line: #e3e8f0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Cairo", Tahoma, Arial, sans-serif;
+  font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.8;
   isolation: isolate;
@@ -214,12 +214,13 @@
 .clinic-button:hover {
   transform: translateY(-2px);
 }
+/* DEV-COPY Stage 1: 60/30/10 rule — teal reserved for primary CTA actions */
 .clinic-button.primary {
-  background: #0f4c81;
+  background: #087f76;
   color: white;
 }
 .clinic-button.primary:hover {
-  background: #0a3d6a;
+  background: #066b63;
 }
 .clinic-button.secondary {
   border-color: #c4d3e2;
@@ -916,7 +917,7 @@
 }
 .booking-stepper,
 .booking-complete {
-  font-family: "Cairo", Tahoma, Arial, sans-serif;
+  font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
   color: #0b1220;
   line-height: 1.8;
   font-size: 1rem;
@@ -1164,7 +1165,7 @@
   margin: 16px 0 24px;
 }
 .clinic-dialog {
-  font-family: "Cairo", Tahoma, Arial, sans-serif;
+  font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
   border: 1px solid #e3e8f0;
   border-radius: 16px;
   box-shadow: 0 24px 80px #0004;
