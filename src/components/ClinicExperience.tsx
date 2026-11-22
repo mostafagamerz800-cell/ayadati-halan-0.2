@@ -1,4 +1,5 @@
 import { translate } from "../lib/clinic.i18n";
+import homeScene from "../assets/cartoons/9-02-home.webp";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -615,6 +616,7 @@ export function ClinicExperience({
                     <em>{translate(lang, "text_44f69bc32e")}</em>
                   </h1>
                   <p>{translate(lang, "text_40e03d6303")}</p>
+                  <img className="hero-scene" src={homeScene} alt="" width={1238} height={928} loading="eager" />
                   <div className="hero-actions">
                     <button
                       className="clinic-button hero-primary"
@@ -1238,4 +1240,4 @@ export function ClinicExperience({
       )}
     </div>
   );
-}
+                      }
