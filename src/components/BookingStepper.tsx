@@ -13,6 +13,7 @@ import {
   type Language,
   type ClinicConfig,
 } from "../lib/clinic.config";
+import { addBooking } from "../lib/devSync";
 
 export const normalizeEgyptianMobile = (value: string) => {
   const western = value
@@ -132,6 +133,15 @@ export function BookingStepper({
           event.preventDefault();
           if (step < 2) advance();
           else {
+            // DEV-COPY Stage 1: actually file the request into the shared
+            // demo store so reception sees it (fake data, this device only).
+            addBooking({
+              name: form.name,
+              phone: normalizeEgyptianMobile(form.phone),
+              type: form.type,
+              date: form.date,
+              note: form.note,
+            });
             setDone(true);
             setForm({
               branch: "",
