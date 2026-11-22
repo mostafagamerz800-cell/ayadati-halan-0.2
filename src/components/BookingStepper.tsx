@@ -316,7 +316,7 @@ export function BookingStepper({
                 </div>
               )}
             </dl>
-            <details>
+            {!PILOT && <details>
               <summary>{translate(lang, "text_cb860abc49")}</summary>
               <label className="sr-only" htmlFor={ids.note}>
                 {translate(lang, "text_9a211efc33")}
@@ -329,7 +329,7 @@ export function BookingStepper({
                 disabled={PILOT} value={PILOT ? "" : form.note}
                 onChange={(e) => update("note", e.target.value)}
               />
-            </details>
+            </details>}
             <p className="field-hint">{PILOT ? "طلب وهمي محفوظ في قاعدة التجربة بعد تأكيد الحفظ فقط. مش موعد طبي ومفيش تواصل أو رسائل." : translate(lang, "text_c374473b87")}</p>
           </div>
         )}

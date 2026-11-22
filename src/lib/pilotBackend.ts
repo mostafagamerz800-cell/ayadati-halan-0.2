@@ -1,37 +1,39 @@
 import {onAuthStateChanged} from 'firebase/auth';
-import {collection,doc,getDoc,getDocs,onSnapshot,query,where,setDoc,updateDoc,runTransaction} from 'firebase/firestore';
+import {collection,doc,getDocFromServer,getDocs,onSnapshot,query,where,setDoc,updateDoc,runTransaction} from 'firebase/firestore';
 import {auth,db} from './firebase';
 import type {MvpBooking} from './devSync';
 export const PILOT = import.meta.env.VITE_SECURE_PILOT === 'true';
 export const CLINIC = 'pilot-clinic-1';
 const base=`clinics/${CLINIC}`;
 const bookings=()=>collection(db,`${base}/bookings`);
-let cache:MvpBooking[]=[], role='patient', stop=()=>{}, error='', generation=0;
+let cache:MvpBooking[]=[], role='patient', stop=()=>{}, error='', generation=0, ready=false, pendingWrites=false;
 const listeners=new Set<()=>void>();
 const emit=()=>listeners.forEach(f=>f());
 export const pilotBookings=()=>[...cache];
 export const pilotRole=()=>role;
 export const pilotError=()=>error;
+export const pilotReady=()=>ready;
+export const pilotPendingWrites=()=>pendingWrites;
 export const pilotSubscribe=(f:()=>void)=>{listeners.add(f);return ()=>{listeners.delete(f);}};
 export const ownPilotBooking=()=>cache.filter(x=>x.createdBy===auth.currentUser?.uid).sort((a,b)=>b.createdAt-a.createdAt)[0]||null;
 export const pilotLastId=()=>ownPilotBooking()?.id||null;
 export async function loadPilotRole(uid:string){
- const snap=await getDoc(doc(db,`${base}/members/${uid}`));
+ const snap=await getDocFromServer(doc(db,`${base}/members/${uid}`));
  const value=snap.exists()?snap.data().role:'patient';
  return ['doctor','receptionist'].includes(value)?value:'patient';
 }
 export async function pilotAction<T>(fn:()=>Promise<T>):Promise<T>{
- error='';emit();try{return await fn();}catch(e){error='التغيير ما اتحفظش. حدّث الصفحة وراجع الحالة، وبعدين حاول تاني لو لسه محتاج. مفيش تأكيد نجاح قبل الحفظ.';emit();throw e;}
+ const current=generation;error='';emit();try{return await fn();}catch(e){if(current===generation){error='التغيير ما اتحفظش. حدّث الصفحة وراجع الحالة، وبعدين حاول تاني لو لسه محتاج. مفيش تأكيد نجاح قبل الحفظ.';emit();}throw e;}
 }
 if(PILOT) onAuthStateChanged(auth,async user=>{
- const current=++generation;stop();cache=[];role='patient';error='';emit();
+ const current=++generation;stop();cache=[];role='patient';error='';ready=false;pendingWrites=false;emit();
  if(!user)return;
  try {
   const uid=user.uid; const nextRole=await loadPilotRole(uid);
   if(current!==generation||auth.currentUser?.uid!==uid)return;
   role=nextRole;
   const source=role==='patient'?query(bookings(),where('createdBy','==',uid)):bookings();
-  stop=onSnapshot(source,s=>{if(current!==generation||auth.currentUser?.uid!==uid)return;cache=s.docs.map(x=>x.data() as MvpBooking);emit();},()=>{if(current!==generation)return;cache=[];error='تعذر تحميل الحجوزات. البيانات مش متاحة من الجهاز ده حاليًا.';emit();});
+  stop=onSnapshot(source,{includeMetadataChanges:true},s=>{if(current!==generation||auth.currentUser?.uid!==uid)return;cache=s.docs.map(x=>x.data() as MvpBooking);ready=true;pendingWrites=s.metadata.hasPendingWrites;emit();},()=>{if(current!==generation)return;cache=[];ready=false;pendingWrites=false;error='تعذر تحميل الحجوزات. البيانات مش متاحة من الجهاز ده حاليًا.';emit();});
   emit();
  } catch {if(current!==generation)return;error='تعذر التحقق من صلاحية الحساب. مش هنعرض بيانات عيادة.';emit();}
 });

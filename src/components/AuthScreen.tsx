@@ -1,4 +1,5 @@
 import {PILOT} from '../lib/pilotBackend';
+import {portalLabels,type PortalRole} from '../lib/portalAccess';
 import React, { useState } from 'react';
 import {
   Stethoscope,
@@ -19,11 +20,13 @@ import {
   Info
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import {ThemeToggle} from './ThemeToggle';
 import { ClinicIllustration } from './ClinicIllustration';
 import './clinic-polish.css';
 
 
-export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPreviewClinic }) => {
+export const AuthScreen: React.FC<{ onPreviewClinic?: () => void; portal?: PortalRole; onChangePortal?: () => void }> = ({ onPreviewClinic, portal='patient', onChangePortal }) => {
+  const signupEnabled = !PILOT || portal==='patient';
   const { login, signup, signInWithGoogle, demoLogin, error, clearError, isPlaceholderAuth } = useAuth();
 
   const [isSignUp, setIsSignUp] = useState(false);
@@ -74,14 +77,14 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
 
     setIsSubmitting(true);
     try {
-      if (isSignUp) {
+      if (isSignUp && signupEnabled) {
         const defaultName = fullName.trim() || email.split('@')[0];
         await signup(email.trim(), password, {
           name: defaultName,
           role,
           department: department.trim() || (role === 'receptionist' ? 'Front Desk & Billing' : 'General Medicine'),
         });
-        setSuccessNotice('Account created successfully! Connecting to your portal...');
+        setSuccessNotice('تم إنشاء الحساب. جاري فتح بوابتك...');
       } else {
         await login(email.trim(), password);
       }
@@ -119,6 +122,7 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
           <span>عيادتي حالا<small lang="en" dir="ltr">AYADATI HALAN</small></span>
         </div>
         {onPreviewClinic && <button type="button" className="auth-text-button" onClick={onPreviewClinic}>استكشف العيادة <ArrowRight size={16} /></button>}
+        {PILOT && onChangePortal && <ThemeToggle inline/>}
       </header>
       <div className="auth-layout">
         <section className="auth-intro" aria-labelledby="auth-welcome">
@@ -129,14 +133,16 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
           <div className="auth-intro-caption"><span>01</span><p>تفاصيل أقل.<br /><strong>اهتمام أكتر.</strong></p></div>
         </section>
         <section className="auth-panel" aria-label="الدخول إلى عيادتي حالا">
+          {PILOT && <div className="auth-portal-context"><strong>{portalLabels[portal]}</strong>{onChangePortal && <button type="button" onClick={onChangePortal}>تغيير البوابة</button>}</div>}
           <div className="auth-mode" role="group" aria-label="نوع الدخول">
             <button type="button" aria-pressed={!isSignUp} onClick={() => changeMode(false)}>تسجيل الدخول</button>
-            <button type="button" aria-pressed={isSignUp} onClick={() => changeMode(true)}>حساب جديد</button>
+            {signupEnabled && <button type="button" aria-pressed={isSignUp} onClick={() => changeMode(true)}>حساب جديد</button>}
           </div>
           <div className="auth-heading">
             <span className="auth-eyebrow">أهلاً بيك في عيادتي حالا</span>
-            <h2>{isSignUp ? 'نبدأ بخطوة بسيطة.' : 'كل حاجة في مكانها.'}</h2>
-            <p>{isSignUp ? 'أدخل بياناتك لإنشاء حسابك.' : 'ادخل لحسابك وكمل يومك.'}</p>
+            <h2>{isSignUp ? 'نبدأ بخطوة بسيطة.' : PILOT ? portalLabels[portal] : 'كل حاجة في مكانها.'}</h2>
+            <p>{isSignUp ? (PILOT ? 'أدخل بياناتك لإنشاء حساب مريض.' : 'أدخل بياناتك لإنشاء حسابك.') : 'ادخل لحسابك وكمل يومك.'}</p>
+            {PILOT && !signupEnabled && <p className="auth-staff-notice">الدخول مرتبط بعضوية فريق العيادة. اختيار البوابة أو إنشاء حساب مريض مش بيمنح صلاحية {portal==='doctor'?'طبيب':'استقبال'}.</p>}
           </div>
           {(localError || error) && <div className="auth-alert" role="alert"><AlertCircle size={18} /><p>{localError || error}</p></div>}
           {successNotice && <div className="auth-notice" role="status"><CheckCircle2 size={18} /><p>{successNotice}</p></div>}

@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "test:rules": "node run.mjs rules",
-    "test:app": "node run.mjs app"
+    "test:app": "node run.mjs app",
+    "test:access": "node --import tsx test-portal-access.ts",
+    "test:built": "node test-built-portals.mjs"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "5.0.2",
