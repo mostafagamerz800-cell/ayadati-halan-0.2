@@ -10,9 +10,52 @@
     <meta property="og:description" content="Clinic interface preview with existing doctor, reception and patient portals. No real appointment requests are sent from the preview form." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      #clinic-boot{min-height:100svh;box-sizing:border-box;display:grid;place-items:center;margin:0;padding:24px;background:#f8f6f0;color:#173b36;font-family:Tahoma,Arial,sans-serif;text-align:center;line-height:1.9}
+      #clinic-boot[hidden],#root[hidden]{display:none!important}#clinic-boot section{width:min(100%,420px)}#clinic-boot .boot-mark{display:grid;place-items:center;width:56px;height:56px;margin:0 auto 24px;border:1px solid #dce3d7;border-radius:18px;background:#fffefa;color:#ae8735;font-size:29px}#clinic-boot h1{font-size:24px;margin:0 0 8px}#clinic-boot p{font-size:15px;margin:8px 0;color:#536b60}#clinic-boot small{display:block;font-size:12px;color:#536b60;margin-top:24px}#clinic-boot button{font:inherit;min-height:48px;margin-top:16px;padding:8px 28px;border:0;border-radius:12px;background:#214f45;color:#fffefa;cursor:pointer}#clinic-boot button:focus-visible{outline:3px solid #ae8735;outline-offset:4px}#clinic-boot .boot-line{height:3px;width:72px;background:#ae8735;margin:24px auto;border-radius:4px}body{margin:0}
+    </style>
+    <script>
+      (function(){
+        var mounted=false,finished=false;
+        function el(id){return document.getElementById(id)}
+        function delayed(failed){
+          if(finished&&!failed)return;
+          var shell=el('clinic-boot');if(!shell)return;
+          shell.hidden=false;el('root').hidden=true;
+          el('boot-title').textContent=failed?'تعذّر فتح الصفحة':'التحميل أخد وقت أطول من المعتاد';
+          el('boot-message').textContent=failed?'جزء من الصفحة ما اتحمّلش. جرّب إعادة المحاولة.':'الصفحة لسه بتحاول تفتح. تقدر تستنى أو تحاول تاني.';
+          el('boot-retry').hidden=false;shell.setAttribute('role',failed?'alert':'status');
+        }
+        var timer=setTimeout(function(){delayed(false)},12000);
+        function show(){
+          var styles=document.querySelectorAll('link[data-app-style]');
+          for(var i=0;i<styles.length;i++)if(styles[i].getAttribute('data-ready')!=='true')return;
+          if(!mounted)return;
+          clearTimeout(timer);finished=true;
+          var shell=el('clinic-boot'),root=el('root');if(shell)shell.hidden=true;if(root)root.hidden=false;
+        }
+        window.__clinicBoot={
+          appReady:function(){mounted=true;show()},
+          styleReady:function(link){link.media='all';link.setAttribute('data-ready','true');show()},
+          fail:function(){clearTimeout(timer);finished=false;mounted=false;delayed(true)}
+        };
+        window.addEventListener('error',function(event){if(!finished&&event.target===window)window.__clinicBoot.fail()});
+      })();
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <main id="clinic-boot" role="status" aria-live="polite" aria-atomic="true">
+      <section>
+        <div class="boot-mark" aria-hidden="true">♡</div>
+        <h1 id="boot-title">عيادتي حالا</h1>
+        <p id="boot-message">جاري فتح الصفحة...</p>
+        <div class="boot-line" aria-hidden="true"></div>
+        <button id="boot-retry" type="button" hidden onclick="window.location.reload()">إعادة المحاولة</button>
+        <small>نسخة تجريبية ببيانات وهمية فقط. ليست لحجز موعد طبي حقيقي.</small>
+        <noscript><p>فعّل JavaScript في المتصفح لفتح النسخة التجريبية.</p></noscript>
+      </section>
+    </main>
+    <div id="root" hidden></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
