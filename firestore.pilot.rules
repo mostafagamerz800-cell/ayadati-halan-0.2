@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function signed() { return request.auth != null && request.auth.token.firebase.sign_in_provider != 'anonymous'; }
+  function member(c) { return /databases/$(database)/documents/clinics/$(c)/members/$(request.auth.uid); }
+  function role(c, r) { return signed() && exists(member(c)) && get(member(c)).data.role == r; }
+  function staff(c) { return role(c, 'doctor') || role(c, 'receptionist'); }
+  function booking(c, id) { return /databases/$(database)/documents/clinics/$(c)/bookings/$(id); }
+  function counter(c) { return /databases/$(database)/documents/clinics/$(c)/meta/turnCounter; }
+  function room(c) { return /databases/$(database)/documents/clinics/$(c)/meta/queueState; }
+  function valid(d, id) {
+   return d.keys().hasOnly(['id','name','phone','type','date','note','status','turn','createdBy','createdAt','updatedAt'])
+    && d.keys().hasAll(['id','name','phone','type','date','note','status','turn','createdBy','createdAt','updatedAt'])
+    && d.id == id && d.name is string && d.name.size() > 0 && d.name.size() <= 100
+    && d.phone is string && d.phone.matches('^010000000[0-9]{2}$')
+    && d.type in ['new','followup'] && d.date is string && d.date.size() <= 10
+    && d.note == '' && d.createdBy is string && d.createdAt is int && d.updatedAt is int
+    && d.status in ['requested','confirmed','arrived','in-consult','done','cancelled','no-show']
+    && (d.turn == null || (d.turn is int && d.turn > 0));
+  }
+  match /clinics/{c}/members/{uid} {
+   allow get: if signed() && request.auth.uid == uid;
+   allow list, write: if false;
+  }
+  match /clinics/{c}/bookings/{id} {
+   allow get, list: if signed() && (resource.data.createdBy == request.auth.uid || staff(c));
+   allow create: if c == 'pilot-clinic-1' && signed() && valid(request.resource.data,id)
+    && request.resource.data.createdBy == request.auth.uid
+    && request.resource.data.status == 'requested' && request.resource.data.turn == null;
+   allow update: if valid(request.resource.data,id)
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','turn','updatedAt'])
+    && request.resource.data.updatedAt >= resource.data.updatedAt
+    && (
+     (role(c,'receptionist') && (
+      (resource.data.status == 'requested' && request.resource.data.status == 'confirmed'
+       && request.resource.data.turn == (exists(counter(c)) ? get(counter(c)).data.next : 1)
+       && getAfter(counter(c)).data.next == request.resource.data.turn + 1
+       && getAfter(counter(c)).data.lastBookingId == id)
+      || (request.resource.data.turn == resource.data.turn && (
+       (resource.data.status == 'requested' && request.resource.data.status == 'cancelled')
+       || (resource.data.status == 'confirmed' && request.resource.data.status in ['arrived','cancelled','no-show'])
+       || (resource.data.status == 'arrived' && request.resource.data.status in ['cancelled','no-show'])
+      ))
+     ))
+     || (role(c,'doctor') && request.resource.data.turn == resource.data.turn && (
+      (resource.data.status in ['confirmed','arrived'] && request.resource.data.status == 'in-consult'
+       && (!exists(room(c)) || get(room(c)).data.currentInConsult == null)
+       && getAfter(room(c)).data.currentInConsult == id)
+      || (resource.data.status == 'in-consult' && request.resource.data.status == 'done'
+       && get(room(c)).data.currentInConsult == id && getAfter(room(c)).data.currentInConsult == null)
+     ))
+    );
+   allow delete: if false;
+  }
+  match /clinics/{c}/meta/turnCounter {
+   allow get: if role(c,'receptionist');
+   allow create, update: if role(c,'receptionist')
+    && request.resource.data.keys().hasOnly(['next','lastBookingId'])
+    && request.resource.data.next is int && request.resource.data.lastBookingId is string
+    && request.resource.data.next == (resource == null ? 2 : resource.data.next + 1)
+    && get(booking(c,request.resource.data.lastBookingId)).data.status == 'requested'
+    && getAfter(booking(c,request.resource.data.lastBookingId)).data.status == 'confirmed'
+    && getAfter(booking(c,request.resource.data.lastBookingId)).data.turn == request.resource.data.next - 1;
+  }
+  match /clinics/{c}/meta/queueState {
+   allow get: if role(c,'doctor');
+   allow create, update: if role(c,'doctor')
+    && request.resource.data.keys().hasOnly(['currentInConsult'])
+    && (
+     ((resource == null || resource.data.currentInConsult == null)
+      && request.resource.data.currentInConsult is string
+      && get(booking(c,request.resource.data.currentInConsult)).data.status in ['confirmed','arrived']
+      && getAfter(booking(c,request.resource.data.currentInConsult)).data.status == 'in-consult')
+     || (resource != null && resource.data.currentInConsult is string && request.resource.data.currentInConsult == null
+      && get(booking(c,resource.data.currentInConsult)).data.status == 'in-consult'
+      && getAfter(booking(c,resource.data.currentInConsult)).data.status == 'done')
+    );
+  }
+  match /{document=**} { allow read, write: if false; }
+ }
+}
