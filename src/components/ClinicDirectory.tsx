@@ -1,3 +1,4 @@
+import { ClinicIllustration } from "./ClinicIllustration";
 import { translate } from "../lib/clinic.i18n";
 import React, { useState } from "react";
 import {
@@ -66,6 +67,7 @@ export function ClinicDirectory({
           <p className="directory-count" aria-live="polite">
             {filtered.length} {translate(lang, "text_5c2ca364cf")}
           </p>
+          {filtered.length === 0 && <div className="directory-empty"><ClinicIllustration kind="search" className="empty-art" /><p>{lang === "ar" ? "مفيش نتائج مطابقة للتخصص ده." : "No matching clinics."}</p></div>}
           <div className="clinic-grid services-grid">
             {filtered.map((tenant) => (
               <article className="clinic-card" key={tenant.id}>
