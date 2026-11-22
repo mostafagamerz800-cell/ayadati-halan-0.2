@@ -162,6 +162,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     let isMounted = true;
 
+    // DEV-COPY ONLY: ?portal= / ?seed= deep-link demo inspection must not
+    // wait on the Firebase network round-trip. Normal visitors are unaffected.
+    if (/[?&](portal|seed)=/.test(window.location.search)) {
+      setLoading(false);
+      return;
+    }
+
     // Check for existing demo session in sessionStorage
     const savedDemoUser = sessionStorage.getItem('ayadatihala_demo_user');
     if (savedDemoUser) {
