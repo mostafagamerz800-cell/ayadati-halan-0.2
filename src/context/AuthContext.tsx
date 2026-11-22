@@ -1,3 +1,4 @@
+import {PILOT,loadPilotRole} from '../lib/pilotBackend';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import {
   User,
@@ -92,6 +93,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Fetch or create user document in Firestore
   const fetchUserData = async (user: User): Promise<UserProfile> => {
+    if(PILOT) return {uid:user.uid,email:user.email,name:user.displayName||user.email?.split('@')[0]||'Pilot user',role:await loadPilotRole(user.uid),department:'تجربة ببيانات وهمية',photoURL:user.photoURL};
     try {
       const userDocRef = doc(db, 'users', user.uid);
       const userDocSnap = await getDoc(userDocRef);
@@ -121,7 +123,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         uid: user.uid,
         email: safeEmail,
         name: fallbackName,
-        role: 'doctor',
+        role: PILOT ? 'patient' : 'doctor',
         department: 'General Medicine',
         ...(safePhotoURL ? { photoURL: safePhotoURL } : {}),
       };
@@ -151,7 +153,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         uid: user.uid,
         email: user.email,
         name: (user.displayName || user.email?.split('@')[0] || 'Doctor').slice(0, 100),
-        role: 'doctor',
+        role: PILOT ? 'patient' : 'doctor',
         department: 'General Medicine',
         photoURL: (user.photoURL && user.photoURL.length <= 500) ? user.photoURL : null,
       };
@@ -161,16 +163,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Listen to Firebase Auth state
   useEffect(() => {
     let isMounted = true;
+    if(PILOT) {
+      let generation=0;
+      const unsubscribe=onAuthStateChanged(auth,async user=>{
+        const run=++generation;
+        setCurrentUser(null);setFirebaseUser(user);setLoading(true);
+        try {if(user){const profile=await fetchUserData(user);if(isMounted&&run===generation&&auth.currentUser?.uid===user.uid)setCurrentUser(profile);}}
+        catch {if(isMounted&&run===generation)setError('تعذر التحقق من صلاحية الحساب. حاول تسجيل الخروج والدخول تاني.');}
+        finally {if(isMounted&&run===generation)setLoading(false);}
+      });
+      return ()=>{isMounted=false;generation++;unsubscribe();};
+    }
 
     // DEV-COPY ONLY: ?portal= / ?seed= deep-link demo inspection must not
     // wait on the Firebase network round-trip. Normal visitors are unaffected.
-    if (/[?&](portal|seed)=/.test(window.location.search)) {
+    if (!PILOT && /[?&](portal|seed)=/.test(window.location.search)) {
       setLoading(false);
       return;
     }
 
     // Check for existing demo session in sessionStorage
-    const savedDemoUser = sessionStorage.getItem('ayadatihala_demo_user');
+    const savedDemoUser = PILOT ? null : sessionStorage.getItem('ayadatihala_demo_user');
     if (savedDemoUser) {
       try {
         const parsed = JSON.parse(savedDemoUser);
@@ -200,7 +213,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 uid: user.uid,
                 email: user.email,
                 name: user.displayName || user.email?.split('@')[0] || 'Doctor',
-                role: 'doctor',
+                role: PILOT ? 'patient' : 'doctor',
                 department: 'General Medicine',
               });
             }
@@ -208,7 +221,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         } else {
           setFirebaseUser(null);
           // If no active demo user, clear currentUser
-          const demoSession = sessionStorage.getItem('ayadatihala_demo_user');
+          const demoSession = PILOT ? null : sessionStorage.getItem('ayadatihala_demo_user');
           if (!demoSession) {
             setCurrentUser(null);
           }
@@ -239,6 +252,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if(PILOT)return;
       const profile = await fetchUserData(userCredential.user);
       setCurrentUser(profile);
       setFirebaseUser(userCredential.user);
@@ -261,6 +275,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // 1. Create Firebase Auth user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      if(PILOT) { await updateProfile(user,{displayName:(options?.name||email.split('@')[0]).slice(0,100)});return; }
 
       // 2. Prepare user profile fields (default role: "doctor", name: email prefix)
       const emailPrefix = email.includes('@') ? email.split('@')[0] : 'User';
@@ -323,6 +338,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
+      if(PILOT)return;
 
       const profile = await fetchUserData(user);
       setFirebaseUser(user);
@@ -359,12 +375,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     name?: string,
     department?: string
   ): void => {
+    if(PILOT) {setError('الدخول التجريبي المحلي غير متاح في نسخة الربط. سجّل حساب مريض، وصلاحية العاملين من الإدارة فقط.');return;}
     const demoProfiles: Record<string, UserProfile> = {
       doctor: {
         uid: 'demo-doc-wright-001',
         email: 'demo@example.invalid',
         name: name || 'Demo user',
-        role: 'doctor',
+        role: PILOT ? 'patient' : 'doctor',
         department: department || 'Internal Medicine',
         isDemoUser: true,
       },
