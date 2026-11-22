@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { ReceptionMvpPanel, PatientMvpStatus, useMvpBookings } from './components/MvpClinicFlow';
+import { seedMvpDemo } from './lib/devSync';
 import { 
   User, 
   Users, 
@@ -109,8 +111,8 @@ const INITIAL_SAAS_TENANTS: Tenant[] = [
   {
     id: 'dr-wright',
     slug: 'dr-wright',
-    clinicName: 'Demo clinic 1',
-    doctorName: 'Demo doctor 1',
+    clinicName: 'عيادة الباطنة التجريبية',
+    doctorName: 'د. أحمد محمد (تجريبي)',
     specialty: 'Internal Medicine',
     tagline: 'Excellence in Medical Care, Tailored for You.',
     bio: 'Demo profile for interface testing only. Not a real doctor.',
@@ -323,17 +325,17 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[120] bg-sky-950/40 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden border border-sky-100 my-8">
+    <div className="fixed inset-0 z-[120] bg-[#0B1220]/40 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden border border-[#E3E8F0] my-8">
         
         {/* Header with Logo */}
-        <div className="bg-gradient-to-r from-sky-500 to-sky-600 text-white p-6 text-center relative">
+        <div className="bg-[#0F4C81] text-white p-6 text-center relative">
           <button onClick={onClose} className="absolute top-4 right-4 text-white/70 hover:text-white p-2 cursor-pointer">
             <X size={24} />
           </button>
           
           <div className="flex justify-center mb-3">
-            <div className="w-16 h-16 rounded-2xl bg-white p-2 shadow-lg flex items-center justify-center overflow-hidden border border-sky-200">
+            <div className="w-16 h-16 rounded-2xl bg-white p-2 shadow-lg flex items-center justify-center overflow-hidden border border-[#E3E8F0]">
               <img src={SAAS_LOGO_URL} alt="عيادتي حالاً Logo" className="w-full h-full object-contain" />
             </div>
           </div>
@@ -343,17 +345,17 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
 
         {/* Success Banner */}
         {successMsg && (
-          <div className="bg-sky-500 text-white p-4 text-center text-sm font-semibold flex items-center justify-center gap-2 animate-pulse">
+          <div className="bg-[#0F4C81] text-white p-4 text-center text-sm font-semibold flex items-center justify-center gap-2 animate-pulse">
             <Check size={18} /> {successMsg}
           </div>
         )}
 
         {/* Role Tab Switcher (1. Doctor made first, 2. Receptionist, 3. Patient) */}
-        <div className="grid grid-cols-3 bg-sky-50/70 p-1.5 gap-1 border-b border-sky-100 text-center text-xs font-bold">
+        <div className="grid grid-cols-3 bg-[#F7F9FC]/70 p-1.5 gap-1 border-b border-[#E3E8F0] text-center text-xs font-bold">
           <button
             onClick={() => setTab('doctor')}
             className={`py-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              tab === 'doctor' ? 'bg-sky-600 text-white shadow-sm' : 'text-sky-800 hover:bg-sky-100/60'
+              tab === 'doctor' ? 'bg-[#0F4C81] text-white shadow-sm' : 'text-[#0F4C81] hover:bg-[#E3E8F0]/60'
             }`}
           >
             <Stethoscope size={15} /> 1. Doctor (أنت طبيب)
@@ -361,7 +363,7 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
           <button
             onClick={() => setTab('receptionist')}
             className={`py-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              tab === 'receptionist' ? 'bg-sky-500 text-white shadow-sm' : 'text-sky-800 hover:bg-sky-100/60'
+              tab === 'receptionist' ? 'bg-[#0F4C81] text-white shadow-sm' : 'text-[#0F4C81] hover:bg-[#E3E8F0]/60'
             }`}
           >
             <Users size={15} /> 2. Receptionist (سكرتير)
@@ -369,7 +371,7 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
           <button
             onClick={() => setTab('patient')}
             className={`py-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              tab === 'patient' ? 'bg-sky-400 text-white shadow-sm' : 'text-sky-800 hover:bg-sky-100/60'
+              tab === 'patient' ? 'bg-[#0F4C81] text-white shadow-sm' : 'text-[#0F4C81] hover:bg-[#E3E8F0]/60'
             }`}
           >
             <User size={15} /> 3. Patient (مريض)
@@ -382,7 +384,7 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
           {/* 1. DOCTOR SIGN UP (Made First) */}
           {tab === 'doctor' && (
             <form onSubmit={handleDoctorSubmit} className="space-y-4">
-              <div className="bg-sky-50 border border-sky-200 p-3 rounded-xl text-xs text-sky-900">
+              <div className="bg-[#F7F9FC] border border-[#E3E8F0] p-3 rounded-xl text-xs text-[#0F4C81]">
                 💡 <strong>Doctor Onboarding:</strong> Register your medical specialty and clinic details to instantly spin up your dedicated web app instance.
               </div>
 
@@ -465,7 +467,7 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold text-sm shadow-md shadow-sky-500/20 transition-all mt-4 cursor-pointer"
+                className="w-full py-3 bg-[#087F76] hover:bg-[#066B63] text-white rounded-xl font-bold text-sm shadow-md shadow-[#087F76]/25 transition-all mt-4 cursor-pointer"
               >
                 Create Doctor Clinic App (تسجيل العيادة)
               </button>
@@ -475,8 +477,8 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
           {/* 2. RECEPTIONIST SIGN UP ("For those to be around") */}
           {tab === 'receptionist' && (
             <form onSubmit={handleReceptionistSubmit} className="space-y-4">
-              <div className="bg-sky-50 border border-sky-200 p-3 rounded-xl text-xs text-sky-900 flex items-center gap-3">
-                <ImageIcon size={28} className="shrink-0 text-sky-500" />
+              <div className="bg-[#F7F9FC] border border-[#E3E8F0] p-3 rounded-xl text-xs text-[#0F4C81] flex items-center gap-3">
+                <ImageIcon size={28} className="shrink-0 text-[#0F4C81]" />
                 <span><strong>Reception Desk Setup:</strong> Link your secretary account to a specific doctor and configure clinic payment options.</span>
               </div>
 
@@ -547,7 +549,7 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold text-sm shadow-md shadow-sky-500/20 transition-all mt-4 cursor-pointer"
+                className="w-full py-3 bg-[#087F76] hover:bg-[#066B63] text-white rounded-xl font-bold text-sm shadow-md shadow-[#087F76]/25 transition-all mt-4 cursor-pointer"
               >
                 Access Reception Desk Portal
               </button>
@@ -557,10 +559,10 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
           {/* 3. PATIENTS SIGN UP (+4 Specialty & Doctor Discovery) */}
           {tab === 'patient' && (
             <div className="space-y-6 text-center py-4">
-              <div className="w-20 h-20 bg-sky-50 text-sky-600 rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner border border-sky-100">
+              <div className="w-20 h-20 bg-[#F7F9FC] text-[#0F4C81] rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner border border-[#E3E8F0]">
                 <Users size={36} />
               </div>
-              <h3 className="text-xl font-bold text-sky-950">Patient Discovery & Booking</h3>
+              <h3 className="text-xl font-bold text-[#0B1220]">Patient Discovery & Booking</h3>
               <p className="text-gray-600 text-sm max-w-md mx-auto">
                 Patients can browse medical specialties, inspect available doctors, view clinic locations and schedules, and book instantly.
               </p>
@@ -570,7 +572,7 @@ const SaasAuthModal: React.FC<SaasAuthModalProps> = ({
                   onClose();
                   onSelectPatientView();
                 }}
-                className="px-8 py-3.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold text-sm shadow-md shadow-sky-500/20 transition-all inline-flex items-center gap-2 cursor-pointer"
+                className="px-8 py-3.5 bg-[#087F76] hover:bg-[#066B63] text-white rounded-xl font-bold text-sm shadow-md shadow-[#087F76]/25 transition-all inline-flex items-center gap-2 cursor-pointer"
               >
                 Browse Specialties & Doctors <ArrowRight size={16} />
               </button>
@@ -613,40 +615,40 @@ const PatientPortal: React.FC<PatientPortalProps> = ({ onBackToHome, tenant, dem
   }, [demoBypassAuth]);
 
   const colors = {
-    primaryText: 'text-sky-950',
-    primaryBg: 'bg-sky-950',
-    accentText: 'text-sky-600',
-    accentBg: 'bg-sky-500',
-    accentBorder: 'border-sky-500',
+    primaryText: 'text-[#0B1220]',
+    primaryBg: 'bg-[#0B1220]',
+    accentText: 'text-[#0F4C81]',
+    accentBg: 'bg-[#0F4C81]',
+    accentBorder: 'border-[#0F4C81]',
   };
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F0F8FF] via-[#E0F2FE] to-white flex flex-col items-center justify-center p-4 font-sans text-sky-950">
+      <div className="min-h-screen bg-[#F7F9FC] flex flex-col items-center justify-center p-4 font-sans text-[#0B1220]">
         <div className="max-w-md w-full mb-4">
-          <button onClick={onBackToHome} className="inline-flex items-center gap-2 text-sm font-semibold text-sky-800 hover:text-sky-600">
+          <button onClick={onBackToHome} className="inline-flex items-center gap-2 text-sm font-semibold text-[#0F4C81] hover:text-[#0F4C81]">
             <ArrowLeft size={16} /> Back to Home
           </button>
         </div>
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-sky-100">
-          <div className="bg-gradient-to-r from-sky-500 to-sky-600 p-8 text-center text-white">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-[#E3E8F0]">
+          <div className="bg-[#0F4C81] p-8 text-center text-white">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
               <User size={32} className="text-white" />
             </div>
             <h1 className="text-2xl font-bold mb-1">Patient Portal</h1>
-            <p className="text-sky-100 text-xs font-medium">{tenant.clinicName} • {tenant.doctorName}</p>
+            <p className="text-[#E3E8F0] text-xs font-medium">{tenant.clinicName} • {tenant.doctorName}</p>
           </div>
           <div className="p-8">
             <form onSubmit={(e) => { e.preventDefault(); setIsLoggedIn(true); }} className="space-y-6">
               <div>
-                <label className="block text-sm font-bold text-sky-900 mb-2">Patient ID / Number</label>
-                <input type="text" required defaultValue="P-1004" className="w-full p-3 border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-400 outline-none text-sky-950" />
+                <label className="block text-sm font-bold text-[#0F4C81] mb-2">Patient ID / Number</label>
+                <input type="text" required defaultValue="P-1004" className="w-full p-3 border border-[#E3E8F0] rounded-xl focus:ring-2 focus:ring-[#0F4C81] outline-none text-[#0B1220]" />
               </div>
               <div>
-                <label className="block text-sm font-bold text-sky-900 mb-2">Mobile Number</label>
-                <input type="tel" required defaultValue="01012345678" className="w-full p-3 border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-400 outline-none text-sky-950" />
+                <label className="block text-sm font-bold text-[#0F4C81] mb-2">Mobile Number</label>
+                <input type="tel" required defaultValue="01012345678" className="w-full p-3 border border-[#E3E8F0] rounded-xl focus:ring-2 focus:ring-[#0F4C81] outline-none text-[#0B1220]" />
               </div>
-              <button type="submit" className="w-full py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold shadow-md transition-all cursor-pointer">
+              <button type="submit" className="w-full py-3 bg-[#0F4C81] hover:bg-[#0F4C81] text-white rounded-xl font-bold shadow-md transition-all cursor-pointer">
                 Access Portal
               </button>
             </form>
@@ -657,28 +659,28 @@ const PatientPortal: React.FC<PatientPortalProps> = ({ onBackToHome, tenant, dem
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F8FF] font-sans text-sky-950">
-      <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-sky-100">
+    <div className={`patient-portal ${activeTab === 'dashboard' ? 'patient-live-view' : ''} min-h-screen bg-[#F7F9FC] font-sans text-[#0B1220]`}>
+      <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-[#E3E8F0]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center gap-3">
-            <Activity className="text-sky-500" size={24} />
-            <h1 className="text-xl font-bold text-sky-950">MedPortal</h1>
+            <Activity className="text-[#0F4C81]" size={24} />
+            <h1 className="text-xl font-bold text-[#0B1220]">عيادتي حالا</h1>
           </div>
-          <button onClick={() => setIsLoggedIn(false)} className="flex items-center gap-2 text-sm text-sky-700 hover:text-sky-900 font-semibold cursor-pointer">
-            <LogOut size={16} /> Log Out
+          <button onClick={() => setIsLoggedIn(false)} className="flex items-center gap-2 text-sm text-[#51607A] hover:text-[#0F4C81] font-semibold cursor-pointer">
+            <LogOut size={16} /> تسجيل الخروج
           </button>
         </div>
       </header>
 
-      <div className="bg-white border-b border-sky-100">
+      <div className="bg-white border-b border-[#E3E8F0]">
         <div className="max-w-5xl mx-auto px-4 flex space-x-6">
-          {['dashboard', 'post-consultation', 'support'].map((tab) => (
+          {[['dashboard', 'متابعتي'], ['post-consultation', 'بعد الكشف'], ['support', 'الدعم']].map(([tab, label]) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`py-4 px-1 border-b-2 font-bold text-sm capitalize cursor-pointer transition ${activeTab === tab ? 'border-sky-500 text-sky-600' : 'border-transparent text-sky-800/60 hover:text-sky-900'}`}
+              className={`py-4 px-1 border-b-2 font-bold text-sm cursor-pointer transition ${activeTab === tab ? 'border-[#0F4C81] text-[#0F4C81]' : 'border-transparent text-[#0F4C81]/60 hover:text-[#0F4C81]'}`}
             >
-              {tab.replace('-', ' ')}
+              {label}
             </button>
           ))}
         </div>
@@ -686,80 +688,63 @@ const PatientPortal: React.FC<PatientPortalProps> = ({ onBackToHome, tenant, dem
 
       <main className="max-w-5xl mx-auto px-4 py-8">
         {activeTab === 'dashboard' && (
-          <div className="space-y-6">
-            <div className="bg-sky-50 border border-sky-200 rounded-2xl p-4 flex gap-4 items-start">
-              <CheckCircle2 className="text-sky-500 shrink-0 mt-0.5" size={24} />
+          <div className="patient-stack grid gap-6 items-start">
+            <div><PatientMvpStatus doctorName={tenant.doctorName} clinicName={tenant.clinicName} /></div>
+            <div className="patient-instructions bg-white border border-[#E3E8F0] rounded-2xl p-4 flex gap-4 items-start">
+              <CheckCircle2 className="text-[#0F4C81] shrink-0 mt-0.5" size={24} />
               <div>
-                <h3 className="text-sky-950 font-bold mb-1">Arrival Instructions</h3>
-                <p className="text-sky-800 text-sm">Please aim to arrive <strong>15 minutes early</strong> for your appointment.</p>
+                <h3 className="text-[#0B1220] font-bold mb-1">تعليمات الحضور</h3>
+                <p className="text-[#51607A] text-sm leading-relaxed">برجاء الحضور <strong className="text-[#0F4C81]">قبل الموعد بـ 15 دقيقة</strong> لاستكمال إجراءات الكشف.</p>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-sm border border-sky-100">
-                <h3 className="text-sm font-bold text-sky-700 mb-4 uppercase">Your Turn Number</h3>
-                <div className="w-32 h-32 rounded-full border-4 border-sky-400 bg-sky-50 flex items-center justify-center mb-2 shadow-inner">
-                  <span className="text-5xl font-extrabold text-sky-600">04</span>
-                </div>
-                <p className="text-sm text-sky-800 mt-2">Currently serving: <span className="font-bold text-sky-600">02</span></p>
-              </div>
-
-              <div className="md:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-sky-100">
-                <h2 className="text-lg font-bold mb-6 text-sky-950 flex items-center gap-2">
-                  <Calendar size={20} className="text-sky-500" /> Upcoming Appointment ({tenant.doctorName})
-                </h2>
-                <div className="grid sm:grid-cols-2 gap-6 text-sm">
-                  <div><p className="text-sky-700">Date:</p><p className="font-bold text-sky-950">Thursday, Nov 12, 2026</p></div>
-                  <div><p className="text-sky-700">Time:</p><p className="font-bold text-sky-950">10:30 AM</p></div>
-                  <div><p className="text-sky-700">Location:</p><p className="font-bold text-sky-950">{tenant.address}</p></div>
-                  <div><p className="text-sky-700">Fee:</p><p className="font-bold text-sky-600">{tenant.consultationFee} EGP</p></div>
-                </div>
-              </div>
-            </div>
           </div>
         )}
 
         {activeTab === 'post-consultation' && (
           <div className="space-y-6">
-            <div className="bg-white p-4 rounded-xl border border-sky-100 flex justify-between items-center">
-              <span className="text-sm font-semibold text-sky-950">Demo: Toggle Visit Status</span>
-              <button onClick={() => setVisitCompleted(!visitCompleted)} className={`px-4 py-2 rounded-full text-sm font-bold transition ${visitCompleted ? 'bg-sky-500 text-white' : 'bg-sky-50 text-sky-700 border border-sky-200'}`}>
+            <div dir="rtl" className="rounded-xl border px-4 py-2.5 text-xs font-bold" style={{ background: '#fff4de', borderColor: '#f0d79a', color: '#92600a' }}>
+              شاشة عرض تجريبية قديمة — مش جزء من متابعة حجزك الجديدة.
+            </div>
+            <div className="bg-white p-4 rounded-xl border border-[#E3E8F0] flex justify-between items-center">
+              <span className="text-sm font-semibold text-[#0B1220]">Demo: Toggle Visit Status</span>
+              <button onClick={() => setVisitCompleted(!visitCompleted)} className={`px-4 py-2 rounded-full text-sm font-bold transition ${visitCompleted ? 'bg-[#0F4C81] text-white' : 'bg-[#F7F9FC] text-[#51607A] border border-[#E3E8F0]'}`}>
                 {visitCompleted ? 'Visit Completed' : 'Mark as Completed'}
               </button>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 space-y-4">
-                <h3 className="font-bold text-sky-950">Medical Orders & Prescriptions</h3>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8F0] space-y-4">
+                <h3 className="font-bold text-[#0B1220]">Medical Orders & Prescriptions</h3>
                 <ul className="space-y-2 text-sm">
-                  <li className="bg-sky-50 p-2.5 rounded-lg border border-sky-200 text-sky-900 font-medium">CBC & Lipid Panel</li>
-                  <li className="bg-sky-50 p-2.5 rounded-lg border border-sky-200 text-sky-900 font-medium">Chest X-Ray</li>
+                  <li className="bg-[#F7F9FC] p-2.5 rounded-lg border border-[#E3E8F0] text-[#0F4C81] font-medium">CBC & Lipid Panel</li>
+                  <li className="bg-[#F7F9FC] p-2.5 rounded-lg border border-[#E3E8F0] text-[#0F4C81] font-medium">Chest X-Ray</li>
                 </ul>
               </div>
 
-              <div className="relative bg-white p-6 rounded-2xl shadow-sm border border-sky-100 flex flex-col">
-                <h3 className="font-bold text-sky-950 mb-4">Ratings & Notes</h3>
+              <div className="relative bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8F0] flex flex-col">
+                <h3 className="font-bold text-[#0B1220] mb-4">Ratings & Notes</h3>
                 <div className="flex gap-2 mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star 
                       key={star} 
                       size={24} 
                       onClick={() => setSelectedRating(star)} 
-                      className={`cursor-pointer transition ${star <= selectedRating ? 'text-amber-400 fill-amber-400' : 'text-sky-200'}`} 
+                      className={`cursor-pointer transition ${star <= selectedRating ? 'text-amber-400 fill-amber-400' : 'text-[#E3E8F0]'}`} 
                     />
                   ))}
                 </div>
-                <div className="bg-sky-50/60 p-3 rounded-xl border border-sky-200 text-xs text-sky-900 mb-4 h-24">
+                <div className="bg-[#F7F9FC]/60 p-3 rounded-xl border border-[#E3E8F0] text-xs text-[#0F4C81] mb-4 h-24">
                   Patient presented with stable vitals. Prescribed standard course. Follow-up in 2 weeks.
                 </div>
-                <button onClick={() => setRatingSubmitted(true)} className="w-full py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-sm font-bold shadow-sm transition">
+                <button onClick={() => setRatingSubmitted(true)} className="w-full py-2.5 bg-[#0F4C81] hover:bg-[#0F4C81] text-white rounded-xl text-sm font-bold shadow-sm transition">
                   {ratingSubmitted ? 'Submitted!' : 'Submit Rating'}
                 </button>
 
                 {!visitCompleted && (
                   <div className="absolute inset-0 bg-white/80 backdrop-blur-[1px] rounded-2xl flex flex-col items-center justify-center">
-                    <Lock size={28} className="text-sky-400 mb-1" />
-                    <span className="text-xs font-bold text-sky-900">Locked Until Visit Completed</span>
+                    <Lock size={28} className="text-[#0F4C81] mb-1" />
+                    <span className="text-xs font-bold text-[#0F4C81]">Locked Until Visit Completed</span>
                   </div>
                 )}
               </div>
@@ -769,6 +754,9 @@ const PatientPortal: React.FC<PatientPortalProps> = ({ onBackToHome, tenant, dem
 
         {activeTab === 'support' && (
           <div className="max-w-xl mx-auto space-y-4">
+            <div dir="rtl" className="rounded-xl border px-4 py-2.5 text-xs font-bold" style={{ background: '#fff4de', borderColor: '#f0d79a', color: '#92600a' }}>
+              شاشة عرض تجريبية قديمة — مش جزء من متابعة حجزك الجديدة.
+            </div>
             <h2 className="text-2xl font-bold text-center mb-6">Frequently Asked Questions</h2>
             {[{q: 'How to reschedule?', a: 'Contact secretary at ' + tenant.secretaryPhone}, {q: 'Where are lab results?', a: 'Visible in Post-Consultation tab.'}].map((f, i) => (
               <div key={i} className="bg-white p-4 rounded-xl border shadow-sm">
@@ -814,6 +802,12 @@ const ReceptionPortal: React.FC<ReceptionPortalProps> = ({ onBackToHome, tenant,
   });
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
+  // DEV-COPY Stage 1: queue counters read from the shared dev booking store
+  // (same source as the MVP panel below and the patient/doctor portals).
+  const mvpBookings = useMvpBookings();
+  const mvpWaiting = mvpBookings.filter((b) => b.status === 'confirmed' || b.status === 'arrived').length;
+  const mvpInConsult = mvpBookings.filter((b) => b.status === 'in-consult').length;
+
   useEffect(() => {
     if (demoBypassAuth) {
       setIsAuthenticated(true);
@@ -838,25 +832,25 @@ const ReceptionPortal: React.FC<ReceptionPortalProps> = ({ onBackToHome, tenant,
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F0F8FF] via-[#E0F2FE] to-white flex items-center justify-center p-4">
-        <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border-t-4 border-sky-400 border border-sky-100">
+      <div className="min-h-screen bg-[#F7F9FC] flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border-t-4 border-[#0F4C81] border border-[#E3E8F0]">
           <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-sky-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-md">
+            <div className="w-16 h-16 bg-[#0F4C81] text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-md">
               <Users size={30} />
             </div>
-            <h1 className="text-xl font-bold text-sky-950">Receptionist Desk Portal</h1>
-            <p className="text-sky-600 text-xs mt-1 font-semibold">{tenant.clinicName}</p>
+            <h1 className="text-xl font-bold text-[#0B1220]">Receptionist Desk Portal</h1>
+            <p className="text-[#0F4C81] text-xs mt-1 font-semibold">{tenant.clinicName}</p>
           </div>
           <form onSubmit={(e) => { e.preventDefault(); setIsAuthenticated(true); }} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-sky-800 mb-1">Username</label>
-              <input type="text" defaultValue="secretary" className="w-full p-2.5 border border-sky-200 rounded-xl text-sm focus:ring-2 focus:ring-sky-400 outline-none text-sky-950" required />
+              <label className="block text-xs font-bold text-[#0F4C81] mb-1">Username</label>
+              <input type="text" defaultValue="secretary" className="w-full p-2.5 border border-[#E3E8F0] rounded-xl text-sm focus:ring-2 focus:ring-[#0F4C81] outline-none text-[#0B1220]" required />
             </div>
             <div>
-              <label className="block text-xs font-bold text-sky-800 mb-1">Password</label>
-              <input type="password" defaultValue="password" className="w-full p-2.5 border border-sky-200 rounded-xl text-sm focus:ring-2 focus:ring-sky-400 outline-none text-sky-950" required />
+              <label className="block text-xs font-bold text-[#0F4C81] mb-1">Password</label>
+              <input type="password" defaultValue="password" className="w-full p-2.5 border border-[#E3E8F0] rounded-xl text-sm focus:ring-2 focus:ring-[#0F4C81] outline-none text-[#0B1220]" required />
             </div>
-            <button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 rounded-xl text-sm shadow-md transition-all cursor-pointer">
+            <button type="submit" className="w-full bg-[#0F4C81] hover:bg-[#0F4C81] text-white font-bold py-3 rounded-xl text-sm shadow-md transition-all cursor-pointer">
               Login to Reception
             </button>
           </form>
@@ -866,200 +860,121 @@ const ReceptionPortal: React.FC<ReceptionPortalProps> = ({ onBackToHome, tenant,
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F8FF] flex">
-      <div className="w-64 bg-white border-r border-sky-100 flex flex-col hidden md:flex fixed h-full z-20">
-        <div className="p-6 bg-gradient-to-r from-sky-500 to-sky-600 text-white">
+    <div className="reception-portal min-h-screen bg-[#F7F9FC] flex overflow-x-clip">
+      <div className="w-64 bg-white border-r border-[#E3E8F0] flex flex-col hidden md:flex fixed start-0 h-full z-20">
+        <div className="p-6 bg-[#0F4C81] text-white">
           <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
             <Users size={22} className="text-white" />
           </div>
           <h2 className="font-bold text-lg">Reception Desk</h2>
-          <p className="text-xs text-sky-100">{tenant.doctorName}</p>
+          <p className="text-xs text-[#E3E8F0]">{tenant.doctorName}</p>
           <span className="inline-block mt-2 px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-semibold">
             {tenant.clinicName}
           </span>
         </div>
         <nav className="flex-1 p-4 space-y-2">
           {[
-            { id: 'queue', label: 'Queue & Turn Manager', icon: Calendar },
-            { id: 'payments', label: `Payments & Invoices (${tenant.consultationFee} EGP)`, icon: CreditCard },
+            { id: 'queue', label: 'إدارة الطابور والأدوار', icon: Calendar },
+            { id: 'payments', label: `المدفوعات والفواتير (${tenant.consultationFee} ج.م)`, icon: CreditCard },
           ].map(item => (
             <button
               key={item.id}
               onClick={() => setCurrentView(item.id)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 currentView === item.id 
-                  ? 'bg-sky-50 text-sky-700 border border-sky-200 shadow-sm' 
-                  : 'text-sky-900/70 hover:bg-sky-50'
+                  ? 'bg-[#F7F9FC] text-[#51607A] border border-[#E3E8F0] shadow-sm' 
+                  : 'text-[#0F4C81]/70 hover:bg-[#F7F9FC]'
               }`}
             >
               <item.icon size={18} /> {item.label}
             </button>
           ))}
         </nav>
-        <div className="p-4 border-t border-sky-100">
-          <button onClick={onBackToHome} className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-sky-700 hover:bg-sky-50 rounded-xl transition cursor-pointer">
-            <ArrowLeft size={16} /> Back to Website
+        <div className="p-4 border-t border-[#E3E8F0]">
+          <button onClick={onBackToHome} className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-[#51607A] hover:bg-[#F7F9FC] rounded-xl transition cursor-pointer">
+            <ArrowLeft size={16} /> عودة للموقع
           </button>
         </div>
       </div>
 
-      <div className="flex-1 md:ml-64 p-6">
-        <div className="max-w-4xl mx-auto space-y-6">
+      <header className="reception-topnav" dir="rtl">
+        <div className="reception-topnav-inner">
+          <div className="reception-brand"><Stethoscope size={28} /><div><strong>{tenant.clinicName}</strong><small>{tenant.doctorName}</small></div></div>
+          <nav><button onClick={() => setCurrentView('queue')}>الطابور</button><button onClick={() => setCurrentView('payments')}>المدفوعات</button><button onClick={onBackToHome}>عودة للموقع</button></nav>
+        </div>
+      </header>
+      <div className="flex-1 min-w-0 md:ms-64 p-6">
+        <div className="reception-workspace max-w-4xl mx-auto space-y-6">
           
           {/* Header Bar */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="reception-header bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8F0] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="w-3 h-3 rounded-full bg-sky-500 animate-pulse"></span>
-                <h1 className="text-xl font-bold text-sky-950">
-                  {currentView === 'queue' ? 'Queue & Turn Management' : 'Clinic Financials & Payments'}
+                <span className="w-3 h-3 rounded-full bg-[#0F4C81] animate-pulse"></span>
+                <h1 className="text-xl font-bold text-[#0B1220]">
+                  {currentView === 'queue' ? 'إدارة الطابور والأدوار' : 'المدفوعات والفواتير'}
                 </h1>
               </div>
-              <p className="text-xs text-sky-700">
-                Secretary Hotline: <strong className="text-sky-950">{tenant.secretaryPhone}</strong> | Location: {tenant.clinicLocations?.[0]?.name || tenant.address}
+              <p className="text-xs text-[#51607A]">
+                خط السكرتارية: <strong className="text-[#0B1220]">{tenant.secretaryPhone}</strong> | الموقع: {tenant.clinicLocations?.[0]?.name || tenant.address}
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => {
-                  const waiting = patients.find((p: any) => p.status === 'waiting');
-                  if (waiting) {
-                    updatePatients(prev => prev.map(p => p.id === waiting.id ? { ...p, status: 'in-consultation' } : p));
-                    showToast(`Called Turn #${waiting.turn} (${waiting.name}) into Doctor's Office!`);
-                  } else {
-                    showToast("No more waiting patients in queue.");
-                  }
-                }} 
-                className="bg-sky-500 hover:bg-sky-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow-sm transition-all cursor-pointer"
-              >
-                <Phone size={15} /> Call Next Patient
-              </button>
-            </div>
           </div>
 
           {/* VIEW 1: QUEUE MANAGER */}
           {currentView === 'queue' && (
             <div className="space-y-6">
+              {/* DEV-COPY Stage 1: booking-request -> queue chain (fake data, this device only) */}
+              <ReceptionMvpPanel />
               {/* Quick Metrics */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-white p-5 rounded-2xl border border-sky-100 shadow-sm flex items-center justify-between">
+                <div className="bg-white p-5 rounded-2xl border border-[#E3E8F0] shadow-sm flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-sky-700 font-semibold block">Waiting Patients</span>
-                    <span className="text-2xl font-bold text-sky-950">
-                      {patients.filter((p: any) => p.status === 'waiting').length}
+                    <span className="text-xs text-[#51607A] font-semibold block">في الانتظار</span>
+                    <span className="text-2xl font-bold text-[#0B1220]">
+                      {mvpWaiting}
                     </span>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F9FC] text-[#0F4C81] flex items-center justify-center font-bold">
                     <Clock size={20} />
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-sky-100 shadow-sm flex items-center justify-between">
+                <div className="bg-white p-5 rounded-2xl border border-[#E3E8F0] shadow-sm flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-sky-700 font-semibold block">In Examination</span>
-                    <span className="text-2xl font-bold text-sky-600">
-                      {patients.filter((p: any) => p.status === 'in-consultation').length}
+                    <span className="text-xs text-[#51607A] font-semibold block">في الكشف</span>
+                    <span className="text-2xl font-bold text-[#0F4C81]">
+                      {mvpInConsult}
                     </span>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F9FC] text-[#0F4C81] flex items-center justify-center font-bold">
                     <Activity size={20} />
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-sky-100 shadow-sm flex items-center justify-between">
+                <div className="bg-white p-5 rounded-2xl border border-[#E3E8F0] shadow-sm flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-sky-700 font-semibold block">Consultation Fee</span>
-                    <span className="text-2xl font-bold text-sky-600">
+                    <span className="text-xs text-[#51607A] font-semibold block">سعر الكشف</span>
+                    <span className="text-2xl font-bold text-[#0F4C81]">
                       {tenant.consultationFee} EGP
                     </span>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F9FC] text-[#0F4C81] flex items-center justify-center font-bold">
                     <DollarSign size={20} />
                   </div>
                 </div>
               </div>
 
-              {/* Waiting & Examination List */}
-              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 overflow-hidden p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-bold text-sky-950 text-sm">
-                    Today's Patients List ({patients.length})
-                  </h3>
-                  <span className="text-xs text-sky-600 font-medium">Live Turn Flow</span>
-                </div>
-
-                <div className="space-y-3">
-                  {patients.map((p: any) => (
-                    <div 
-                      key={p.id} 
-                      className={`flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border rounded-xl gap-3 transition-all ${
-                        p.status === 'in-consultation' 
-                          ? 'bg-sky-50/70 border-sky-200 shadow-sm' 
-                          : p.status === 'done'
-                          ? 'bg-slate-50/60 border-slate-200 opacity-70'
-                          : 'bg-white border-sky-100'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3.5">
-                        <span className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center text-sm shrink-0 shadow-sm ${
-                          p.status === 'in-consultation'
-                            ? 'bg-sky-500 text-white animate-pulse'
-                            : p.status === 'done'
-                            ? 'bg-sky-200 text-sky-800'
-                            : 'bg-sky-100 text-sky-800'
-                        }`}>
-                          #{p.turn}
-                        </span>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <p className="font-bold text-sky-950 text-sm">{p.name}</p>
-                            {p.status === 'in-consultation' && (
-                              <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold">
-                                In Examination Room
-                              </span>
-                            )}
-                            {p.status === 'done' && (
-                              <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold">
-                                Finished
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-xs text-sky-700/80">
-                            {p.phone} • Scheduled: {p.time} • {p.address}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        {p.status === 'waiting' && (
-                          <button 
-                            onClick={() => {
-                              updatePatients(prev => prev.map(item => item.id === p.id ? { ...item, status: 'in-consultation' } : item));
-                              showToast(`Sent ${p.name} to Doctor's Room`);
-                            }} 
-                            className="px-3 py-1.5 bg-sky-500 hover:bg-sky-600 text-white rounded-lg text-xs font-bold transition-all cursor-pointer shadow-sm"
-                          >
-                            Send In
-                          </button>
-                        )}
-                        <button 
-                          onClick={() => showToast(`Payment of ${tenant.consultationFee} EGP recorded for ${p.name}`)} 
-                          className="px-3.5 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
-                        >
-                          <CreditCard size={13} /> Collect {tenant.consultationFee} EGP
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 
           {/* VIEW 2: PAYMENTS & INVOICES */}
           {currentView === 'payments' && (
             <div className="space-y-6">
+              <div dir="rtl" className="rounded-xl border px-4 py-2.5 text-xs font-bold" style={{ background: '#fff4de', borderColor: '#f0d79a', color: '#92600a' }}>
+                شاشة عرض تجريبية ثابتة — بيانات الفواتير دي مش متصلة بمسار الحجز الجديد ولا بأي نظام دفع حقيقي.
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
                   <span className="text-xs text-gray-500 font-semibold block mb-1">Total Revenue Today</span>
@@ -1155,15 +1070,30 @@ export interface TodayAppointment {
   dateLabel?: string;
 }
 
-export const WEEK_DAYS_STRIP = [
-  { key: 'sat', labelAr: 'السبت', labelEn: 'Sat', dateLabel: '2026-11-07' },
-  { key: 'sun', labelAr: 'الأحد', labelEn: 'Sun', dateLabel: '2026-11-08' },
-  { key: 'mon', labelAr: 'الإثنين', labelEn: 'Mon', dateLabel: '2026-11-09' },
-  { key: 'tue', labelAr: 'الثلاثاء', labelEn: 'Tue', dateLabel: '2026-11-10' },
-  { key: 'wed', labelAr: 'الأربعاء', labelEn: 'Wed', dateLabel: '2026-11-11' },
-  { key: 'thu', labelAr: 'الخميس (اليوم)', labelEn: 'Thu (Today)', dateLabel: '2026-11-05' },
-  { key: 'fri', labelAr: 'الجمعة', labelEn: 'Fri', dateLabel: '2026-11-06' },
-];
+// DEV-COPY fix: week strip is generated from the real current week (was stale hardcoded dates)
+const MVP_DAY_LABELS: Record<string, [string, string]> = {
+  sat: ['السبت', 'Sat'], sun: ['الأحد', 'Sun'], mon: ['الإثنين', 'Mon'],
+  tue: ['الثلاثاء', 'Tue'], wed: ['الأربعاء', 'Wed'], thu: ['الخميس', 'Thu'], fri: ['الجمعة', 'Fri'],
+};
+function buildWeekStrip() {
+  const now = new Date();
+  const sinceSaturday = (now.getDay() + 1) % 7;
+  const saturday = new Date(now);
+  saturday.setDate(now.getDate() - sinceSaturday);
+  const toIso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  return ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri'].map((key, i) => {
+    const d = new Date(saturday);
+    d.setDate(saturday.getDate() + i);
+    const isToday = d.toDateString() === now.toDateString();
+    return {
+      key,
+      labelAr: MVP_DAY_LABELS[key][0] + (isToday ? ' (اليوم)' : ''),
+      labelEn: MVP_DAY_LABELS[key][1] + (isToday ? ' (Today)' : ''),
+      dateLabel: toIso(d),
+    };
+  });
+}
+export const WEEK_DAYS_STRIP = buildWeekStrip();
 
 export const SEEDED_TODAY_APPOINTMENTS: TodayAppointment[] = [
   { id: 'wa-1', name: 'Demo patient 01', phone: 'DEMO-NO-CONTACT', time: '10:30 AM', dayKey: 'thu', dateLabel: '2026-11-05' },
@@ -1458,10 +1388,10 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
   return (
     <div className="space-y-6">
       {/* 10. WEEK DAY STRIP (شريط أيام الأسبوع للتنقل السريع بين الأيام) */}
-      <div className="bg-white rounded-2xl p-4 border border-sky-100 shadow-sm space-y-3" dir="rtl">
+      <div className="bg-white rounded-2xl p-4 border border-[#E3E8F0] shadow-sm space-y-3" dir="rtl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <h3 className="text-xs sm:text-sm font-bold text-sky-950 flex items-center gap-2">
-            <Calendar size={16} className="text-sky-500" />
+          <h3 className="text-xs sm:text-sm font-bold text-[#0B1220] flex items-center gap-2">
+            <Calendar size={16} className="text-[#0F4C81]" />
             <span>شريط أيام الأسبوع — التنقل السريع بين جدول المواعيد (Week Day Strip)</span>
           </h3>
           <button
@@ -1472,8 +1402,8 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
             }}
             className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
               selectedDayKey === 'all'
-                ? 'bg-sky-500 text-white shadow-sm'
-                : 'bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200'
+                ? 'bg-[#0F4C81] text-white shadow-sm'
+                : 'bg-[#F7F9FC] text-[#51607A] hover:bg-[#E3E8F0] border border-[#E3E8F0]'
             }`}
           >
             عرض كل الأسبوع ({allWeekAppointments.length})
@@ -1495,19 +1425,19 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                 }}
                 className={`p-2.5 rounded-xl border text-right transition-all cursor-pointer flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-sky-500 text-white border-sky-500 shadow-md'
-                    : 'bg-sky-50/50 hover:bg-sky-50 text-sky-950 border-sky-100'
+                    ? 'bg-[#0F4C81] text-white border-[#0F4C81] shadow-md'
+                    : 'bg-[#F7F9FC]/50 hover:bg-[#F7F9FC] text-[#0B1220] border-[#E3E8F0]'
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
                   <span className="text-xs font-bold">{day.labelAr}</span>
                   <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                    isSelected ? 'bg-white text-sky-600' : 'bg-white text-sky-700 border border-sky-200'
+                    isSelected ? 'bg-white text-[#0F4C81]' : 'bg-white text-[#51607A] border border-[#E3E8F0]'
                   }`}>
                     {count}
                   </span>
                 </div>
-                <span className={`text-[10px] font-mono mt-1 block ${isSelected ? 'text-sky-100' : 'text-sky-600/70'}`}>
+                <span className={`text-[10px] font-mono mt-1 block ${isSelected ? 'text-[#E3E8F0]' : 'text-[#0F4C81]/70'}`}>
                   {day.dateLabel}
                 </span>
               </button>
@@ -1517,18 +1447,18 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
       </div>
 
       {/* MAIN WHATSAPP ALERTS & MESSAGING CENTER SECTION */}
-      <section className="bg-white rounded-2xl shadow-sm border border-sky-100 overflow-hidden" aria-label="WhatsApp Alerts">
+      <section className="bg-white rounded-2xl shadow-sm border border-[#E3E8F0] overflow-hidden" aria-label="WhatsApp Alerts">
         {/* Section Header */}
-        <div className="bg-gradient-to-r from-sky-500 to-sky-600 p-5 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="bg-[#0F4C81] p-5 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-white/20 text-white flex items-center justify-center shadow-sm shrink-0 backdrop-blur-sm">
               <MessageCircle size={24} className="fill-white text-white" />
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold flex items-center gap-2">
-                <span>إشعارات واتساب للمرضى — WhatsApp Patient Alerts</span>
+                <span>إشعارات واتساب للمرضى</span>
               </h2>
-              <p className="text-sky-100 text-xs">
+              <p className="text-[#E3E8F0] text-xs">
                 مركز رسائل المواعيد (تأكيد الحجز • تذكير قبل المعاد • تغيير/إلغاء المعاد) عبر الإرسال اليدوي المباشر wa.me
               </p>
             </div>
@@ -1537,7 +1467,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
           {/* Counter Badge */}
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-4 py-2 rounded-xl border border-white/25">
             <span className="text-xs text-white/95 font-medium">حالة الإرسال:</span>
-            <span className="px-3 py-1 rounded-full bg-white text-sky-700 font-bold text-xs shadow-sm">
+            <span className="px-3 py-1 rounded-full bg-white text-[#51607A] font-bold text-xs shadow-sm">
               {confirmedCount}/{SEEDED_TODAY_APPOINTMENTS.length} تم تأكيد إرسالها
             </span>
           </div>
@@ -1546,29 +1476,29 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
         <div className="p-6 space-y-6">
           
           {/* 6A. EDITABLE TEMPLATES FOR 3 APPOINTMENT CASES WITH VARIABLES */}
-          <div className="p-5 bg-sky-50/50 rounded-2xl border border-sky-100 space-y-4" dir="rtl">
+          <div className="p-5 bg-[#F7F9FC]/50 rounded-2xl border border-[#E3E8F0] space-y-4" dir="rtl">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div>
-                <h3 className="text-xs sm:text-sm font-bold text-sky-950 flex items-center gap-2">
-                  <MessageSquare size={16} className="text-sky-500" />
+                <h3 className="text-xs sm:text-sm font-bold text-[#0B1220] flex items-center gap-2">
+                  <MessageSquare size={16} className="text-[#0F4C81]" />
                   <span>قوالب رسائل المواعيد القابلة للتعديل (٣ حالات + متغيرات تلقائية)</span>
                 </h3>
-                <p className="text-[11px] text-sky-700/80 mt-0.5">
-                  المتغيرات المتاحة: <code className="bg-white px-1.5 py-0.5 rounded border border-sky-200 text-sky-950 font-mono">{'{اسم_المريض}'}</code> ،{' '}
-                  <code className="bg-white px-1.5 py-0.5 rounded border border-sky-200 text-sky-950 font-mono">{'{التاريخ}'}</code> ،{' '}
-                  <code className="bg-white px-1.5 py-0.5 rounded border border-sky-200 text-sky-950 font-mono">{'{الساعة}'}</code> ،{' '}
-                  <code className="bg-white px-1.5 py-0.5 rounded border border-sky-200 text-sky-950 font-mono">{'{اسم_الدكتور}'}</code>
+                <p className="text-[11px] text-[#51607A]/80 mt-0.5">
+                  المتغيرات المتاحة: <code className="bg-white px-1.5 py-0.5 rounded border border-[#E3E8F0] text-[#0B1220] font-mono">{'{اسم_المريض}'}</code> ،{' '}
+                  <code className="bg-white px-1.5 py-0.5 rounded border border-[#E3E8F0] text-[#0B1220] font-mono">{'{التاريخ}'}</code> ،{' '}
+                  <code className="bg-white px-1.5 py-0.5 rounded border border-[#E3E8F0] text-[#0B1220] font-mono">{'{الساعة}'}</code> ،{' '}
+                  <code className="bg-white px-1.5 py-0.5 rounded border border-[#E3E8F0] text-[#0B1220] font-mono">{'{اسم_الدكتور}'}</code>
                 </p>
               </div>
 
               {/* Reminder Lead Time Setting */}
-              <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-sky-200 text-xs shadow-sm">
-                <Clock size={14} className="text-sky-500" />
-                <label className="font-bold text-sky-900">إعداد وقت التذكير:</label>
+              <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-[#E3E8F0] text-xs shadow-sm">
+                <Clock size={14} className="text-[#0F4C81]" />
+                <label className="font-bold text-[#0F4C81]">إعداد وقت التذكير:</label>
                 <select
                   value={reminderLeadTime}
                   onChange={(e) => handleReminderLeadChange(e.target.value)}
-                  className="bg-sky-50/50 border border-sky-200 rounded-lg px-2 py-1 text-xs font-bold text-sky-950 outline-none"
+                  className="bg-[#F7F9FC]/50 border border-[#E3E8F0] rounded-lg px-2 py-1 text-xs font-bold text-[#0B1220] outline-none"
                 >
                   <option value="قبل الموعد بـ 24 ساعة">قبل الموعد بـ 24 ساعة</option>
                   <option value="قبل الموعد بـ 6 ساعات">قبل الموعد بـ 6 ساعات</option>
@@ -1597,8 +1527,8 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                   }}
                   className={`py-2.5 px-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                     activeTemplateKey === item.key
-                      ? 'bg-sky-500 text-white border-sky-500 shadow-sm'
-                      : 'bg-white text-sky-900 border-sky-200 hover:bg-sky-50'
+                      ? 'bg-[#0F4C81] text-white border-[#0F4C81] shadow-sm'
+                      : 'bg-white text-[#0F4C81] border-[#E3E8F0] hover:bg-[#F7F9FC]'
                   }`}
                 >
                   <span>{item.label}</span>
@@ -1610,7 +1540,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
             {/* Active Template Editor */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-bold text-sky-900">
+                <span className="font-bold text-[#0F4C81]">
                   تعديل نص القالب ({templateTypeLabels[activeTemplateKey]}):
                 </span>
                 <button
@@ -1619,7 +1549,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                     const samplePt = appointments[0] || SEEDED_TODAY_APPOINTMENTS[0];
                     setAlertMessage(resolveTemplateVariables(templates[activeTemplateKey], samplePt, tenant.doctorName, reminderLeadTime));
                   }}
-                  className="text-xs font-bold text-sky-600 hover:underline cursor-pointer"
+                  className="text-xs font-bold text-[#0F4C81] hover:underline cursor-pointer"
                 >
                   نسخ القالب للرسالة الموحدة أدناه
                 </button>
@@ -1628,7 +1558,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                 rows={2}
                 value={templates[activeTemplateKey]}
                 onChange={(e) => handleTemplateChange(activeTemplateKey, e.target.value)}
-                className="w-full p-3 bg-white border border-sky-200 rounded-xl text-xs text-sky-950 focus:ring-2 focus:ring-sky-400 outline-none leading-relaxed"
+                className="w-full p-3 bg-white border border-[#E3E8F0] rounded-xl text-xs text-[#0B1220] focus:ring-2 focus:ring-[#0F4C81] outline-none leading-relaxed"
               />
             </div>
           </div>
@@ -1636,11 +1566,11 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
           {/* 1 Message Textarea with Live Character Count */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <label className="block text-xs font-bold text-sky-900 flex items-center gap-1.5">
-                <FileText size={15} className="text-sky-500" />
+              <label className="block text-xs font-bold text-[#0F4C81] flex items-center gap-1.5">
+                <FileText size={15} className="text-[#0F4C81]" />
                 <span>نص الرسالة الموحدة (Message to all selected patients)</span>
               </label>
-              <span className="text-xs font-mono font-bold text-sky-800 bg-sky-50 px-2.5 py-0.5 rounded-md border border-sky-200">
+              <span className="text-xs font-mono font-bold text-[#0F4C81] bg-[#F7F9FC] px-2.5 py-0.5 rounded-md border border-[#E3E8F0]">
                 {alertMessage.length} حرف / characters
               </span>
             </div>
@@ -1650,23 +1580,23 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
               placeholder="اكتب رسالتك هنا..."
               value={alertMessage}
               onChange={(e) => setAlertMessage(e.target.value)}
-              className="w-full p-3.5 border border-sky-200 rounded-xl text-xs sm:text-sm text-sky-950 focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none transition-all resize-y leading-relaxed"
+              className="w-full p-3.5 border border-[#E3E8F0] rounded-xl text-xs sm:text-sm text-[#0B1220] focus:ring-2 focus:ring-[#0F4C81] focus:border-[#0F4C81] outline-none transition-all resize-y leading-relaxed"
             />
 
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-sky-600">
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-[#0F4C81]">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sky-800">قوالب جاهزة:</span>
+                <span className="font-semibold text-[#0F4C81]">قوالب جاهزة:</span>
                 <button
                   type="button"
                   onClick={() => setAlertMessage(`تذكير بموعد الكشف اليوم في العيادة مع ${tenant.doctorName}. برجاء الحضور قبل الموعد بـ 15 دقيقة حرصاً على راحتكم ودقة المواعيد.`)}
-                  className="text-[11px] px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-lg font-medium transition-all"
+                  className="text-[11px] px-2.5 py-1 bg-[#F7F9FC] hover:bg-[#E3E8F0] text-[#51607A] border border-[#E3E8F0] rounded-lg font-medium transition-all"
                 >
                   تذكير بالموعد
                 </button>
                 <button
                   type="button"
                   onClick={() => setAlertMessage(`نرجو تأكيد حضوركم لموعد الكشف اليوم في عيادة ${tenant.doctorName}. في حال رغبتكم بتعديل الموعد يرجى الرد على هذه الرسالة.`)}
-                  className="text-[11px] px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-lg font-medium transition-all"
+                  className="text-[11px] px-2.5 py-1 bg-[#F7F9FC] hover:bg-[#E3E8F0] text-[#51607A] border border-[#E3E8F0] rounded-lg font-medium transition-all"
                 >
                   تأكيد الحضور
                 </button>
@@ -1674,7 +1604,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
               <button
                 type="button"
                 onClick={() => setAlertMessage('')}
-                className="text-xs text-sky-400 hover:text-sky-600 transition-colors"
+                className="text-xs text-[#0F4C81] hover:text-[#0F4C81] transition-colors"
               >
                 مسح النص
               </button>
@@ -1682,19 +1612,19 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
           </div>
 
           {/* Patients Appointments List */}
-          <div className="border border-sky-100 rounded-xl overflow-hidden shadow-sm">
+          <div className="border border-[#E3E8F0] rounded-xl overflow-hidden shadow-sm">
             {/* List Header with Select All Checkbox */}
-            <div className="bg-sky-50/60 p-3.5 border-b border-sky-100 flex justify-between items-center text-xs">
-              <label className="flex items-center gap-2.5 font-bold text-sky-900 cursor-pointer select-none">
+            <div className="bg-[#F7F9FC]/60 p-3.5 border-b border-[#E3E8F0] flex justify-between items-center text-xs">
+              <label className="flex items-center gap-2.5 font-bold text-[#0F4C81] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={selectedPatientIds.length === appointments.length && appointments.length > 0}
                   onChange={handleSelectAll}
-                  className="w-4 h-4 rounded text-sky-600 focus:ring-sky-400 cursor-pointer"
+                  className="w-4 h-4 rounded text-[#0F4C81] focus:ring-[#0F4C81] cursor-pointer"
                 />
                 <span>تحديد الكل / Select all ({selectedPatientIds.length}/{appointments.length} محدد)</span>
               </label>
-              <span className="text-sky-700 font-medium hidden sm:inline">
+              <span className="text-[#51607A] font-medium hidden sm:inline">
                 مواعيد اليوم المعروضة ({appointments.length})
               </span>
             </div>
@@ -1703,17 +1633,17 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
             {apiFeedback && (
               <div className={`p-4 rounded-xl border text-xs flex items-center justify-between gap-3 ${
                 apiFeedback.success
-                  ? 'bg-sky-50 border-sky-300 text-sky-900 font-semibold'
+                  ? 'bg-[#F7F9FC] border-[#E3E8F0] text-[#0F4C81] font-semibold'
                   : 'bg-amber-50 border-amber-200 text-amber-900 font-medium'
               }`} dir="rtl">
                 <div className="flex items-center gap-2">
-                  <span className={`w-2.5 h-2.5 rounded-full ${apiFeedback.success ? 'bg-sky-500' : 'bg-amber-500'}`} />
+                  <span className={`w-2.5 h-2.5 rounded-full ${apiFeedback.success ? 'bg-[#0F4C81]' : 'bg-amber-500'}`} />
                   <span>{apiFeedback.message}</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setApiFeedback(null)}
-                  className="text-xs font-bold text-sky-700 hover:underline cursor-pointer"
+                  className="text-xs font-bold text-[#51607A] hover:underline cursor-pointer"
                 >
                   إغلاق
                 </button>
@@ -1721,7 +1651,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
             )}
 
             {/* List Rows */}
-            <div className="divide-y divide-sky-100">
+            <div className="divide-y divide-[#E3E8F0]">
               {appointments.map((patient) => {
                 const isSelected = selectedPatientIds.includes(patient.id);
                 const status = patientStatuses[patient.id] || 'pending';
@@ -1740,7 +1670,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                   <div
                     key={patient.id}
                     className={`p-4 flex flex-col gap-3 transition-colors ${
-                      isSelected ? 'bg-white hover:bg-sky-50/50' : 'bg-sky-50/30 opacity-60'
+                      isSelected ? 'bg-white hover:bg-[#F7F9FC]/50' : 'bg-[#F7F9FC]/30 opacity-60'
                     }`}
                   >
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
@@ -1750,22 +1680,22 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => handleTogglePatient(patient.id)}
-                          className="w-4 h-4 rounded text-sky-600 focus:ring-sky-400 cursor-pointer"
+                          className="w-4 h-4 rounded text-[#0F4C81] focus:ring-[#0F4C81] cursor-pointer"
                         />
                         <div>
                           <div className="flex items-center gap-2">
-                            <p className="font-bold text-sky-950 text-sm">{patient.name}</p>
-                            <span className="px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 font-bold text-[10px] flex items-center gap-1 border border-sky-200">
+                            <p className="font-bold text-[#0B1220] text-sm">{patient.name}</p>
+                            <span className="px-2 py-0.5 rounded-md bg-[#F7F9FC] text-[#51607A] font-bold text-[10px] flex items-center gap-1 border border-[#E3E8F0]">
                               <Clock size={11} /> {patient.time}
                             </span>
                             {patient.dateLabel && (
-                              <span className="text-[10px] font-mono text-sky-400">{patient.dateLabel}</span>
+                              <span className="text-[10px] font-mono text-[#0F4C81]">{patient.dateLabel}</span>
                             )}
                           </div>
-                          <div className="flex items-center gap-2 text-xs text-sky-700/70 mt-0.5">
-                            <Phone size={11} className="text-sky-400" />
-                            <span className="font-mono text-sky-800">{patient.phone}</span>
-                            <span className="text-[11px] text-sky-500 font-mono">({normalizedPhone})</span>
+                          <div className="flex items-center gap-2 text-xs text-[#51607A]/70 mt-0.5">
+                            <Phone size={11} className="text-[#0F4C81]" />
+                            <span className="font-mono text-[#0F4C81]">{patient.phone}</span>
+                            <span className="text-[11px] text-[#0F4C81] font-mono">({normalizedPhone})</span>
                           </div>
                         </div>
                       </div>
@@ -1773,12 +1703,12 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                       {/* Status Badge (Mapped to honest manual states) */}
                       <div className="flex items-center gap-2">
                         {status === 'confirmed' ? (
-                          <span className="px-3 py-1 rounded-full bg-sky-50 text-sky-700 font-bold text-xs flex items-center gap-1 border border-sky-200">
-                            <CheckCircle2 size={13} className="text-sky-600" /> تم تأكيد الإرسال (أكّدها الدكتور يدويًا)
+                          <span className="px-3 py-1 rounded-full bg-[#F7F9FC] text-[#51607A] font-bold text-xs flex items-center gap-1 border border-[#E3E8F0]">
+                            <CheckCircle2 size={13} className="text-[#0F4C81]" /> تم تأكيد الإرسال (أكّدها الدكتور يدويًا)
                           </span>
                         ) : status === 'opened' ? (
-                          <span className="px-3 py-1 rounded-full bg-sky-100 text-sky-800 font-bold text-xs flex items-center gap-1 border border-sky-200">
-                            <MessageSquare size={13} className="text-sky-600" /> تم فتح المحادثة (فتحت في واتساب يدويًا)
+                          <span className="px-3 py-1 rounded-full bg-[#E3E8F0] text-[#0F4C81] font-bold text-xs flex items-center gap-1 border border-[#E3E8F0]">
+                            <MessageSquare size={13} className="text-[#0F4C81]" /> تم فتح المحادثة (فتحت في واتساب يدويًا)
                           </span>
                         ) : (
                           <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-600 font-medium text-xs">
@@ -1797,7 +1727,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={() => updatePatientStatus(patient, 'opened', 'رسالة موحدة')}
-                              className="px-3.5 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold text-xs shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer"
+                              className="px-3.5 py-2 bg-[#0F4C81] hover:bg-[#0F4C81] text-white rounded-xl font-bold text-xs shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer"
                               title="فتح محادثة واتساب مع المريض في نافذة جديدة"
                             >
                               <MessageCircle size={15} className="fill-white text-white" />
@@ -1810,10 +1740,10 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={() => updatePatientStatus(patient, 'opened', templateTypeLabels[activeTemplateKey])}
-                              className="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 rounded-xl font-bold text-xs transition-all inline-flex items-center gap-1 cursor-pointer"
+                              className="px-3 py-2 bg-[#F7F9FC] hover:bg-[#E3E8F0] text-[#0F4C81] border border-[#E3E8F0] rounded-xl font-bold text-xs transition-all inline-flex items-center gap-1 cursor-pointer"
                               title="فتح واتساب بنص القالب المخصص باسم المريض وموعده"
                             >
-                              <Send size={13} className="text-sky-600" />
+                              <Send size={13} className="text-[#0F4C81]" />
                               <span>فتح بالقالب ({templateTypeLabels[activeTemplateKey].split(' ')[0]})</span>
                             </a>
 
@@ -1822,13 +1752,13 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                               type="button"
                               disabled={apiSendingId === patient.id}
                               onClick={() => handleCloudApiSend(patient, personalizedTemplateMsg)}
-                              className="px-3 py-2 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800 text-white rounded-xl font-bold text-xs shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                              className="px-3 py-2 bg-gradient-to-r from-[#0F4C81] to-[#51607A] hover:from-[#51607A] hover:to-[#0F4C81] text-white rounded-xl font-bold text-xs shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                               title="إرسال رسالة مباشرة للمريض عبر Meta WhatsApp Cloud API و Node.js backend"
                             >
                               {apiSendingId === patient.id ? (
                                 <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                               ) : (
-                                <Sparkles size={13} className="text-sky-200" />
+                                <Sparkles size={13} className="text-[#E3E8F0]" />
                               )}
                               <span>إرسال Cloud API</span>
                             </button>
@@ -1839,8 +1769,8 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                               onClick={() => updatePatientStatus(patient, 'confirmed', templateTypeLabels[activeTemplateKey])}
                               className={`px-3 py-2 rounded-xl font-bold text-xs transition-all flex items-center gap-1 cursor-pointer ${
                                 status === 'confirmed'
-                                  ? 'bg-sky-50 text-sky-700 border border-sky-300'
-                                  : 'bg-sky-500 hover:bg-sky-600 text-white shadow-sm'
+                                  ? 'bg-[#F7F9FC] text-[#51607A] border border-[#E3E8F0]'
+                                  : 'bg-[#0F4C81] hover:bg-[#0F4C81] text-white shadow-sm'
                               }`}
                               title="تأكيد يدوي من الطبيب بأنه أرسل الرسالة داخل واتساب"
                             >
@@ -1849,7 +1779,7 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
                             </button>
                           </>
                         ) : (
-                          <span className="text-[11px] text-sky-400 italic">
+                          <span className="text-[11px] text-[#0F4C81] italic">
                             حدد المريض لإرسال الإشعار
                           </span>
                         )}
@@ -1858,9 +1788,9 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
 
                     {/* Preview of personalized template message for this patient */}
                     {isSelected && (
-                      <div className="bg-sky-50/50 px-3 py-2 rounded-lg border border-sky-100 text-[11px] text-sky-700 flex items-center justify-between gap-2" dir="rtl">
+                      <div className="bg-[#F7F9FC]/50 px-3 py-2 rounded-lg border border-[#E3E8F0] text-[11px] text-[#51607A] flex items-center justify-between gap-2" dir="rtl">
                         <span className="truncate">
-                          <strong className="text-sky-950">معاينة القالب للمريض:</strong> {personalizedTemplateMsg}
+                          <strong className="text-[#0B1220]">معاينة القالب للمريض:</strong> {personalizedTemplateMsg}
                         </span>
                       </div>
                     )}
@@ -1871,20 +1801,20 @@ export const WhatsAppPatientAlertsSection: React.FC<WhatsAppPatientAlertsSection
           </div>
 
           {/* Note under section */}
-          <div className="p-3.5 bg-sky-50 border border-sky-200 rounded-xl text-xs text-sky-900 font-semibold flex items-center gap-2.5 shadow-sm">
-            <Info size={16} className="text-sky-500 shrink-0" />
+          <div className="p-3.5 bg-[#F7F9FC] border border-[#E3E8F0] rounded-xl text-xs text-[#0F4C81] font-semibold flex items-center gap-2.5 shadow-sm">
+            <Info size={16} className="text-[#0F4C81] shrink-0" />
             <span>إرسال يدوي - الدكتور يراجع الرسالة ويضغط إرسال داخل واتساب بنفسه</span>
           </div>
 
           {/* 6C. INTERNAL MESSAGE LOG (سجل داخلي لكل رسالة: الوقت، النوع، والحالة) */}
-          <div className="border border-sky-100 rounded-2xl overflow-hidden bg-white shadow-sm" dir="rtl">
-            <div className="bg-sky-50/60 p-4 border-b border-sky-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div className="border border-[#E3E8F0] rounded-2xl overflow-hidden bg-white shadow-sm" dir="rtl">
+            <div className="bg-[#F7F9FC]/60 p-4 border-b border-[#E3E8F0] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <div>
-                <h3 className="text-xs sm:text-sm font-bold text-sky-950 flex items-center gap-2">
-                  <Clock size={15} className="text-sky-500" />
+                <h3 className="text-xs sm:text-sm font-bold text-[#0B1220] flex items-center gap-2">
+                  <Clock size={15} className="text-[#0F4C81]" />
                   <span>سجل الرسائل الداخلي على الجهاز (Internal Message Log — {messageLog.length})</span>
                 </h3>
-                <p className="text-[11px] text-sky-700/80 mt-0.5">
+                <p className="text-[11px] text-[#51607A]/80 mt-0.5">
                   الحالات المسموحة: <strong>«جاهزة»</strong> • <strong>«فتحت في واتساب يدويًا»</strong> • <strong>«أكّدها الدكتور يدويًا»</strong> (تأكيد المستخدم اليدوي ليس إيصال استلام أو قراءة من واتساب).
                 </p>
               </div>
@@ -1947,16 +1877,14 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
     }
   }, [demoBypassAuth]);
 
-  // Read waiting queue count from real reception queue in localStorage
-  const waitingQueueCount = (() => {
-    try {
-      const saved = localStorage.getItem(`ayadati_reception_queue_${tenant.id}`);
-      const list = saved ? JSON.parse(saved) : INITIAL_RECEPTION_PATIENTS;
-      return Array.isArray(list) ? list.filter((p: any) => p.status === 'waiting').length : 3;
-    } catch {
-      return 3;
-    }
-  })();
+  // DEV-COPY Stage 1: queue KPIs read live from the shared dev booking store
+  // (same source as reception queue + patient portal). Stage 2 swaps the
+  // store internals for Firestore without changing these call sites.
+  const mvpBookings = useMvpBookings();
+  const waitingQueueCount = mvpBookings.filter(
+    (b) => b.status === 'confirmed' || b.status === 'arrived'
+  ).length;
+  const todayCasesCount = mvpBookings.filter((b) => b.status !== 'cancelled').length;
 
   // Clinical Consultation State persisted in localStorage
   const clinicalStorageKey = `ayadati_doctor_clinical_${tenant.id}`;
@@ -2073,38 +2001,38 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F0F8FF] via-[#E0F2FE] to-white flex items-center justify-center p-4">
-        <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full border-t-4 border-sky-400 border border-sky-100">
+      <div className="min-h-screen bg-[#F7F9FC] flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full border-t-4 border-[#0F4C81] border border-[#E3E8F0]">
           <div className="text-center mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto mb-3 shadow-sm border border-sky-100">
+            <div className="w-16 h-16 rounded-2xl bg-[#F7F9FC] text-[#0F4C81] flex items-center justify-center mx-auto mb-3 shadow-sm border border-[#E3E8F0]">
               <Stethoscope size={36} />
             </div>
-            <h1 className="text-xl font-bold text-sky-950">Doctor Portal — {tenant.doctorName}</h1>
-            <p className="text-xs text-sky-600 font-semibold mt-1">{tenant.specialty} • {tenant.clinicName}</p>
+            <h1 className="text-xl font-bold text-[#0B1220]">Doctor Portal — {tenant.doctorName}</h1>
+            <p className="text-xs text-[#0F4C81] font-semibold mt-1">{tenant.specialty} • {tenant.clinicName}</p>
           </div>
           <form onSubmit={handleDoctorLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-sky-800 mb-1">Doctor Security PIN / Passcode</label>
+              <label className="block text-xs font-bold text-[#0F4C81] mb-1">Doctor Security PIN / Passcode</label>
               <input 
                 type="password" 
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                className="w-full p-2.5 border border-sky-200 rounded-xl text-sm focus:ring-2 focus:ring-sky-400 outline-none text-sky-950" 
+                className="w-full p-2.5 border border-[#E3E8F0] rounded-xl text-sm focus:ring-2 focus:ring-[#0F4C81] outline-none text-[#0B1220]" 
                 required 
               />
-              <span className="text-[11px] text-sky-500 mt-1 block">PIN التجريبي المعبأ: DR-2026</span>
+              <span className="text-[11px] text-[#0F4C81] mt-1 block">PIN التجريبي المعبأ: DR-2026</span>
             </div>
             <button 
               type="submit" 
               onClick={handleDoctorLogin}
-              className="w-full py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold text-sm shadow-md transition-all cursor-pointer"
+              className="w-full py-3 bg-[#0F4C81] hover:bg-[#0F4C81] text-white rounded-xl font-bold text-sm shadow-md transition-all cursor-pointer"
             >
               Login to Doctor Dashboard
             </button>
             <button 
               type="button" 
               onClick={onBackToHome} 
-              className="w-full text-xs font-bold text-sky-700 hover:text-sky-900 pt-2 cursor-pointer"
+              className="w-full text-xs font-bold text-[#51607A] hover:text-[#0F4C81] pt-2 cursor-pointer"
             >
               Back to Main Website
             </button>
@@ -2114,26 +2042,28 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
     );
   }
 
-  const nextUpcomingAppt = SEEDED_TODAY_APPOINTMENTS[0];
+  const nextUpcomingAppt = mvpBookings
+    .filter((b) => b.status === 'confirmed' || b.status === 'arrived')
+    .sort((a, b) => (a.turn ?? 99) - (b.turn ?? 99))[0];
 
   return (
-    <div className="min-h-screen bg-[#F0F8FF] p-4 sm:p-6 font-sans">
+    <div className="min-h-screen bg-[#F7F9FC] p-4 sm:p-6 font-sans">
       <div className="max-w-5xl mx-auto space-y-6">
         
         {/* Doctor Header Bar */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8F0] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-sky-500 text-white flex items-center justify-center font-bold text-xl shadow-md">
+            <div className="w-14 h-14 rounded-2xl bg-[#0F4C81] text-white flex items-center justify-center font-bold text-xl shadow-md">
               <Stethoscope size={28} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-sky-950">{tenant.doctorName}</h1>
-              <p className="text-xs text-sky-700">{tenant.specialty} • {tenant.clinicName}</p>
+              <h1 className="text-xl font-bold text-[#0B1220]">{tenant.doctorName}</h1>
+              <p className="text-xs text-[#51607A]">{tenant.specialty} • {tenant.clinicName}</p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-[10px] font-bold flex items-center gap-1">
-                  <CheckCircle size={10} className="text-sky-600" /> Clinic Active
+                <span className="px-2 py-0.5 rounded-full bg-[#F7F9FC] text-[#51607A] border border-[#E3E8F0] text-[10px] font-bold flex items-center gap-1">
+                  <CheckCircle size={10} className="text-[#0F4C81]" /> Clinic Active
                 </span>
-                <span className="text-[11px] text-sky-600/80">Consultation Fee: {tenant.consultationFee} EGP</span>
+                <span className="text-[11px] text-[#0F4C81]/80">Consultation Fee: {tenant.consultationFee} EGP</span>
               </div>
             </div>
           </div>
@@ -2141,19 +2071,19 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
           <div className="flex items-center gap-3">
             <button 
               onClick={() => showNotification("Egyptian Tax Authority (ETA) e-Invoice batch synchronized successfully.")}
-              className="px-4 py-2 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-sky-200 cursor-pointer shadow-sm"
+              className="px-4 py-2 bg-[#F7F9FC] text-[#51607A] hover:bg-[#E3E8F0] rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-[#E3E8F0] cursor-pointer shadow-sm"
             >
               <FileSpreadsheet size={15} /> Sync ETA e-Invoice
             </button>
             <button 
               onClick={() => setIsAuthenticated(false)} 
-              className="px-4 py-2 bg-white hover:bg-sky-50 text-sky-700 border border-sky-200 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm"
+              className="px-4 py-2 bg-white hover:bg-[#F7F9FC] text-[#51607A] border border-[#E3E8F0] rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm"
             >
               Logout
             </button>
             <button 
               onClick={onBackToHome} 
-              className="px-4 py-2 bg-sky-500 text-white hover:bg-sky-600 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm"
+              className="px-4 py-2 bg-[#0F4C81] text-white hover:bg-[#0F4C81] rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm"
             >
               Back to Web
             </button>
@@ -2166,18 +2096,18 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
           <button
             type="button"
             onClick={() => setActiveDoctorTab('whatsapp')}
-            className="bg-white p-4 rounded-2xl border border-sky-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-right flex items-center justify-between cursor-pointer group"
+            className="bg-white p-4 rounded-2xl border border-[#E3E8F0] shadow-sm hover:shadow-md hover:border-[#E3E8F0] transition-all text-right flex items-center justify-between cursor-pointer group"
           >
             <div>
-              <span className="text-xs text-sky-700 font-bold block">حالات النهارده (مواعيد اليوم)</span>
-              <span className="text-2xl font-extrabold text-sky-950 mt-1 block">
-                {SEEDED_TODAY_APPOINTMENTS.length} حالات
+              <span className="text-xs text-[#51607A] font-bold block">حالات النهارده (مسار الحجز)</span>
+              <span className="text-2xl font-extrabold text-[#0B1220] mt-1 block">
+                {todayCasesCount} حالات
               </span>
-              <span className="text-[10px] text-sky-600 font-bold group-hover:underline">
+              <span className="text-[10px] text-[#0F4C81] font-bold group-hover:underline">
                 انتقل لجدول المواعيد والواتساب ←
               </span>
             </div>
-            <div className="w-11 h-11 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-[#F7F9FC] text-[#0F4C81] flex items-center justify-center shrink-0">
               <Calendar size={22} />
             </div>
           </button>
@@ -2186,18 +2116,18 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
           <button
             type="button"
             onClick={() => setActiveDoctorTab('consultation')}
-            className="bg-white p-4 rounded-2xl border border-sky-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-right flex items-center justify-between cursor-pointer group"
+            className="bg-white p-4 rounded-2xl border border-[#E3E8F0] shadow-sm hover:shadow-md hover:border-[#E3E8F0] transition-all text-right flex items-center justify-between cursor-pointer group"
           >
             <div>
-              <span className="text-xs text-sky-700 font-bold block">المنتظرين في الطابور</span>
-              <span className="text-2xl font-extrabold text-sky-600 mt-1 block">
+              <span className="text-xs text-[#51607A] font-bold block">المنتظرين في الطابور</span>
+              <span className="text-2xl font-extrabold text-[#0F4C81] mt-1 block">
                 {waitingQueueCount} بالانتظار
               </span>
-              <span className="text-[10px] text-sky-600 font-bold group-hover:underline">
+              <span className="text-[10px] text-[#0F4C81] font-bold group-hover:underline">
                 انتقل لغرفة الكشف الحالية ←
               </span>
             </div>
-            <div className="w-11 h-11 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-[#F7F9FC] text-[#0F4C81] flex items-center justify-center shrink-0">
               <Users size={22} />
             </div>
           </button>
@@ -2206,18 +2136,18 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
           <button
             type="button"
             onClick={() => setActiveDoctorTab('whatsapp')}
-            className="bg-white p-4 rounded-2xl border border-sky-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-right flex items-center justify-between cursor-pointer group"
+            className="bg-white p-4 rounded-2xl border border-[#E3E8F0] shadow-sm hover:shadow-md hover:border-[#E3E8F0] transition-all text-right flex items-center justify-between cursor-pointer group"
           >
             <div className="min-w-0">
-              <span className="text-xs text-sky-700 font-bold block">أقرب معاد جاي</span>
-              <span className="text-sm font-extrabold text-sky-700 mt-1 block truncate">
-                {nextUpcomingAppt ? `${nextUpcomingAppt.time} — ${nextUpcomingAppt.name}` : 'غير متاح'}
+              <span className="text-xs text-[#51607A] font-bold block">أقرب معاد جاي</span>
+              <span className="text-sm font-extrabold text-[#51607A] mt-1 block truncate">
+                {nextUpcomingAppt ? `دور #${nextUpcomingAppt.turn} — ${nextUpcomingAppt.name}` : 'مفيش حد في الطابور'}
               </span>
-              <span className="text-[10px] text-sky-600 font-bold group-hover:underline">
+              <span className="text-[10px] text-[#0F4C81] font-bold group-hover:underline">
                 عرض تفاصيل الموعد ←
               </span>
             </div>
-            <div className="w-11 h-11 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-[#F7F9FC] text-[#0F4C81] flex items-center justify-center shrink-0">
               <Clock size={22} />
             </div>
           </button>
@@ -2226,31 +2156,31 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
           <button
             type="button"
             onClick={() => setActiveDoctorTab('settings')}
-            className="bg-white p-4 rounded-2xl border border-sky-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-right flex items-center justify-between cursor-pointer group"
+            className="bg-white p-4 rounded-2xl border border-[#E3E8F0] shadow-sm hover:shadow-md hover:border-[#E3E8F0] transition-all text-right flex items-center justify-between cursor-pointer group"
           >
             <div>
-              <span className="text-xs text-sky-700 font-bold block">صافي الدخل / قيمة الكشف</span>
-              <span className="text-sm font-extrabold text-sky-950 mt-1 block">
-                صافي الدخل: <span className="text-sky-600">غير متاح</span>
+              <span className="text-xs text-[#51607A] font-bold block">صافي الدخل / قيمة الكشف</span>
+              <span className="text-sm font-extrabold text-[#0B1220] mt-1 block">
+                صافي الدخل: <span className="text-[#0F4C81]">غير متاح</span>
               </span>
-              <span className="text-[10px] text-sky-600 block">
+              <span className="text-[10px] text-[#0F4C81] block">
                 الكشف: {tenant.consultationFee} ج.م (لا توجد بيانات مصروفات)
               </span>
             </div>
-            <div className="w-11 h-11 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-[#F7F9FC] text-[#0F4C81] flex items-center justify-center shrink-0">
               <DollarSign size={22} />
             </div>
           </button>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex flex-wrap gap-2 border-b border-sky-100 pb-2 text-xs font-bold">
+        <div className="flex flex-wrap gap-2 border-b border-[#E3E8F0] pb-2 text-xs font-bold">
           <button
             onClick={() => setActiveDoctorTab('whatsapp')}
             className={`px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
               activeDoctorTab === 'whatsapp' 
-                ? 'bg-sky-500 text-white shadow-sm' 
-                : 'text-sky-800 hover:bg-sky-50 bg-white border border-sky-100'
+                ? 'bg-[#0F4C81] text-white shadow-sm' 
+                : 'text-[#0F4C81] hover:bg-[#F7F9FC] bg-white border border-[#E3E8F0]'
             }`}
           >
             <MessageCircle size={15} className="fill-current text-white" />
@@ -2260,19 +2190,19 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
             onClick={() => setActiveDoctorTab('ambient')}
             className={`px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
               activeDoctorTab === 'ambient' 
-                ? 'bg-sky-500 text-white shadow-sm' 
-                : 'text-sky-800 hover:bg-sky-50 bg-white border border-sky-100'
+                ? 'bg-[#0F4C81] text-white shadow-sm' 
+                : 'text-[#0F4C81] hover:bg-[#F7F9FC] bg-white border border-[#E3E8F0]'
             }`}
           >
-            <Mic size={15} className="text-sky-300" />
+            <Mic size={15} className="text-[#E3E8F0]" />
             <span>تجربة التسجيل الذكي / Ambient demo</span>
           </button>
           <button
             onClick={() => setActiveDoctorTab('consultation')}
             className={`px-4 py-2 rounded-xl transition-all cursor-pointer ${
               activeDoctorTab === 'consultation' 
-                ? 'bg-sky-500 text-white shadow-sm' 
-                : 'text-sky-800 hover:bg-sky-50 bg-white border border-sky-100'
+                ? 'bg-[#0F4C81] text-white shadow-sm' 
+                : 'text-[#0F4C81] hover:bg-[#F7F9FC] bg-white border border-[#E3E8F0]'
             }`}
           >
             Active Examination & Rx (الكشف و SOAP)
@@ -2281,8 +2211,8 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
             onClick={() => setActiveDoctorTab('records')}
             className={`px-4 py-2 rounded-xl transition-all cursor-pointer ${
               activeDoctorTab === 'records' 
-                ? 'bg-sky-500 text-white shadow-sm' 
-                : 'text-sky-800 hover:bg-sky-50 bg-white border border-sky-100'
+                ? 'bg-[#0F4C81] text-white shadow-sm' 
+                : 'text-[#0F4C81] hover:bg-[#F7F9FC] bg-white border border-[#E3E8F0]'
             }`}
           >
             Patient History & Diagnosis
@@ -2291,8 +2221,8 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
             onClick={() => setActiveDoctorTab('settings')}
             className={`px-4 py-2 rounded-xl transition-all cursor-pointer ${
               activeDoctorTab === 'settings' 
-                ? 'bg-sky-500 text-white shadow-sm' 
-                : 'text-sky-800 hover:bg-sky-50 bg-white border border-sky-100'
+                ? 'bg-[#0F4C81] text-white shadow-sm' 
+                : 'text-[#0F4C81] hover:bg-[#F7F9FC] bg-white border border-[#E3E8F0]'
             }`}
           >
             Clinic Settings & Automation (الإعدادات والأتمتة)
@@ -2315,31 +2245,31 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
             
             {/* Left: Active Patient Banner & Vital Signs Chips (ضغط، نبض، حرارة، سكر) */}
             <div className="lg:col-span-1 space-y-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-sky-100">
-                <span className="text-[11px] font-bold text-sky-600 uppercase tracking-wider block mb-1">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8F0]">
+                <span className="text-[11px] font-bold text-[#0F4C81] uppercase tracking-wider block mb-1">
                   Now Examining
                 </span>
-                <h3 className="text-lg font-bold text-sky-950">{currentPatientName}</h3>
-                <p className="text-xs text-sky-700/80 mb-4">Patient File #P-1004 • Age: 38 • Male</p>
+                <h3 className="text-lg font-bold text-[#0B1220]">{currentPatientName}</h3>
+                <p className="text-xs text-[#51607A]/80 mb-4">Patient File #P-1004 • Age: 38 • Male</p>
 
                 {/* 5. VITAL SIGNS CHIPS (العلامات الحيوية: ضغط، نبض، حرارة، سكر في خانات chips واضحة) */}
                 <div className="space-y-3" dir="rtl">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-extrabold text-sky-950 flex items-center gap-1.5">
-                      <HeartPulse size={15} className="text-sky-500" />
+                    <span className="text-xs font-extrabold text-[#0B1220] flex items-center gap-1.5">
+                      <HeartPulse size={15} className="text-[#0F4C81]" />
                       العلامات الحيوية (Vital Signs Chips)
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2.5 text-xs">
                     {/* Chip 1: Blood Pressure (ضغط) */}
-                    <div className="p-3 rounded-xl bg-sky-50/70 border border-sky-200 space-y-1.5">
-                      <span className="text-[11px] font-bold text-sky-900 block">الضغط (BP)</span>
+                    <div className="p-3 rounded-xl bg-[#F7F9FC]/70 border border-[#E3E8F0] space-y-1.5">
+                      <span className="text-[11px] font-bold text-[#0F4C81] block">الضغط (BP)</span>
                       <input
                         type="text"
                         value={patientVitals.bp}
                         onChange={(e) => updateVital('bp', e.target.value)}
-                        className="w-full px-2 py-1 bg-white border border-sky-200 rounded-lg font-mono font-bold text-sky-950 text-xs focus:ring-1 focus:ring-sky-400 outline-none"
+                        className="w-full px-2 py-1 bg-white border border-[#E3E8F0] rounded-lg font-mono font-bold text-[#0B1220] text-xs focus:ring-1 focus:ring-[#0F4C81] outline-none"
                         dir="ltr"
                       />
                       <div className="flex flex-wrap gap-1">
@@ -2348,7 +2278,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                             key={val}
                             type="button"
                             onClick={() => updateVital('bp', `${val} mmHg`)}
-                            className="px-1.5 py-0.5 bg-white hover:bg-sky-100 border border-sky-200 rounded text-[10px] font-mono text-sky-800 cursor-pointer"
+                            className="px-1.5 py-0.5 bg-white hover:bg-[#E3E8F0] border border-[#E3E8F0] rounded text-[10px] font-mono text-[#0F4C81] cursor-pointer"
                           >
                             {val}
                           </button>
@@ -2357,13 +2287,13 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                     </div>
 
                     {/* Chip 2: Pulse / Heart Rate (نبض) */}
-                    <div className="p-3 rounded-xl bg-sky-50/70 border border-sky-200 space-y-1.5">
-                      <span className="text-[11px] font-bold text-sky-900 block">النبض (Pulse)</span>
+                    <div className="p-3 rounded-xl bg-[#F7F9FC]/70 border border-[#E3E8F0] space-y-1.5">
+                      <span className="text-[11px] font-bold text-[#0F4C81] block">النبض (Pulse)</span>
                       <input
                         type="text"
                         value={patientVitals.hr}
                         onChange={(e) => updateVital('hr', e.target.value)}
-                        className="w-full px-2 py-1 bg-white border border-sky-200 rounded-lg font-mono font-bold text-sky-950 text-xs focus:ring-1 focus:ring-sky-400 outline-none"
+                        className="w-full px-2 py-1 bg-white border border-[#E3E8F0] rounded-lg font-mono font-bold text-[#0B1220] text-xs focus:ring-1 focus:ring-[#0F4C81] outline-none"
                         dir="ltr"
                       />
                       <div className="flex flex-wrap gap-1">
@@ -2372,7 +2302,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                             key={val}
                             type="button"
                             onClick={() => updateVital('hr', val)}
-                            className="px-1.5 py-0.5 bg-white hover:bg-sky-100 border border-sky-200 rounded text-[10px] font-mono text-sky-800 cursor-pointer"
+                            className="px-1.5 py-0.5 bg-white hover:bg-[#E3E8F0] border border-[#E3E8F0] rounded text-[10px] font-mono text-[#0F4C81] cursor-pointer"
                           >
                             {val}
                           </button>
@@ -2381,13 +2311,13 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                     </div>
 
                     {/* Chip 3: Temperature (حرارة) */}
-                    <div className="p-3 rounded-xl bg-sky-50/70 border border-sky-200 space-y-1.5">
-                      <span className="text-[11px] font-bold text-sky-900 block">الحرارة (Temp)</span>
+                    <div className="p-3 rounded-xl bg-[#F7F9FC]/70 border border-[#E3E8F0] space-y-1.5">
+                      <span className="text-[11px] font-bold text-[#0F4C81] block">الحرارة (Temp)</span>
                       <input
                         type="text"
                         value={patientVitals.temp}
                         onChange={(e) => updateVital('temp', e.target.value)}
-                        className="w-full px-2 py-1 bg-white border border-sky-200 rounded-lg font-mono font-bold text-sky-950 text-xs focus:ring-1 focus:ring-sky-400 outline-none"
+                        className="w-full px-2 py-1 bg-white border border-[#E3E8F0] rounded-lg font-mono font-bold text-[#0B1220] text-xs focus:ring-1 focus:ring-[#0F4C81] outline-none"
                         dir="ltr"
                       />
                       <div className="flex flex-wrap gap-1">
@@ -2396,7 +2326,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                             key={val}
                             type="button"
                             onClick={() => updateVital('temp', val)}
-                            className="px-1.5 py-0.5 bg-white hover:bg-sky-100 border border-sky-200 rounded text-[10px] font-mono text-sky-800 cursor-pointer"
+                            className="px-1.5 py-0.5 bg-white hover:bg-[#E3E8F0] border border-[#E3E8F0] rounded text-[10px] font-mono text-[#0F4C81] cursor-pointer"
                           >
                             {val}
                           </button>
@@ -2405,13 +2335,13 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                     </div>
 
                     {/* Chip 4: Blood Glucose (سكر) */}
-                    <div className="p-3 rounded-xl bg-sky-50/70 border border-sky-200 space-y-1.5">
-                      <span className="text-[11px] font-bold text-sky-900 block">السكر (Glucose)</span>
+                    <div className="p-3 rounded-xl bg-[#F7F9FC]/70 border border-[#E3E8F0] space-y-1.5">
+                      <span className="text-[11px] font-bold text-[#0F4C81] block">السكر (Glucose)</span>
                       <input
                         type="text"
                         value={patientVitals.glucose}
                         onChange={(e) => updateVital('glucose', e.target.value)}
-                        className="w-full px-2 py-1 bg-white border border-sky-200 rounded-lg font-mono font-bold text-sky-950 text-xs focus:ring-1 focus:ring-sky-400 outline-none"
+                        className="w-full px-2 py-1 bg-white border border-[#E3E8F0] rounded-lg font-mono font-bold text-[#0B1220] text-xs focus:ring-1 focus:ring-[#0F4C81] outline-none"
                         dir="ltr"
                       />
                       <div className="flex flex-wrap gap-1">
@@ -2420,7 +2350,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                             key={val}
                             type="button"
                             onClick={() => updateVital('glucose', val)}
-                            className="px-1.5 py-0.5 bg-white hover:bg-sky-100 border border-sky-200 rounded text-[10px] font-mono text-sky-800 cursor-pointer"
+                            className="px-1.5 py-0.5 bg-white hover:bg-[#E3E8F0] border border-[#E3E8F0] rounded text-[10px] font-mono text-[#0F4C81] cursor-pointer"
                           >
                             {val}
                           </button>
@@ -2436,7 +2366,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                       showNotification(`Consultation completed for ${currentPatientName}! Prescription & e-Invoice issued.`);
                       setCurrentPatientName('Fatma Ali');
                     }}
-                    className="w-full py-3 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full py-3 bg-[#0F4C81] hover:bg-[#0F4C81] text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <CheckCircle2 size={16} /> Complete & Issue Prescription
                   </button>
@@ -2445,7 +2375,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                       setCurrentPatientName('Fatma Ali');
                       showNotification("Called Next Patient: Fatma Ali");
                     }}
-                    className="w-full py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold rounded-xl text-xs transition-all border border-sky-200 cursor-pointer"
+                    className="w-full py-2 bg-[#F7F9FC] hover:bg-[#E3E8F0] text-[#0F4C81] font-bold rounded-xl text-xs transition-all border border-[#E3E8F0] cursor-pointer"
                   >
                     Next Patient in Queue
                   </button>
@@ -2453,15 +2383,15 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
               </div>
 
               {/* Lab & Imaging Requests */}
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-sky-100">
-                <h4 className="font-bold text-sky-950 text-sm mb-3 flex items-center gap-2">
-                  <Activity size={16} className="text-sky-500" /> Lab & Radiology Orders
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8F0]">
+                <h4 className="font-bold text-[#0B1220] text-sm mb-3 flex items-center gap-2">
+                  <Activity size={16} className="text-[#0F4C81]" /> Lab & Radiology Orders
                 </h4>
                 <div className="space-y-2 text-xs">
                   {labTests.map((t, idx) => (
-                    <div key={idx} className="p-2.5 bg-sky-50/70 border border-sky-100 rounded-lg flex justify-between items-center text-sky-900 font-medium">
+                    <div key={idx} className="p-2.5 bg-[#F7F9FC]/70 border border-[#E3E8F0] rounded-lg flex justify-between items-center text-[#0F4C81] font-medium">
                       <span>{t}</span>
-                      <button onClick={() => setLabTests(prev => prev.filter((_, i) => i !== idx))} className="text-sky-500 hover:text-sky-700 font-bold cursor-pointer">×</button>
+                      <button onClick={() => setLabTests(prev => prev.filter((_, i) => i !== idx))} className="text-[#0F4C81] hover:text-[#51607A] font-bold cursor-pointer">×</button>
                     </div>
                   ))}
                 </div>
@@ -2470,7 +2400,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                     type="text" 
                     id="new-lab-input" 
                     placeholder="e.g., Lipid Profile" 
-                    className="w-full p-2 border border-sky-200 rounded-lg text-xs text-sky-950 focus:ring-1 focus:ring-sky-400 outline-none" 
+                    className="w-full p-2 border border-[#E3E8F0] rounded-lg text-xs text-[#0B1220] focus:ring-1 focus:ring-[#0F4C81] outline-none" 
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         const val = (e.target as HTMLInputElement).value;
@@ -2491,7 +2421,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                         if (onLocalSave) onLocalSave();
                       }
                     }}
-                    className="px-3 bg-sky-500 hover:bg-sky-600 text-white rounded-lg text-xs font-bold cursor-pointer shadow-sm"
+                    className="px-3 bg-[#0F4C81] hover:bg-[#0F4C81] text-white rounded-lg text-xs font-bold cursor-pointer shadow-sm"
                   >
                     Add
                   </button>
@@ -2501,24 +2431,24 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
 
             {/* Right: Separate S / O / A / P Consultation Cards & Electronic Prescription Pad */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 space-y-5">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-sky-100 pb-4">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8F0] space-y-5">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-[#E3E8F0] pb-4">
                   <div>
-                    <h3 className="font-bold text-sky-950 text-base flex items-center gap-2">
-                      <FileText size={18} className="text-sky-500" /> مسودة الكشف (كروت S / O / A / P) & الروشتة الإلكترونية (Rx)
+                    <h3 className="font-bold text-[#0B1220] text-base flex items-center gap-2">
+                      <FileText size={18} className="text-[#0F4C81]" /> مسودة الكشف (كروت S / O / A / P) & الروشتة الإلكترونية (Rx)
                     </h3>
-                    <p className="text-xs text-sky-700/80">Official Clinic SOAP Notes & Prescription • Saved Locally</p>
+                    <p className="text-xs text-[#51607A]/80">Official Clinic SOAP Notes & Prescription • Saved Locally</p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <span className="text-[10px] bg-sky-50 text-sky-800 border border-sky-200 font-bold px-2.5 py-0.5 rounded-full">
+                    <span className="text-[10px] bg-[#F7F9FC] text-[#0F4C81] border border-[#E3E8F0] font-bold px-2.5 py-0.5 rounded-full">
                       بيانات تجريبية للعرض فقط - محاكاة
                     </span>
                     <button
                       type="button"
                       onClick={handleLoadSimulatedEncounter}
-                      className="px-3 py-1.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5 cursor-pointer"
+                      className="px-3 py-1.5 bg-[#0F4C81] hover:bg-[#0F4C81] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5 cursor-pointer"
                     >
-                      <Sparkles size={13} className="text-sky-100" />
+                      <Sparkles size={13} className="text-[#E3E8F0]" />
                       <span>جرّب بسيناريو جاهز (محاكاة)</span>
                     </button>
                   </div>
@@ -2527,10 +2457,10 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                 {/* 4. SEPARATE S / O / A / P CARDS (بدل النص الطويل المتصل) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs" dir="rtl">
                   {/* Card S: Subjective */}
-                  <div className="p-4 rounded-2xl border border-sky-200 bg-sky-50/40 space-y-2">
+                  <div className="p-4 rounded-2xl border border-[#E3E8F0] bg-[#F7F9FC]/40 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-extrabold text-sky-950 flex items-center gap-1.5">
-                        <span className="w-6 h-6 rounded-lg bg-sky-500 text-white font-mono flex items-center justify-center">S</span>
+                      <span className="font-extrabold text-[#0B1220] flex items-center gap-1.5">
+                        <span className="w-6 h-6 rounded-lg bg-[#0F4C81] text-white font-mono flex items-center justify-center">S</span>
                         Subjective — شكوى المريض
                       </span>
                     </div>
@@ -2538,15 +2468,15 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                       rows={3}
                       value={soapNotes.s}
                       onChange={(e) => updateSoapField('s', e.target.value)}
-                      className="w-full p-2.5 bg-white border border-sky-200 rounded-xl text-xs text-sky-950 leading-relaxed focus:ring-2 focus:ring-sky-400 outline-none"
+                      className="w-full p-2.5 bg-white border border-[#E3E8F0] rounded-xl text-xs text-[#0B1220] leading-relaxed focus:ring-2 focus:ring-[#0F4C81] outline-none"
                     />
                   </div>
 
                   {/* Card O: Objective */}
-                  <div className="p-4 rounded-2xl border border-sky-200 bg-sky-50/40 space-y-2">
+                  <div className="p-4 rounded-2xl border border-[#E3E8F0] bg-[#F7F9FC]/40 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-extrabold text-sky-950 flex items-center gap-1.5">
-                        <span className="w-6 h-6 rounded-lg bg-sky-600 text-white font-mono flex items-center justify-center">O</span>
+                      <span className="font-extrabold text-[#0B1220] flex items-center gap-1.5">
+                        <span className="w-6 h-6 rounded-lg bg-[#0F4C81] text-white font-mono flex items-center justify-center">O</span>
                         Objective — الفحص الإكلينيكي
                       </span>
                     </div>
@@ -2554,18 +2484,18 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                       rows={3}
                       value={soapNotes.o}
                       onChange={(e) => updateSoapField('o', e.target.value)}
-                      className="w-full p-2.5 bg-white border border-sky-200 rounded-xl text-xs text-sky-950 leading-relaxed focus:ring-2 focus:ring-sky-400 outline-none"
+                      className="w-full p-2.5 bg-white border border-[#E3E8F0] rounded-xl text-xs text-[#0B1220] leading-relaxed focus:ring-2 focus:ring-[#0F4C81] outline-none"
                     />
                   </div>
 
                   {/* Card A: Assessment */}
-                  <div className="p-4 rounded-2xl border border-sky-200 bg-sky-50/40 space-y-2">
+                  <div className="p-4 rounded-2xl border border-[#E3E8F0] bg-[#F7F9FC]/40 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-extrabold text-sky-950 flex items-center gap-1.5">
-                        <span className="w-6 h-6 rounded-lg bg-sky-500 text-white font-mono flex items-center justify-center">A</span>
+                      <span className="font-extrabold text-[#0B1220] flex items-center gap-1.5">
+                        <span className="w-6 h-6 rounded-lg bg-[#0F4C81] text-white font-mono flex items-center justify-center">A</span>
                         Assessment — التقييم والتشخيص
                       </span>
-                      <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-2 py-0.5 rounded-full border border-sky-200">
+                      <span className="text-[10px] bg-[#E3E8F0] text-[#0F4C81] font-bold px-2 py-0.5 rounded-full border border-[#E3E8F0]">
                         بيانات تجريبية للعرض فقط - محاكاة
                       </span>
                     </div>
@@ -2573,18 +2503,18 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                       rows={3}
                       value={soapNotes.a}
                       onChange={(e) => updateSoapField('a', e.target.value)}
-                      className="w-full p-2.5 bg-white border border-sky-200 rounded-xl text-xs text-sky-950 leading-relaxed focus:ring-2 focus:ring-sky-400 outline-none"
+                      className="w-full p-2.5 bg-white border border-[#E3E8F0] rounded-xl text-xs text-[#0B1220] leading-relaxed focus:ring-2 focus:ring-[#0F4C81] outline-none"
                     />
                   </div>
 
                   {/* Card P: Plan */}
-                  <div className="p-4 rounded-2xl border border-sky-200 bg-sky-50/40 space-y-2">
+                  <div className="p-4 rounded-2xl border border-[#E3E8F0] bg-[#F7F9FC]/40 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-extrabold text-sky-950 flex items-center gap-1.5">
-                        <span className="w-6 h-6 rounded-lg bg-sky-600 text-white font-mono flex items-center justify-center">P</span>
+                      <span className="font-extrabold text-[#0B1220] flex items-center gap-1.5">
+                        <span className="w-6 h-6 rounded-lg bg-[#0F4C81] text-white font-mono flex items-center justify-center">P</span>
                         Plan — الخطة والمتابعة
                       </span>
-                      <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-2 py-0.5 rounded-full border border-sky-200">
+                      <span className="text-[10px] bg-[#E3E8F0] text-[#0F4C81] font-bold px-2 py-0.5 rounded-full border border-[#E3E8F0]">
                         بيانات تجريبية للعرض فقط - محاكاة
                       </span>
                     </div>
@@ -2592,7 +2522,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                       rows={3}
                       value={soapNotes.p}
                       onChange={(e) => updateSoapField('p', e.target.value)}
-                      className="w-full p-2.5 bg-white border border-sky-200 rounded-xl text-xs text-sky-950 leading-relaxed focus:ring-2 focus:ring-sky-400 outline-none"
+                      className="w-full p-2.5 bg-white border border-[#E3E8F0] rounded-xl text-xs text-[#0B1220] leading-relaxed focus:ring-2 focus:ring-[#0F4C81] outline-none"
                     />
                   </div>
                 </div>
@@ -2600,27 +2530,27 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                 {/* Mandatory Simulation Badge above Medications / Dosages / Alerts */}
                 <div className="space-y-3 pt-2">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h4 className="text-xs font-bold text-sky-950">Prescribed Medications (الأدوية والجرعات)</h4>
-                    <span className="text-[11px] bg-sky-50 text-sky-800 border border-sky-200 font-extrabold px-3 py-0.5 rounded-full">
+                    <h4 className="text-xs font-bold text-[#0B1220]">Prescribed Medications (الأدوية والجرعات)</h4>
+                    <span className="text-[11px] bg-[#F7F9FC] text-[#0F4C81] border border-[#E3E8F0] font-extrabold px-3 py-0.5 rounded-full">
                       بيانات تجريبية للعرض فقط - محاكاة
                     </span>
                   </div>
 
                   {medications.map((m, idx) => (
-                    <div key={m.id} className="p-3.5 bg-sky-50/60 border border-sky-100 rounded-xl flex justify-between items-center text-xs">
+                    <div key={m.id} className="p-3.5 bg-[#F7F9FC]/60 border border-[#E3E8F0] rounded-xl flex justify-between items-center text-xs">
                       <div className="space-y-0.5">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-bold text-sky-950">{idx + 1}. {m.name}</span>
-                          <span className="px-2 py-0.5 rounded-md bg-sky-100 text-sky-800 font-bold text-[10px]">{m.dose}</span>
-                          <span className="px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 text-[10px] font-semibold">
+                          <span className="font-bold text-[#0B1220]">{idx + 1}. {m.name}</span>
+                          <span className="px-2 py-0.5 rounded-md bg-[#E3E8F0] text-[#0F4C81] font-bold text-[10px]">{m.dose}</span>
+                          <span className="px-2 py-0.5 rounded bg-[#F7F9FC] text-[#51607A] border border-[#E3E8F0] text-[10px] font-semibold">
                             بيانات تجريبية للعرض فقط - محاكاة
                           </span>
                         </div>
-                        <p className="text-sky-700/80">{m.freq} — Duration: {m.days}</p>
+                        <p className="text-[#51607A]/80">{m.freq} — Duration: {m.days}</p>
                       </div>
                       <button 
                         onClick={() => handleRemoveMedication(m.id)}
-                        className="text-sky-500 hover:text-sky-700 font-bold px-2 py-1 cursor-pointer"
+                        className="text-[#0F4C81] hover:text-[#51607A] font-bold px-2 py-1 cursor-pointer"
                       >
                         Delete
                       </button>
@@ -2629,15 +2559,15 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                 </div>
 
                 {/* Add new medication form */}
-                <form onSubmit={handleAddMedication} className="p-4 bg-sky-50/50 border border-dashed border-sky-200 rounded-xl space-y-3">
-                  <span className="text-xs font-bold text-sky-900 block">+ Add Drug to Rx</span>
+                <form onSubmit={handleAddMedication} className="p-4 bg-[#F7F9FC]/50 border border-dashed border-[#E3E8F0] rounded-xl space-y-3">
+                  <span className="text-xs font-bold text-[#0F4C81] block">+ Add Drug to Rx</span>
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
                     <input 
                       type="text" 
                       placeholder="Medication Name" 
                       value={newMed.name} 
                       onChange={e => setNewMed({...newMed, name: e.target.value})}
-                      className="p-2 border border-sky-200 rounded-lg text-xs bg-white text-sky-950 sm:col-span-2 focus:ring-1 focus:ring-sky-400 outline-none"
+                      className="p-2 border border-[#E3E8F0] rounded-lg text-xs bg-white text-[#0B1220] sm:col-span-2 focus:ring-1 focus:ring-[#0F4C81] outline-none"
                       required
                     />
                     <input 
@@ -2645,14 +2575,14 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                       placeholder="Dosage (e.g., 500mg)" 
                       value={newMed.dose} 
                       onChange={e => setNewMed({...newMed, dose: e.target.value})}
-                      className="p-2 border border-sky-200 rounded-lg text-xs bg-white text-sky-950 focus:ring-1 focus:ring-sky-400 outline-none"
+                      className="p-2 border border-[#E3E8F0] rounded-lg text-xs bg-white text-[#0B1220] focus:ring-1 focus:ring-[#0F4C81] outline-none"
                     />
                     <input 
                       type="text" 
                       placeholder="Days (e.g., 5 days)" 
                       value={newMed.days} 
                       onChange={e => setNewMed({...newMed, days: e.target.value})}
-                      className="p-2 border border-sky-200 rounded-lg text-xs bg-white text-sky-950 focus:ring-1 focus:ring-sky-400 outline-none"
+                      className="p-2 border border-[#E3E8F0] rounded-lg text-xs bg-white text-[#0B1220] focus:ring-1 focus:ring-[#0F4C81] outline-none"
                     />
                   </div>
                   <div className="flex gap-2">
@@ -2661,11 +2591,11 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
                       placeholder="Frequency / Instructions (e.g., 1 Tab TID after food)" 
                       value={newMed.freq} 
                       onChange={e => setNewMed({...newMed, freq: e.target.value})}
-                      className="p-2 border border-sky-200 rounded-lg text-xs bg-white text-sky-950 flex-1 focus:ring-1 focus:ring-sky-400 outline-none"
+                      className="p-2 border border-[#E3E8F0] rounded-lg text-xs bg-white text-[#0B1220] flex-1 focus:ring-1 focus:ring-[#0F4C81] outline-none"
                     />
                     <button 
                       type="submit" 
-                      className="px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-lg text-xs shadow-sm transition-all cursor-pointer"
+                      className="px-4 py-2 bg-[#0F4C81] hover:bg-[#0F4C81] text-white font-bold rounded-lg text-xs shadow-sm transition-all cursor-pointer"
                     >
                       Add Medication
                     </button>
@@ -2843,6 +2773,22 @@ export default function App() {
   const [demoBypassAuth, setDemoBypassAuth] = useState(true);
   const [tenants, setTenants] = useState(INITIAL_SAAS_TENANTS);
   const [activeTenantId, setActiveTenantId] = useState(INITIAL_SAAS_TENANTS[0].id);
+
+  // DEV-COPY ONLY: deep-link + fake-data seeding for local inspection
+  // e.g. ?portal=reception&seed=1 — no effect on the real project.
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search);
+      if (q.get('seed') === '1') seedMvpDemo();
+      const p = q.get('portal');
+      if (p === 'patient' || p === 'reception' || p === 'doctor' || p === 'landing') {
+        setDemoBypassAuth(true);
+        setGuestPreview(true);
+        setActivePortal(p);
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<'doctor' | 'receptionist' | 'patient'>('doctor');
 
@@ -2921,16 +2867,16 @@ export default function App() {
   // 4. Loading Spinner while Firebase checks Auth State & Firestore User Profile
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F0F8FF] via-[#E0F2FE] to-white flex flex-col items-center justify-center p-4 text-sky-950 font-sans selection:bg-sky-200 selection:text-sky-900">
+      <div className="min-h-screen bg-[#F7F9FC] flex flex-col items-center justify-center p-4 text-[#0B1220] font-sans selection:bg-[#E3E8F0] selection:text-[#0F4C81]">
         <DynamicCursor />
-        <div className="w-16 h-16 rounded-2xl bg-white p-2 shadow-xl mb-4 border border-sky-200 animate-pulse flex items-center justify-center">
+        <div className="w-16 h-16 rounded-2xl bg-white p-2 shadow-xl mb-4 border border-[#E3E8F0] animate-pulse flex items-center justify-center">
           <img src={SAAS_LOGO_URL} alt="عيادتي حالا" className="w-full h-full object-contain" />
         </div>
-        <div className="flex items-center gap-2.5 text-sky-700 text-sm font-bold mb-2">
-          <div className="animate-spin rounded-full h-5 w-5 border-2 border-sky-500 border-t-transparent"></div>
+        <div className="flex items-center gap-2.5 text-[#51607A] text-sm font-bold mb-2">
+          <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#0F4C81] border-t-transparent"></div>
           <span>Verifying Firebase Authentication...</span>
         </div>
-        <p className="text-sky-700/70 text-xs">Checking user session & Firestore profile credentials</p>
+        <p className="text-[#51607A]/70 text-xs">Checking user session & Firestore profile credentials</p>
       </div>
     );
   }
@@ -2951,32 +2897,32 @@ export default function App() {
       <DynamicCursor />
       
       {/* Existing staff controls remain outside the patient-facing clinic shell. */}
-      {activePortal !== 'landing' && currentUser && <div className="sticky top-0 z-[110] bg-white/95 text-sky-950 border-b border-sky-200 px-3 sm:px-6 py-2 shadow-sm backdrop-blur-md">
+      {activePortal !== 'landing' && currentUser && <div className="sticky top-0 z-[110] bg-white/95 text-[#0B1220] border-b border-[#E3E8F0] px-3 sm:px-6 py-2 shadow-sm backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
           
           {/* Quick Role Switcher + Current User Identity */}
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1.5 bg-sky-50 border border-sky-200 text-sky-800 px-2.5 py-1 rounded-xl text-[11px] font-bold">
+            <div className="flex items-center gap-1.5 bg-[#F7F9FC] border border-[#E3E8F0] text-[#0F4C81] px-2.5 py-1 rounded-xl text-[11px] font-bold">
               {currentUser.photoURL ? (
-                <img src={currentUser.photoURL} alt={currentUser.name} className="w-4 h-4 rounded-full object-cover border border-sky-300" />
+                <img src={currentUser.photoURL} alt={currentUser.name} className="w-4 h-4 rounded-full object-cover border border-[#E3E8F0]" />
               ) : (
-                <span className={`w-2 h-2 rounded-full ${currentUser.isDemoUser ? 'bg-amber-400' : 'bg-sky-500'} animate-pulse`}></span>
+                <span className={`w-2 h-2 rounded-full ${currentUser.isDemoUser ? 'bg-amber-400' : 'bg-[#0F4C81]'} animate-pulse`}></span>
               )}
               <span>{currentUser.name}</span>
-              <span className="px-1.5 py-0.5 rounded bg-sky-100 text-sky-700 text-[10px] uppercase tracking-wider font-extrabold border border-sky-200">
+              <span className="px-1.5 py-0.5 rounded bg-[#E3E8F0] text-[#51607A] text-[10px] uppercase tracking-wider font-extrabold border border-[#E3E8F0]">
                 {currentUser.role}
               </span>
-              <span className="text-sky-600/70 hidden sm:inline text-[10px]">({currentUser.department})</span>
+              <span className="text-[#0F4C81]/70 hidden sm:inline text-[10px]">({currentUser.department})</span>
             </div>
 
-            <div className="flex items-center bg-sky-50/80 p-1 rounded-xl gap-1 border border-sky-200">
+            <div className="flex items-center bg-[#F7F9FC]/80 p-1 rounded-xl gap-1 border border-[#E3E8F0]">
               <button
                 type="button"
                 onClick={() => handleQuickRoleSwitch('doctor')}
                 className={`px-3 py-1 rounded-lg font-bold transition cursor-pointer flex items-center gap-1 ${
                   activePortal === 'doctor'
-                    ? 'bg-sky-500 text-white shadow-sm'
-                    : 'text-sky-800 hover:bg-white'
+                    ? 'bg-[#0F4C81] text-white shadow-sm'
+                    : 'text-[#0F4C81] hover:bg-white'
                 }`}
               >
                 <Stethoscope size={13} />
@@ -2988,8 +2934,8 @@ export default function App() {
                 onClick={() => handleQuickRoleSwitch('reception')}
                 className={`px-3 py-1 rounded-lg font-bold transition cursor-pointer flex items-center gap-1 ${
                   activePortal === 'reception'
-                    ? 'bg-sky-500 text-white shadow-sm'
-                    : 'text-sky-800 hover:bg-white'
+                    ? 'bg-[#0F4C81] text-white shadow-sm'
+                    : 'text-[#0F4C81] hover:bg-white'
                 }`}
               >
                 <Monitor size={13} />
@@ -3001,8 +2947,8 @@ export default function App() {
                 onClick={() => handleQuickRoleSwitch('patient')}
                 className={`px-3 py-1 rounded-lg font-bold transition cursor-pointer flex items-center gap-1 ${
                   activePortal === 'patient'
-                    ? 'bg-sky-500 text-white shadow-sm'
-                    : 'text-sky-800 hover:bg-white'
+                    ? 'bg-[#0F4C81] text-white shadow-sm'
+                    : 'text-[#0F4C81] hover:bg-white'
                 }`}
               >
                 <User size={13} />
@@ -3014,8 +2960,8 @@ export default function App() {
                 onClick={() => handleQuickRoleSwitch('landing')}
                 className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
                   activePortal === 'landing'
-                    ? 'bg-sky-600 text-white shadow-sm'
-                    : 'text-sky-700 hover:bg-white'
+                    ? 'bg-[#0F4C81] text-white shadow-sm'
+                    : 'text-[#51607A] hover:bg-white'
                 }`}
               >
                 {uiLang === 'ar' ? 'الرئيسية' : 'Home'}
@@ -3026,10 +2972,10 @@ export default function App() {
           {/* Right side: Saved on Device Indicator + Language Toggle + Logout */}
           <div className="flex items-center gap-2">
             <div
-              className="flex items-center gap-1.5 bg-sky-50 text-sky-800 border border-sky-200 px-2.5 py-1 rounded-lg text-[11px] font-bold"
+              className="flex items-center gap-1.5 bg-[#F7F9FC] text-[#0F4C81] border border-[#E3E8F0] px-2.5 py-1 rounded-lg text-[11px] font-bold"
               title="يتم حفظ التعديلات محلياً في localStorage على هذا الجهاز"
             >
-              <CheckCircle2 size={13} className="text-sky-600 shrink-0" />
+              <CheckCircle2 size={13} className="text-[#0F4C81] shrink-0" />
               <span>
                 {uiLang === 'ar'
                   ? `تم الحفظ على الجهاز • آخر حفظ: ${lastSavedAt}`
@@ -3040,19 +2986,19 @@ export default function App() {
             <button
               type="button"
               onClick={toggleUiLanguage}
-              className="px-3 py-1 rounded-lg bg-white hover:bg-sky-50 text-sky-700 font-bold text-xs border border-sky-200 transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="px-3 py-1 rounded-lg bg-white hover:bg-[#F7F9FC] text-[#51607A] font-bold text-xs border border-[#E3E8F0] transition flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
-              <Globe size={13} className="text-sky-500" />
+              <Globe size={13} className="text-[#0F4C81]" />
               <span>{uiLang === 'ar' ? 'English / عربي' : 'عربي / English'}</span>
             </button>
 
             <button
               type="button"
               onClick={() => logout()}
-              className="px-3 py-1 rounded-lg bg-white hover:bg-sky-50 text-sky-700 font-bold text-xs border border-sky-200 transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="px-3 py-1 rounded-lg bg-white hover:bg-[#F7F9FC] text-[#51607A] font-bold text-xs border border-[#E3E8F0] transition flex items-center gap-1.5 cursor-pointer shadow-sm"
               title="Sign out of Firebase"
             >
-              <LogOut size={13} className="text-sky-500" />
+              <LogOut size={13} className="text-[#0F4C81]" />
               <span>{uiLang === 'ar' ? 'خروج' : 'Log Out'}</span>
             </button>
           </div>
@@ -3062,40 +3008,40 @@ export default function App() {
 }
 
       {activePortal !== 'landing' && currentUser && <>
-      <div className="legacy-switcher fixed bottom-4 left-4 z-[95] bg-white/95 text-sky-950 p-2 rounded-2xl shadow-xl border border-sky-200 backdrop-blur-md flex items-center gap-2 text-xs">
-        <div className="w-8 h-8 rounded-xl bg-sky-50 border border-sky-200 p-1 flex items-center justify-center shrink-0">
+      <div className="legacy-switcher fixed bottom-4 left-4 z-[95] bg-white/95 text-[#0B1220] p-2 rounded-2xl shadow-xl border border-[#E3E8F0] backdrop-blur-md flex items-center gap-2 text-xs">
+        <div className="w-8 h-8 rounded-xl bg-[#F7F9FC] border border-[#E3E8F0] p-1 flex items-center justify-center shrink-0">
           <img src={SAAS_LOGO_URL} alt="Logo" className="w-full h-full object-contain" />
         </div>
         
         <button
           onClick={() => handleOpenAuthModal('doctor')}
-          className="px-3 py-1.5 rounded-xl font-bold bg-sky-500 hover:bg-sky-600 text-white shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+          className="px-3 py-1.5 rounded-xl font-bold bg-[#0F4C81] hover:bg-[#0F4C81] text-white shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
           title="Onboard Doctor or Reception"
         >
-          <Sparkles size={13} className="text-sky-200" />
+          <Sparkles size={13} className="text-[#E3E8F0]" />
           <span>Onboard</span>
         </button>
 
         <button
           onClick={() => logout()}
-          className="px-2.5 py-1.5 rounded-xl font-bold bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 shadow-sm transition-all flex items-center gap-1 cursor-pointer"
+          className="px-2.5 py-1.5 rounded-xl font-bold bg-[#F7F9FC] hover:bg-[#E3E8F0] text-[#0F4C81] border border-[#E3E8F0] shadow-sm transition-all flex items-center gap-1 cursor-pointer"
           title="Logout from Firebase Auth"
         >
-          <LogOut size={13} className="text-sky-600" />
+          <LogOut size={13} className="text-[#0F4C81]" />
           <span>Exit</span>
         </button>
 
-        <div className="h-5 w-px bg-sky-200"></div>
+        <div className="h-5 w-px bg-[#E3E8F0]"></div>
 
         <button
           onClick={() => setActivePortal('landing')}
-          className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${activePortal === 'landing' ? 'bg-sky-500 text-white shadow-sm' : 'text-sky-700 hover:bg-sky-50'}`}
+          className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${activePortal === 'landing' ? 'bg-[#0F4C81] text-white shadow-sm' : 'text-[#51607A] hover:bg-[#F7F9FC]'}`}
         >
           Home
         </button>
         <button
           onClick={() => setActivePortal('patient-directory')}
-          className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${activePortal === 'patient-directory' ? 'bg-sky-500 text-white shadow-sm' : 'text-sky-700 hover:bg-sky-50'}`}
+          className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${activePortal === 'patient-directory' ? 'bg-[#0F4C81] text-white shadow-sm' : 'text-[#51607A] hover:bg-[#F7F9FC]'}`}
         >
           Patients (اختر تخصص)
         </button>
@@ -3182,4 +3128,4 @@ export default function App() {
 
     </div>
   );
-      }
+    }
