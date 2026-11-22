@@ -1,3 +1,4 @@
+import { ClinicIllustration } from './ClinicIllustration';
 // ============================================================
 // DEV-COPY ONLY — Stage 1 MVP panels (approved scope).
 // Reception inbox + queue panel, and patient live-status card,
@@ -204,7 +205,7 @@ export const ReceptionMvpPanel: React.FC = () => {
   );
 };
 
-export const PatientMvpStatus: React.FC<{ doctorName?: string; clinicName?: string }> = ({ doctorName, clinicName }) => {
+export const PatientMvpStatus: React.FC<{ doctorName?: string; clinicName?: string; onBook?: () => void }> = ({ doctorName, clinicName, onBook }) => {
   const bookings = useMvpBookings();
   const lastId = getLastBookingId();
   let mine: any;
@@ -234,7 +235,12 @@ export const PatientMvpStatus: React.FC<{ doctorName?: string; clinicName?: stri
       : 0;
   }
 
-  if (!mine) return null;
+  if (!mine) return <section className="patient-empty-status" dir="rtl" aria-labelledby="patient-empty-title">
+    <ClinicIllustration kind="search" className="empty-art" />
+    <h2 id="patient-empty-title">لسه مفيش طلب حجز تجريبي</h2>
+    <p>بعد ما تجرّب طلب موعد، تقدر تتابع حالته من هنا.</p>
+    {onBook && <button type="button" onClick={onBook} className="clinic-button primary">استكشف طلب موعد</button>}
+  </section>;
 
   return (
     <div className="patient-live-content" dir="rtl">
