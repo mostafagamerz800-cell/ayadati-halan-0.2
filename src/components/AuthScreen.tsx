@@ -1,3 +1,4 @@
+import {PILOT} from '../lib/pilotBackend';
 import React, { useState } from 'react';
 import {
   Stethoscope,
@@ -32,7 +33,7 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
   
   // Extra signup fields
   const [fullName, setFullName] = useState('');
-  const [role, setRole] = useState<'doctor' | 'receptionist' | 'patient'>('doctor');
+  const [role, setRole] = useState<'doctor' | 'receptionist' | 'patient'>(PILOT?'patient':'doctor');
   const [department, setDepartment] = useState('General Medicine');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -162,13 +163,13 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
           <div className="auth-divider"><span>أو بالبريد الإلكتروني</span></div>
           <form onSubmit={handleSubmit} className="auth-form">
             {isSignUp && <>
-              <fieldset className="auth-role-field"><legend>هتستخدم العيادة كـ</legend><div className="auth-roles">
+              {!PILOT && <fieldset className="auth-role-field"><legend>هتستخدم العيادة كـ</legend><div className="auth-roles">
                 {([['doctor', 'طبيب', Stethoscope], ['receptionist', 'استقبال', Users], ['patient', 'مريض', User]] as const).map(([key, label, Icon]) => <button type="button" key={key} onClick={() => handleRoleChange(key)} aria-pressed={role === key}><Icon size={18} />{label}</button>)}
-              </div></fieldset>
+              </div></fieldset>}
               <label htmlFor="auth-name">الاسم الكامل <span className="auth-optional">اختياري</span></label>
               <input id="auth-name" name="name" autoComplete="name" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="اسمك الكامل" />
-              <label htmlFor="auth-department">القسم / التخصص</label>
-              <input id="auth-department" name="department" value={department} onChange={e => setDepartment(e.target.value)} />
+              {!PILOT && <><label htmlFor="auth-department">القسم / التخصص</label>
+              <input id="auth-department" name="department" value={department} onChange={e => setDepartment(e.target.value)} /></>}
             </>}
             <label htmlFor="auth-email">البريد الإلكتروني</label>
             <div className="auth-input-wrap"><Mail size={18} /><input id="auth-email" name="email" type="email" autoComplete="email" required dir="ltr" placeholder="name@example.com" value={email} onChange={e => setEmail(e.target.value)} /></div>
@@ -176,14 +177,14 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
             <div className="auth-input-wrap"><Lock size={18} /><input id="auth-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete={isSignUp ? 'new-password' : 'current-password'} required dir="ltr" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} /><button className="auth-eye" type="button" aria-label={showPassword ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'} aria-pressed={showPassword} onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></div>
             <button className="auth-submit" type="submit" disabled={isSubmitting || isGoogleLoading}>{isSubmitting ? <><span className="auth-spinner" />{isSignUp ? 'جارٍ إنشاء الحساب...' : 'جارٍ تسجيل الدخول...'}</> : <>{isSignUp ? 'إنشاء حساب' : 'تسجيل الدخول'}<ArrowRight size={18} /></>}</button>
           </form>
-          <details className="auth-demo"><summary>جرّب الواجهة من غير حساب <span>تجريبي</span></summary>
+          {!PILOT && <details className="auth-demo"><summary>جرّب الواجهة من غير حساب <span>تجريبي</span></summary>
             <p>بيانات وهمية لاختبار الواجهة فقط.</p>
             <div className="auth-demo-roles">
               <button type="button" onClick={() => openDemo('doctor', 'Demo doctor', 'Internal Medicine')}><Stethoscope size={17} />طبيب</button>
               <button type="button" onClick={() => openDemo('receptionist', 'Demo receptionist', 'Front Desk & Reception')}><Users size={17} />استقبال</button>
               <button type="button" onClick={() => openDemo('patient', 'Demo patient', 'Outpatient Consultation')}><User size={17} />مريض</button>
             </div>
-          </details>
+          </details>}
           <p className="auth-safety"><Info size={15} />{isPlaceholderAuth ? 'المعاينة متاحة. إعداد تسجيل الدخول لم يكتمل.' : 'نسخة معاينة. الحجز الفعلي وجاهزية الخدمة غير مؤكدين.'}</p>
         </section>
       </div>

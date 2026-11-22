@@ -1,3 +1,4 @@
+import {PILOT} from '../lib/pilotBackend';
 import { translate } from "../lib/clinic.i18n";
 import React, { useRef, useState } from "react";
 import {
@@ -38,6 +39,8 @@ export function BookingStepper({
   };
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
+  const [saving,setSaving] = useState(false);
+  const writeLock=useRef(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     branch: "",
@@ -69,6 +72,7 @@ export function BookingStepper({
         setError(translate(lang, "text_9317614313"));
         return;
       }
+      if(PILOT&&!/^010000000[0-9]{2}$/.test(normalizeEgyptianMobile(form.phone))){setError('استخدم رقم اختبار من 01000000000 لحد 01000000099، مش رقم حقيقي.');return;}
       if (form.date && form.date < minDate) {
         setError(translate(lang, "text_f1acab8c7c"));
         return;
@@ -82,8 +86,8 @@ export function BookingStepper({
     return (
       <div className="booking-complete" role="status">
         <CheckCircle2 size={42} />
-        <h3>{translate(lang, "text_8745013f6b")}</h3>
-        <p>{translate(lang, "text_371098e27b")}</p>
+        <h3>{PILOT ? "اتحفظ طلب التجربة" : translate(lang, "text_8745013f6b")}</h3>
+        <p>{PILOT ? "الطلب محفوظ في قاعدة التجربة. ده مش موعد طبي حقيقي." : translate(lang, "text_371098e27b")}</p>
         <button
           className="clinic-button secondary"
           onClick={() => {
@@ -99,7 +103,7 @@ export function BookingStepper({
             });
           }}
         >
-          {translate(lang, "text_3470574853")}
+          {PILOT ? "طلب تجريبي جديد" : translate(lang, "text_3470574853")}
         </button>
       </div>
     );
@@ -107,7 +111,7 @@ export function BookingStepper({
     <div className="booking-stepper">
       <div className="notice">
         <Info size={18} />
-        <p>{translate(lang, "text_7e106b8f6a")}</p>
+        <p>{PILOT ? "استخدم اسم وهمي ورقم اختبار من 01000000000 لحد 01000000099 فقط. مفيش حجز طبي حقيقي أو إرسال رسائل." : translate(lang, "text_7e106b8f6a")}</p>
       </div>
       <ol
         className="booking-progress"
@@ -128,19 +132,21 @@ export function BookingStepper({
           </li>
         ))}
       </ol>
-      <form key={step}
-        onSubmit={(event) => {
+      <form aria-busy={saving} key={step}
+        onSubmit={async (event) => {
           event.preventDefault();
           if (step < 2) advance();
           else {
             // DEV-COPY Stage 1: actually file the request into the shared
             // demo store so reception sees it (fake data, this device only).
-            addBooking({
+            if(writeLock.current)return;
+            writeLock.current=true;setSaving(true);
+            try { await addBooking({
               name: form.name,
               phone: normalizeEgyptianMobile(form.phone),
               type: form.type,
               date: form.date,
-              note: form.note,
+              note: PILOT ? "" : form.note,
             });
             setDone(true);
             setForm({
@@ -151,6 +157,7 @@ export function BookingStepper({
               date: "",
               note: "",
             });
+            } catch { setError("لم يتم حفظ الطلب. لازم تسجّل الدخول وتتأكد من الاتصال. استخدم بيانات وهمية فقط."); } finally {writeLock.current=false;setSaving(false);}
           }
         }}
         noValidate
@@ -319,21 +326,23 @@ export function BookingStepper({
                 rows={3}
                 maxLength={300}
                 placeholder={translate(lang, "text_18e28faca8")}
-                value={form.note}
+                disabled={PILOT} value={PILOT ? "" : form.note}
                 onChange={(e) => update("note", e.target.value)}
               />
             </details>
-            <p className="field-hint">{translate(lang, "text_c374473b87")}</p>
+            <p className="field-hint">{PILOT ? "طلب وهمي محفوظ في قاعدة التجربة بعد تأكيد الحفظ فقط. مش موعد طبي ومفيش تواصل أو رسائل." : translate(lang, "text_c374473b87")}</p>
           </div>
         )}
         <p className="form-error" role="alert">
           {error}
         </p>
+        {saving&&<p role="status">جاري حفظ الطلب. استنى تأكيد الحفظ، ومتقفلش الصفحة.</p>}
         <div className="booking-controls">
           {step > 0 && (
             <button
               type="button"
               className="clinic-button secondary"
+              disabled={saving}
               onClick={() => {
                 setStep((previous) => previous - 1);
                 setError("");
@@ -342,9 +351,9 @@ export function BookingStepper({
               {translate(lang, "text_92b9ba7727")}
             </button>
           )}
-          <button type="submit" className="clinic-button primary">
+          <button type="submit" disabled={saving} className="clinic-button primary">
             {step === 2
-              ? translate(lang, "text_7bf22a99f4")
+              ? (PILOT ? "حفظ طلب التجربة" : translate(lang, "text_7bf22a99f4"))
               : translate(lang, "text_4ea85cc4e9")}
             {lang === "ar" ? <ArrowLeft size={18} /> : <ArrowRight size={18} />}
           </button>

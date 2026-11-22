@@ -1,0 +1,12 @@
+import {spawn} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {dirname,join,resolve} from 'node:path';
+import {existsSync} from 'node:fs';
+const here=dirname(fileURLToPath(import.meta.url));
+const root=resolve(here,'../..');process.chdir(root);
+const local=join(here,'node_modules/firebase-tools/lib/bin/firebase.js');
+const fallback=join(root,'node_modules/firebase-tools/lib/bin/firebase.js');
+const cli=existsSync(local)?local:fallback;
+const app=process.argv[2]==='app';
+const child=spawn(process.execPath,[cli,'emulators:exec','--project','demo-ayadati-secure','--only',app?'firestore,auth':'firestore',app?'node qa/pilot/run-pilot-app-test.mjs':'node qa/pilot/test-pilot-rules.mjs'],{stdio:'inherit',env:process.env});
+child.on('exit',code=>{process.exitCode=code||0;});

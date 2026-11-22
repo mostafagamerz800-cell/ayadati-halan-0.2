@@ -1,0 +1,6 @@
+import {build} from 'vite';
+import {readFileSync,writeFileSync,copyFileSync} from 'node:fs';
+const previous=readFileSync('index.html');copyFileSync('index.source.html','index.html');
+const inventory=[];
+const collector=kind=>({name:'pilot-runtime-inventory-'+kind,generateBundle(_options,bundle){for(const [file,item] of Object.entries(bundle)){if(item.type==='chunk')inventory.push({kind,file,isEntry:item.isEntry,imports:item.imports,dynamicImports:item.dynamicImports,modules:Object.entries(item.modules).map(([id,m])=>({id,renderedLength:m.renderedLength}))});}}});
+try{await build({build:{write:false},plugins:[collector('main')],worker:{plugins:()=>[collector('worker')]}});writeFileSync('/tmp/pilot-runtime-audit.json',JSON.stringify(inventory,null,2));const exposed=inventory.flatMap(c=>c.modules.filter(m=>m.renderedLength>0&&/grpc|protobuf|onnx|transformers|sharp|asrWorker|AmbientDemo|\/src\/App.tsx/.test(m.id)));if(process.env.VITE_SECURE_PILOT==='true'&&exposed.length)throw Error('Unexpected legacy or vulnerable dependency in pilot output');console.log('Runtime inventory checked: pilot excludes gRPC, protobuf, ONNX, transformers, sharp and legacy App/audio worker.');}finally{writeFileSync('index.html',previous);}
