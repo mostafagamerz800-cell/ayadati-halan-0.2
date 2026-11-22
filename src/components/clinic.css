@@ -1,15 +1,15 @@
 /* Patient-facing UI. Deliberately scoped so existing staff workflows keep their layout. */
 .clinic-site {
-  --bg: #f7f9fc;
+  --bg: #f8f6f0;
   --surface: #fff;
-  --ink: #0b1220;
-  --ink-soft: #51607a;
-  --brand: #0f4c81;
-  --brand-deep: #070d18;
+  --ink: #173b36;
+  --ink-soft: #536b60;
+  --brand: #214f45;
+  --brand-deep: #10221f;
   --accent: #12a594;
   --whatsapp: #25d366;
   --danger: #d64545;
-  --line: #e3e8f0;
+  --line: #dce3d7;
   background: var(--bg);
   color: var(--ink);
   font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
@@ -73,12 +73,12 @@
   scroll-margin-block-start: 110px;
 }
 .section-tint {
-  background: #eef3f8;
+  background: #eff7f5;
   border-block: 1px solid var(--line);
 }
 .clinic-site :focus-visible,
 .clinic-dialog :focus-visible {
-  outline: 2px solid #087f76;
+  outline: 2px solid #ae8735;
   outline-offset: 4px;
 }
 .skip-link {
@@ -88,8 +88,8 @@
   z-index: 300;
   padding: 12px 20px;
   background: white;
-  color: #0b1220 !important;
-  border: 2px solid #0f4c81;
+  color: #173b36 !important;
+  border: 2px solid #214f45;
   border-radius: 8px;
 }
 .skip-link:focus {
@@ -216,19 +216,19 @@
 }
 /* DEV-COPY Stage 1: 60/30/10 rule — teal reserved for primary CTA actions */
 .clinic-button.primary {
-  background: #087f76;
+  background: #ae8735;
   color: white;
 }
 .clinic-button.primary:hover {
-  background: #066b63;
+  background: #92600a;
 }
 .clinic-button.secondary {
-  border-color: #c4d3e2;
-  color: #0f4c81;
+  border-color: #c6e0d8;
+  color: #214f45;
   background: white;
 }
 .clinic-button.secondary:hover {
-  background: #eef4fa;
+  background: #eff9f6;
 }
 .clinic-button.whatsapp {
   background: #25d366;
@@ -247,7 +247,7 @@
   font-size: 0.75rem !important;
 }
 .icon-button:hover {
-  background: #eaf0f6;
+  background: #ebf5f2;
 }
 .mobile-menu {
   display: none;
@@ -261,11 +261,11 @@
 }
 .hero-primary {
   background: white;
-  color: #0f4c81 !important;
+  color: #214f45 !important;
   box-shadow: 0 8px 25px #0002;
 }
 .hero-secondary {
-  border-color: #5b697e;
+  border-color: #5e7b72;
   color: #fff;
   background: #ffffff08;
 }
@@ -275,7 +275,7 @@
 .clinic-hero {
   position: relative;
   overflow: hidden;
-  background: #070d18;
+  background: #10221f;
   color: #fff;
   padding-block: 72px 64px;
 }
@@ -298,7 +298,7 @@
 }
 .hero-copy > p {
   font-size: 1rem;
-  color: #becbdb;
+  color: #c0d9d1;
   max-width: 600px;
   line-height: 1.9;
 }
@@ -306,7 +306,7 @@
   display: inline-flex;
   gap: 8px;
   align-items: center;
-  color: #c8d7e6;
+  color: #cae4dc;
   font-size: 0.75rem;
   line-height: 1.6;
   padding: 7px 14px;
@@ -332,7 +332,7 @@
   gap: 8px;
   align-items: flex-start;
   font-size: 0.72rem !important;
-  color: #a7bbd0 !important;
+  color: #aacdc2 !important;
 }
 .hero-micro svg {
   margin-top: 4px;
@@ -347,7 +347,7 @@
   gap: 8px;
   flex-wrap: wrap;
   font-size: 0.7rem;
-  color: #becbdb;
+  color: #c0d9d1;
 }
 .hero-quick > span {
   margin-inline-end: 6px;
@@ -360,7 +360,7 @@
   padding: 6px 12px;
   border: 1px solid #ffffff26;
   border-radius: 999px;
-  color: #e0ebf6;
+  color: #e2f4ef;
 }
 .hero-quick button:hover {
   background: #ffffff12;
@@ -391,12 +391,12 @@
   align-items: center;
   gap: 7px;
   font-size: 0.72rem;
-  color: #bfd0df;
+  color: #c1ddd4;
   margin: 0 12px 15px;
 }
 .visit-illustration {
-  background: linear-gradient(145deg, #fff, #f0f6fa);
-  color: #0b1220;
+  background: linear-gradient(145deg, #fff, #f1f9f7);
+  color: #173b36;
   border: 1px solid #fff;
   border-radius: 20px;
   padding: 28px;
@@ -420,7 +420,7 @@
   justify-content: center;
   border-radius: 16px;
   background: #e4f4f1;
-  color: #087f76;
+  color: #ae8735;
 }
 .preview-tag {
   font-size: 0.65rem !important;
@@ -438,12 +438,12 @@
 }
 .visit-illustration > p {
   font-size: 0.8rem !important;
-  color: #5c6b7b !important;
+  color: #5e7971 !important;
   margin: 0 0 22px;
 }
 .illustration-calendar {
   background: white;
-  border: 1px solid #e3e8f0;
+  border: 1px solid #dce3d7;
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 20px;
@@ -453,16 +453,16 @@
   gap: 8px;
   align-items: center;
   font-size: 0.75rem;
-  color: #476179;
+  color: #4b7568;
 }
 .illustration-calendar > div:first-child span {
   margin-inline-start: auto;
   font-family: Arial, sans-serif;
   font-size: 0.65rem;
-  background: #eef3f8;
+  background: #eff7f5;
   padding: 3px 8px;
   border-radius: 6px;
-  color: #486078;
+  color: #4c7468;
 }
 .calendar-dots {
   display: grid;
@@ -479,11 +479,11 @@
   border-radius: 8px;
   font-size: 0.7rem;
   font-style: normal;
-  color: #51607a;
-  background: #f7f9fc;
+  color: #536b60;
+  background: #f8f6f0;
 }
 .calendar-dots i.chosen {
-  background: #0f4c81;
+  background: #214f45;
   color: #fff;
   box-shadow: 0 3px 10px #0f4c8140;
 }
@@ -492,7 +492,7 @@
   align-items: center;
   gap: 10px;
   padding-block: 12px;
-  border-block-start: 1px solid #e2eaf1;
+  border-block-start: 1px solid #e3f0ec;
 }
 .illustration-step > span {
   width: 30px;
@@ -511,12 +511,12 @@
 }
 .illustration-step small {
   display: block;
-  color: #67798a;
+  color: #6a877e;
   font-size: 0.65rem;
 }
 .illustration-step > svg {
   margin-inline-start: auto;
-  color: #6b7e92;
+  color: #6e8f85;
 }
 .floating-note {
   position: absolute;
@@ -529,7 +529,7 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  color: #0f4c81;
+  color: #214f45;
   transform: rotate(2deg);
 }
 .floating-note b {
@@ -539,11 +539,11 @@
 .floating-note small {
   display: block;
   font-size: 0.65rem;
-  color: #51607a;
+  color: #536b60;
 }
 .visual-footnote {
   font-size: 0.65rem;
-  color: #91a9bf;
+  color: #94bcb0;
   text-align: center;
   margin-top: 30px;
 }
@@ -610,7 +610,7 @@
   gap: 8px;
   font-weight: 700 !important;
   font-size: 0.8rem !important;
-  color: #0f4c81 !important;
+  color: #214f45 !important;
   min-height: 44px;
 }
 .text-link:hover {
@@ -635,13 +635,13 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   background: white;
-  color: #51607a;
+  color: #536b60;
   text-align: start;
 }
 .journey-tabs button > span {
   font-family: Arial, sans-serif;
   font-size: 1rem;
-  color: #5c6d81;
+  color: #5f7e75;
 }
 .journey-tabs button > b {
   font-size: 0.9rem;
@@ -650,13 +650,13 @@
   margin-inline-start: auto;
 }
 .journey-tabs button[aria-selected="true"] {
-  background: #0f4c81;
-  border-color: #0f4c81;
+  background: #214f45;
+  border-color: #214f45;
   color: white;
   box-shadow: 0 8px 24px #0f4c8120;
 }
 .journey-tabs button[aria-selected="true"] > span {
-  color: #a7ccdf;
+  color: #abdbcd;
 }
 .journey-panel {
   padding: 28px 32px;
@@ -672,7 +672,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background: #eaf2f8;
+  background: #ebf7f3;
   color: var(--brand);
   margin-block-end: 18px;
 }
@@ -754,7 +754,7 @@
   border: 0;
 }
 .value-tile > svg {
-  color: #0f4c81;
+  color: #214f45;
 }
 .value-tile h3 {
   font-size: 1rem;
@@ -841,7 +841,7 @@
   font-size: 0.85rem;
 }
 .check-list svg {
-  color: #087f76;
+  color: #ae8735;
   margin-top: 4px;
 }
 .faq-section {
@@ -885,7 +885,7 @@
   margin-bottom: 4px;
 }
 .booking-section {
-  background: #eef3f8;
+  background: #eff7f5;
 }
 .booking-layout {
   display: grid;
@@ -902,7 +902,7 @@
 }
 .booking-intro em {
   font-style: normal;
-  color: #0f4c81;
+  color: #214f45;
 }
 .booking-intro > p {
   font-size: 0.9rem;
@@ -918,7 +918,7 @@
 .booking-stepper,
 .booking-complete {
   font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
-  color: #0b1220;
+  color: #173b36;
   line-height: 1.8;
   font-size: 1rem;
 }
@@ -957,7 +957,7 @@
   align-items: center;
   gap: 8px;
   flex: 1;
-  color: #6a7889;
+  color: #6c877f;
   font-size: 0.7rem;
   position: relative;
 }
@@ -967,24 +967,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #edf1f6;
-  color: #657386;
+  background: #eef5f3;
+  color: #67847b;
   border-radius: 50%;
   font-family: Arial, sans-serif;
   font-weight: 700;
 }
 .booking-progress li.active {
-  color: #0f4c81;
+  color: #214f45;
 }
 .booking-progress li.active > span {
-  background: #0f4c81;
+  background: #214f45;
   color: white;
 }
 .booking-progress li:not(:last-child):after {
   content: "";
   flex: 1;
   height: 1px;
-  background: #e3e8f0;
+  background: #dce3d7;
   margin-inline: 4px;
 }
 .step-heading {
@@ -1012,7 +1012,7 @@
 }
 .form-stack > input,
 .form-stack textarea {
-  border: 1px solid #c9d3df;
+  border: 1px solid #cfd8c9;
   background: #fff;
   border-radius: 8px;
   min-height: 48px;
@@ -1020,7 +1020,7 @@
   font: inherit;
   font-size: 0.9rem;
   width: 100%;
-  color: #0b1220;
+  color: #173b36;
   margin-bottom: 8px;
 }
 .form-stack textarea {
@@ -1029,10 +1029,10 @@
 }
 .form-stack > input:focus,
 .form-stack textarea:focus {
-  border-color: #0f4c81;
+  border-color: #214f45;
 }
 .form-stack input[type="radio"] {
-  accent-color: #0f4c81;
+  accent-color: #214f45;
   width: 17px;
   height: 17px;
   flex-shrink: 0;
@@ -1042,12 +1042,12 @@
   align-items: flex-start;
   gap: 12px;
   padding: 18px;
-  border: 1px dashed #c6d1dd;
+  border: 1px dashed #c8dbd5;
   border-radius: 8px;
-  background: #f7f9fc;
+  background: #f8f6f0;
 }
 .empty-branch > svg {
-  color: #647c92;
+  color: #678f83;
   margin-top: 3px;
 }
 .empty-branch strong {
@@ -1055,7 +1055,7 @@
 }
 .empty-branch p {
   font-size: 0.73rem;
-  color: #51607a;
+  color: #536b60;
   margin: 4px 0 0;
 }
 .visit-types {
@@ -1068,7 +1068,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  border: 1px solid #c9d3df;
+  border: 1px solid #cfd8c9;
   border-radius: 8px;
   min-height: 52px;
   padding: 12px;
@@ -1085,13 +1085,13 @@
 }
 .choice.selected,
 .branch-option.selected {
-  border-color: #0f4c81;
-  background: #eef4fa;
+  border-color: #214f45;
+  background: #eff9f6;
 }
 .field-hint {
   font-size: 0.72rem !important;
   line-height: 1.8;
-  color: #51607a !important;
+  color: #536b60 !important;
   margin: 0 0 14px !important;
 }
 .form-error {
@@ -1116,7 +1116,7 @@
   margin: 0 0 16px;
   display: grid;
   gap: 0;
-  border: 1px solid #e3e8f0;
+  border: 1px solid #dce3d7;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -1126,14 +1126,14 @@
   justify-content: space-between;
   gap: 20px;
   padding: 12px 16px;
-  border-bottom: 1px solid #e3e8f0;
+  border-bottom: 1px solid #dce3d7;
   font-size: 0.8rem;
 }
 .review-details > div:last-child {
   border: 0;
 }
 .review-details dt {
-  color: #51607a;
+  color: #536b60;
 }
 .review-details dd {
   margin: 0;
@@ -1154,19 +1154,19 @@
 }
 .booking-complete > svg {
   margin: 0 auto 20px;
-  color: #087f76;
+  color: #ae8735;
 }
 .booking-complete h3 {
   font-size: 1.3rem;
 }
 .booking-complete p {
-  color: #51607a;
+  color: #536b60;
   font-size: 0.85rem;
   margin: 16px 0 24px;
 }
 .clinic-dialog {
   font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
-  border: 1px solid #e3e8f0;
+  border: 1px solid #dce3d7;
   border-radius: 16px;
   box-shadow: 0 24px 80px #0004;
   max-width: 560px;
@@ -1174,7 +1174,7 @@
   padding: 24px 28px;
   max-height: calc(100dvh - 40px);
   overflow-y: auto;
-  color: #0b1220;
+  color: #173b36;
   background: white;
   margin: auto;
 }
@@ -1187,7 +1187,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  border-block-end: 1px solid #e3e8f0;
+  border-block-end: 1px solid #dce3d7;
   padding-bottom: 12px;
   margin-bottom: 22px;
 }
@@ -1212,8 +1212,8 @@
   text-align: start;
 }
 .drawer-nav > button[aria-current="page"] {
-  background: #edf3fa;
-  color: #0f4c81;
+  background: #eef9f6;
+  color: #214f45;
 }
 .drawer-nav > .clinic-button {
   margin-top: 12px;
@@ -1223,8 +1223,8 @@
   margin-inline-end: 16px;
 }
 .clinic-footer {
-  background: #070d18;
-  color: #e6edf5;
+  background: #10221f;
+  color: #e7f4f0;
   padding: 56px 0 24px;
 }
 .footer-top {
@@ -1242,7 +1242,7 @@
 }
 .clinic-footer p {
   font-size: 0.8rem;
-  color: #97abc1;
+  color: #9abeb3;
   max-width: 330px;
   margin-top: 18px;
 }
@@ -1254,7 +1254,7 @@
   display: block;
   min-height: 40px;
   font-size: 0.75rem;
-  color: #a9bdd0;
+  color: #accdc3;
 }
 .footer-links button:hover {
   color: white;
@@ -1266,7 +1266,7 @@
   flex-wrap: wrap;
   border-top: 1px solid #ffffff19;
   padding-top: 22px;
-  color: #91a9bf;
+  color: #94bcb0;
   font-size: 0.65rem;
 }
 .a11y-controls {
@@ -1281,13 +1281,13 @@
 }
 .a11y-trigger {
   background: white;
-  color: #0f4c81;
-  border: 1px solid #cbd7e4;
+  color: #214f45;
+  border: 1px solid #cde2dc;
   box-shadow: 0 4px 20px #0b122018;
 }
 .a11y-panel {
   background: white;
-  border: 1px solid #cbd7e4;
+  border: 1px solid #cde2dc;
   border-radius: 12px;
   padding: 8px;
   box-shadow: 0 8px 24px #0b122015;
@@ -1297,7 +1297,7 @@
   min-height: 44px;
   text-align: start;
   padding-inline: 12px;
-  color: #0f4c81;
+  color: #214f45;
   font-size: 0.8rem;
 }
 .clinic-floating-contact {
@@ -1310,7 +1310,7 @@
   flex-direction: column;
 }
 .subpage-hero {
-  background: #edf3f8;
+  background: #eef7f4;
   border-bottom: 1px solid var(--line);
   padding-block: 48px;
 }
@@ -1621,7 +1621,7 @@
     justify-content: flex-start;
     gap: 12px;
     border-inline-end: 0;
-    border-bottom: 1px solid #e3e8f0;
+    border-bottom: 1px solid #dce3d7;
     padding-block: 14px;
   }
   .journey-strip strong {
@@ -1951,16 +1951,16 @@
 }
 .verified-trust strong {
   font-size: 1.75rem;
-  color: #0f4c81;
+  color: #214f45;
   display: block;
 }
 .verified-trust span {
   font-size: 0.8rem;
-  color: #51607a;
+  color: #536b60;
 }
 .condition-number {
   font-size: 1.5rem;
-  color: #719aab;
+  color: #75a798;
   font-family: Arial, sans-serif;
 }
 .specialty-rows {
@@ -1986,14 +1986,14 @@
   grid-template-columns: 1fr;
 }
 .promo-band {
-  background: #0f4c81;
+  background: #214f45;
   color: white;
 }
 .promo-band p {
-  color: #d4e5f3;
+  color: #d6f1e9;
 }
 .promo-band .icon-tile {
-  color: #0f4c81;
+  color: #214f45;
   background: #fff;
 }
 @media (max-width: 760px) {
@@ -2047,7 +2047,7 @@
   margin: 0 0 16px;
   padding-top: 20px;
   border-top: 1px solid #ffffff19;
-  color: #b7c8d8;
+  color: #b9d6cd;
   font-size: 0.8rem;
   line-height: 1.8;
 }
@@ -2079,4 +2079,4 @@
   .illustration-calendar {
     margin-bottom: 8px;
   }
-}
+  }
