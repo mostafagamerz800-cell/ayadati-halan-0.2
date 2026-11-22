@@ -2,8 +2,8 @@
 // DEV-COPY ONLY — Stage 1 MVP panels (approved scope).
 // Reception inbox + queue panel, and patient live-status card,
 // wired to the shared dev store in lib/devSync.ts.
-// 60/30/10 palette: neutral surfaces (60), deep blue #0F4C81 family (30),
-// teal #087F76 reserved for CTA actions only (10) — see mvp.css.
+// 60/30/10 palette: neutral surfaces (60), deep blue #214f45 family (30),
+// teal #ae8735 reserved for CTA actions only (10) — see mvp.css.
 // ============================================================
 import React, { useEffect, useState } from 'react';
 import {
@@ -241,6 +241,7 @@ export const PatientMvpStatus: React.FC<{ doctorName?: string; clinicName?: stri
       <div className="patient-live-brand"><Stethoscope size={32} /><h1>{clinicName || 'عيادتي حالا'}</h1><p>أهلًا، {mine.name}</p></div>
       <section dir="rtl" className="patient-live-card" aria-label="حالة حجزي التجريبية">
         <h2 className="patient-live-label">حجزي — متابعة لحظية</h2>
+        {mine.turn != null && <><p className="patient-live-label">رقم دورك</p><p className="patient-live-turn" aria-label={`رقم دورك ${mine.turn}`}>{String(mine.turn).padStart(2, '0')}</p></>}
         {(mine.status === 'confirmed' || mine.status === 'arrived') && <p className="patient-live-label">عدد المرضى قبلك في الطابور</p>}
         {(mine.status === 'confirmed' || mine.status === 'arrived') && <>
           <p className="patient-live-number">{ahead > 0 ? `قدامك ${ahead}` : 'انت التالي'}</p>
