@@ -7,5 +7,5 @@ try {
   copyFileSync('index.source.html','index.html');
   const {build}=await import('vite');
   await build({base:'/ayadati-halan-0.2/',build:{assetsInlineLimit:10000}});
-  await import('./inline-fonts.mjs');
-} finally {writeFileSync('index.html',previous);}
+  await import('./finalize-pages.mjs');
+} catch(error) {writeFileSync('index.html',previous);throw error;}
