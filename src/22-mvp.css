@@ -1,0 +1,384 @@
+/* ============================================================
+   DEV-COPY — Stage 1 MVP palette (approved scope).
+   60/30/10 rule, derived from the existing doctor-portal palette:
+   - 60% neutral light surfaces (#f8f6f0 family)
+   - 30% deep blue #214f45 family (primary brand; remaps the sky-* scale)
+   - 10% CTA teal #ae8735 (action buttons only)
+   ============================================================ */
+
+/* Plain :root overrides (unlayered) — these beat Tailwind v4's @layer theme
+   defaults, remapping the sky-* scale onto the doctor-portal deep-blue family. */
+:root {
+  --color-sky-50: #f4f7f3;
+  --color-sky-100: #e7ede4;
+  --color-sky-200: #cfdccf;
+  --color-sky-300: #a7bfa9;
+  --color-sky-400: #6f9484;
+  --color-sky-500: #214f45;
+  --color-sky-600: #1d453c;
+  --color-sky-700: #193b33;
+  --color-sky-800: #173b36;
+  --color-sky-900: #173b36;
+  --color-sky-950: #10221f;
+}
+
+:root {
+  --mvp-primary: #214f45;   /* 30% — deep blue, doctor brand */
+  --mvp-navy: #173b36;      /* headings / strong text */
+  --mvp-muted: #536b60;     /* secondary text */
+  --mvp-bg: #f8f6f0;        /* 60% — neutral surface */
+  --mvp-line: #dce3d7;      /* hairlines */
+  --mvp-cta: #ae8735;       /* 10% — CTA teal (action only) */
+  --mvp-cta-hover: #92600a;
+  --mvp-warn: #b45309;      /* waiting status (semantic, not CTA) */
+  --mvp-danger: #a13838;    /* decline / no-show (semantic, not CTA) */
+}
+
+.mvp-card {
+  background: #ffffff;
+  border: 1px solid var(--mvp-line);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgb(11 18 32 / 0.06);
+}
+
+.mvp-cta {
+  background-color: var(--mvp-cta);
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+.mvp-cta:hover { background-color: var(--mvp-cta-hover); }
+
+/* tonal teal: secondary positive action (confirm) — filled teal stays reserved for the one key action */
+.mvp-cta-tonal {
+  background-color: #edf1e8;
+  color: var(--mvp-cta);
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+.mvp-cta-tonal:hover { background-color: #dfe6d4; }
+
+.mvp-outline {
+  border: 1.5px solid var(--mvp-primary);
+  color: var(--mvp-primary);
+  font-weight: 700;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  cursor: pointer;
+}
+.mvp-outline:hover { background: var(--mvp-bg); }
+
+.mvp-ghost {
+  color: var(--mvp-muted);
+  font-weight: 700;
+  border-radius: 0.75rem;
+  background: transparent;
+  cursor: pointer;
+}
+.mvp-ghost:hover { background: var(--mvp-bg); color: var(--mvp-navy); }
+
+.mvp-ghost-danger {
+  color: var(--mvp-danger);
+  font-weight: 700;
+  border-radius: 0.75rem;
+  background: transparent;
+  cursor: pointer;
+}
+.mvp-ghost-danger:hover { background: #fdf1ef; }
+
+.mvp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+.mvp-badge-new { background: #edf1e8; color: var(--mvp-cta); }
+.mvp-badge-confirmed { background: #e7ede4; color: var(--mvp-primary); }
+.mvp-badge-waiting { background: #fdf3e3; color: var(--mvp-warn); }
+.mvp-badge-inconsult { background: var(--mvp-cta); color: #ffffff; }
+.mvp-badge-done { background: #e9f7ee; color: #1d7a3e; }
+.mvp-badge-muted { background: var(--mvp-line); color: var(--mvp-muted); }
+
+.mvp-turn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  font-weight: 800;
+  color: var(--mvp-primary);
+  background: var(--mvp-bg);
+  border: 1px solid var(--mvp-line);
+  border-radius: 0.625rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.mvp-turn-big {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.25rem;
+  background: var(--mvp-primary);
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  box-shadow: 0 4px 10px rgb(15 76 129 / 0.25);
+}
+
+/* Competitor-grounded restructure (Nov 22): QClinic + TabibSoft patterns,
+   reviewed via adviser consultation on the actual screenshots. */
+.mvp-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #edf1e8;
+  border: 1px solid #bfe3e0;
+  border-inline-start: 4px solid var(--mvp-cta);
+}
+.mvp-hero-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: var(--mvp-cta);
+  color: #ffffff;
+  flex-shrink: 0;
+}
+/* Waiting list: compact flex rows on mobile, structured table on desktop. */
+.mvp-queue-head {
+  grid-template-columns: 56px 1fr 110px 104px 178px;
+  gap: 8px;
+  padding: 4px 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mvp-muted);
+  border-bottom: 1px solid var(--mvp-line);
+}
+.mvp-queue-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--mvp-line);
+  background: transparent;
+}
+.mvp-queue-row:last-child { border-bottom: none; }
+@media (min-width: 768px) {
+  .mvp-queue-row {
+    display: grid;
+    grid-template-columns: 56px 1fr 110px 104px 178px;
+    gap: 8px;
+  }
+}
+/* Patient screen: the one big answer — how many are ahead of me. */
+.mvp-ahead-big {
+  font-size: 46px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--mvp-cta);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 767px) {
+  .mvp-ahead-big { font-size: 38px; }
+}
+
+/* Gemini-reviewed iteration. Reception phone layout remains unchanged. */
+@media (min-width: 1024px) {
+  .reception-portal { background: #ebf5f2; }
+  .reception-workspace { max-width: 1280px; }
+  .reception-header { background: #214f45; border-color: #14523f; border-inline-start: 5px solid #c49a45; }
+  .reception-header h1, .reception-header strong { color: white; }
+  .reception-header p { color: #dce3d7; }
+  .reception-operational-grid { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr); gap: 20px; align-items: start; }
+  .reception-operational-grid > * { margin: 0; min-width: 0; }
+  .reception-inbox { grid-column: 2; grid-row: 1; }
+  .reception-queue { grid-column: 1; grid-row: 1; }
+  .reception-inbox li > div { flex-wrap: wrap; gap: 12px; }
+  .reception-inbox li p { flex-wrap: wrap; }
+  .reception-queue .mvp-hero { background: #214f45; border-color: #14523f; border-inline-start: 4px solid #c49a45; padding: 20px 16px; }
+  .reception-queue .mvp-hero p:first-child { color: #fff !important; white-space: normal; font-size: 18px; }
+  .reception-queue .mvp-hero p:last-child { color: #dce3d7 !important; margin-top: 6px; }
+  .reception-queue .mvp-hero-icon { background: #ffffff20; }
+  .reception-queue .mvp-queue-head { background: #e4f6f0; border-radius: 8px; padding: 10px; }
+  .reception-queue .mvp-queue-head, .reception-queue .mvp-queue-row { grid-template-columns: 48px minmax(70px, 1fr) 82px 94px; }
+  .reception-queue .mvp-queue-head > :nth-child(3), .reception-queue .mvp-queue-row > :nth-child(3) { display: none; }
+  .reception-queue .mvp-queue-row { padding: 16px 4px; }
+  .reception-queue .mvp-queue-row > :last-child { grid-column: 2 / -1; justify-content: flex-start; }
+  .reception-queue .mvp-badge-inconsult { background: #214f45; }
+}
+.patient-portal { background: #ebf5f2; }
+.patient-portal > header { background: #214f45; border-bottom: 4px solid #c49a45; }
+.patient-portal > header h1, .patient-portal > header svg, .patient-portal > header button { color: #fff; }
+.patient-stack { max-width: 540px; margin: 0 auto; }
+.patient-ticket { padding: 0; overflow: hidden; border-color: #bcdcd2; box-shadow: 0 12px 32px #163b6410; }
+.patient-brand { display: flex; align-items: center; gap: 12px; padding: 22px 24px; background: #214f45; color: white; border-bottom: 3px solid #c49a45; }
+.patient-brand > svg { padding: 9px; width: 48px; height: 48px; background: #ffffff18; border-radius: 14px; }
+.patient-brand p { font-size: 12px; color: #dce3d7; margin-bottom: 4px; }
+.patient-brand strong { font-size: 18px; }
+.patient-ticket > div:not(.patient-brand) { margin: 0; padding: 18px 24px; }
+.patient-context { background: #f4faf8; border-block: 1px solid #daeae5; }
+.patient-ticket .mvp-turn-big { width: 56px; height: 56px; border-radius: 12px; font-size: 24px; }
+.patient-ticket .mvp-ahead-big { color: #214f45; font-size: clamp(38px, 6vw, 56px); margin: 18px 0; }
+.patient-answer { min-height: 210px; }
+.patient-ticket .mvp-badge-inconsult { background: #214f45; }
+.patient-ticket .mvp-badge-waiting { background: #fdf6e7; color: #805d11; border: 1px solid #e5c787; }
+.patient-instructions { border-inline-start: 4px solid #214f45; background: #f4faf8; }
+.patient-ticket > p { padding: 18px 24px; margin: 0; line-height: 1.8; }
+@media (max-width: 767px) {
+  .reception-queue .mvp-hero p:first-child { white-space: normal; overflow: visible; }
+}
+/* Direct workflow reference: QClinic queue and patient live-link.
+   No competitor branding, uploads, billing, or fake unimplemented actions. */
+.reception-topnav {display:none;}
+@media(min-width:0px){
+ .reception-portal {display:block;background:#fff;padding-top:78px;}
+ .reception-portal > div:first-child {display:none;}
+ .reception-portal > .flex-1 {margin-inline-start:0;padding:30px 24px;}
+ .reception-topnav {display:block;position:absolute;top:0;inset-inline:0;height:78px;border-bottom:1px solid #dce3d7;background:white;}
+ .reception-topnav-inner {max-width:1040px;margin:auto;height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+ .reception-brand {display:flex;align-items:center;gap:12px;color:#214f45;}
+ .reception-brand strong,.reception-brand small {display:block;}
+ .reception-brand small {font-size:12px;color:#536b60;}
+ .reception-topnav nav {display:flex;gap:26px;font-size:14px;color:#36524a;}
+ .reception-workspace {max-width:1040px;}
+ .reception-header {background:transparent;border:none;box-shadow:none;border-radius:0;padding:0 0 10px;}
+ .reception-header h1,.reception-header strong {color:#173b36;}
+ .reception-header p {color:#536b60;}
+ .reception-workspace > .space-y-6 > .grid {display:none;}
+ .reception-workspace .mvp-card {border:none;box-shadow:none;padding:0;background:#fff;}
+ .reception-workspace .mvp-card > div:first-child {font-size:12px;}
+ .reception-workspace .mvp-card > div:first-child h2 {font-size:13px;color:#536b60!important;}
+ .reception-operational-grid {display:flex;flex-direction:column;gap:24px;}
+ .reception-queue {order:0;width:100%;background:white!important;border:0;padding:0;}
+ .reception-inbox {order:1;width:100%;background:#f8f6f0!important;padding:16px;}
+ .reception-queue .mvp-hero {background:#f1faf7;border:1.5px solid #c0e2d8;border-inline-start:1.5px solid #c0e2d8;padding:24px;margin:18px 0 24px;}
+ .reception-queue .mvp-hero p:first-child {color:#173b36!important;font-size:21px;}
+ .reception-queue .mvp-hero p:last-child {color:#536b60!important;font-size:13px;}
+ .reception-queue .mvp-hero-icon {background:#e2f5ef;color:#214f45;}
+ .reception-queue .mvp-hero button {padding:18px 28px;font-size:16px;}
+ .reception-queue .mvp-queue-head {display:none;}
+ .reception-queue .mvp-queue-row {display:flex;flex-wrap:nowrap;border:1px solid #dce3d7;border-radius:13px;margin:9px 0;padding:22px 18px;gap:16px;background:#fff;}
+ .reception-queue .mvp-queue-row > :nth-child(2) {flex:1;}
+ .reception-queue .mvp-queue-row > :last-child {margin-inline-start:auto;}
+ .reception-queue .mvp-queue-row:has(.mvp-badge-inconsult) {display:none;}
+ .reception-queue .mvp-turn {border:none;border-radius:50%;width:42px;height:42px;}
+}
+.patient-live-view {background:white;}
+.patient-live-view > header {display:none;}
+.patient-live-view > div:nth-child(2) {background:white;border:0;}
+.patient-live-view > div:nth-child(2) > div {max-width:580px;justify-content:center;}
+.patient-live-view main {padding-top:14px;}
+.patient-live-view .patient-stack {max-width:580px;gap:20px;}
+.patient-live-content {text-align:center;}
+.patient-live-brand {padding:10px 0 24px;}
+.patient-live-brand > svg {width:64px;height:64px;padding:15px;margin:0 auto 14px;background:#214f45;border-radius:17px;color:white;}
+.patient-live-brand h1 {font-size:27px;font-weight:700;margin-bottom:8px;color:#173b36;}
+.patient-live-brand p {font-size:19px;color:#536b60;}
+.patient-live-card {border:1px solid #dae9e4;border-radius:18px;padding:30px 24px;background:white;}
+.patient-live-label {font-size:14px;font-weight:600;color:#536b60;margin-bottom:10px;}
+.patient-live-card h2 {font-size:12px;font-weight:400;}
+.patient-live-number {font-size:58px;line-height:1.4;font-weight:700;color:#214f45;margin:2px 0 12px;}
+.patient-live-eta {font-size:16px;color:#173b36;}
+.patient-live-eta small {font-size:11px;display:block;color:#536b60;margin-top:4px;}
+.patient-live-doctor {display:flex;align-items:center;justify-content:center;gap:12px;font-size:18px;color:#536b60;margin:18px 0;}
+.patient-live-doctor > span {width:42px;height:42px;border-radius:50%;background:#ebf7f3;color:#214f45;display:flex;align-items:center;justify-content:center;}
+.patient-live-meta {display:flex;justify-content:center;align-items:center;gap:10px;font-size:13px;color:#536b60;}
+.patient-live-reassurance {font-size:14px;line-height:1.9;color:#536b60;margin-top:20px;}
+.patient-live-message {font-size:22px;line-height:1.7;font-weight:600;color:#214f45;margin:16px 0;}
+.patient-live-demo {font-size:11px;color:#76958c;margin-top:14px;}
+.patient-live-view .patient-instructions {background:white;border:1px solid #dae9e4;border-radius:18px;padding:22px;}
+@media(max-width:767px){
+ .reception-portal {padding-top:112px;}
+ .reception-topnav {height:112px;}
+ .reception-topnav-inner {flex-direction:column;align-items:stretch;gap:10px;padding:12px 18px;}
+ .reception-brand {gap:10px;}
+ .reception-brand strong {font-size:15px;}
+ .reception-topnav nav {gap:22px;font-size:12px;justify-content:center;}
+ .reception-portal > .flex-1 {padding:22px 16px;}
+ .reception-header h1 {font-size:22px;}
+ .reception-queue .mvp-hero {padding:18px;}
+ .reception-queue .mvp-hero p:first-child {font-size:17px;}
+ .reception-queue .mvp-hero button {padding:12px 22px;font-size:14px;}
+ .reception-queue .mvp-queue-row {flex-wrap:wrap;padding:16px 12px;gap:10px;}
+ .reception-queue .mvp-queue-row > :nth-child(2) {min-width:120px;}
+ .reception-queue .mvp-queue-row > :last-child {width:100%;padding-inline-start:50px;}
+ .reception-inbox li > div {flex-wrap:wrap;}
+ .reception-inbox li p {flex-wrap:wrap;}
+ .patient-live-number {font-size:44px;}
+ .patient-live-card {padding:24px 18px;}
+}
+.reception-queue .mvp-queue-row p {white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;}
+/* Role distributions from the EXISTING cream/forest/gold style guide.
+   Patient: surface-led 60 / cream supporting 30 / forest-gold focus 10.
+   Reception: forest framing 60 / cream work surfaces 30 / gold actions 10.
+   Percentages are design hierarchy, not literal pixel-area measurements. */
+.patient-portal,.reception-portal {
+ --role-cream:#f8f6f0;--role-surface:#fffefa;--role-ink:#173b36;
+ --role-muted:#536b60;--role-forest:#214f45;--role-gold:#e5bc62;
+ --role-accent:#ae8735;--role-line:#dce3d7;
+ --mvp-primary:#214f45;--mvp-navy:#173b36;--mvp-muted:#536b60;
+ --mvp-bg:#f8f6f0;--mvp-line:#dce3d7;
+}
+.patient-live-view {background:var(--role-surface);color:var(--role-ink);}
+.patient-live-view > div:nth-child(2) {background:var(--role-surface);}
+.patient-live-view button {color:var(--role-muted);}
+.patient-live-view button[class*="border-[#214f45]"] {color:var(--role-forest);border-color:var(--role-accent);}
+.patient-live-brand > svg {background:var(--role-forest);color:var(--role-gold);}
+.patient-live-brand h1 {color:var(--role-ink);}
+.patient-live-brand p,.patient-live-label,.patient-live-reassurance,.patient-live-meta,.patient-live-doctor {color:var(--role-muted);}
+.patient-live-card {background:var(--role-cream);border-color:var(--role-line);}
+.patient-live-number,.patient-live-message {color:var(--role-forest);}
+.patient-live-eta {color:var(--role-ink);}
+.patient-live-doctor > span {background:var(--role-surface);color:var(--role-forest);border:1px solid var(--role-line);}
+.patient-live-demo {color:var(--role-muted);}
+.patient-live-view .patient-instructions {background:var(--role-cream);border-color:var(--role-line);}
+.patient-live-view .patient-instructions h3,.patient-live-view .patient-instructions svg,.patient-live-view .patient-instructions strong {color:var(--role-forest);}
+.patient-live-view .patient-instructions p {color:var(--role-muted);}
+.patient-portal .mvp-badge-inconsult {background:var(--role-forest);color:var(--role-surface);}
+.patient-portal .mvp-badge-waiting {background:var(--role-gold);color:var(--role-ink);}
+.patient-portal .mvp-badge-confirmed {background:var(--role-surface);color:var(--role-forest);border:1px solid var(--role-line);}
+.reception-portal {background:var(--role-forest);color:var(--role-surface);}
+.reception-topnav {background:var(--role-forest);border-bottom-color:var(--role-muted);}
+.reception-brand,.reception-topnav nav {color:var(--role-surface);}
+.reception-brand > svg {color:var(--role-gold);}
+.reception-brand small {color:var(--role-line);}
+.reception-header h1,.reception-header strong {color:var(--role-surface);}
+.reception-header p {color:var(--role-line);}
+.reception-header .rounded-full {background:var(--role-gold);}
+.reception-workspace .mvp-card {background:transparent;}
+.reception-workspace .mvp-card > div:first-child h2,.reception-workspace .mvp-card > div:first-child span {color:var(--role-line)!important;}
+.reception-workspace .mvp-card > div:first-child svg,.reception-queue > div:first-child h3 {color:var(--role-gold)!important;}
+.reception-queue {background:transparent!important;}
+.reception-queue .mvp-hero {background:var(--role-cream);border-color:var(--role-line);border-inline-start-color:var(--role-gold);}
+.reception-queue .mvp-hero p:first-child {color:var(--role-ink)!important;}
+.reception-queue .mvp-hero p:last-child {color:var(--role-muted)!important;}
+.reception-queue .mvp-hero-icon {background:var(--role-surface);color:var(--role-forest);}
+.reception-queue .mvp-queue-row {background:var(--role-cream);border-color:var(--role-line);color:var(--role-ink);}
+.reception-queue .mvp-turn {background:var(--role-surface);color:var(--role-forest);}
+.reception-inbox {background:var(--role-cream)!important;color:var(--role-ink);border-color:var(--role-line)!important;}
+.reception-inbox li {background:var(--role-surface);}
+.reception-portal .mvp-cta {background:var(--role-gold);color:var(--role-ink);box-shadow:none;}
+.reception-portal .mvp-cta:hover {background:var(--role-accent);color:var(--role-surface);}
+.reception-portal .mvp-cta:disabled {opacity:.5;}
+.reception-portal .mvp-cta-tonal {background:var(--role-gold);color:var(--role-ink);}
+.reception-portal .mvp-outline {background:var(--role-surface);border-color:var(--role-forest);color:var(--role-forest);}
+.reception-portal .mvp-badge-waiting {background:var(--role-gold);color:var(--role-ink);}
+.reception-portal .mvp-badge-confirmed {background:var(--role-surface);color:var(--role-forest);border:1px solid var(--role-line);}
+.reception-portal .mvp-badge-inconsult {background:var(--role-forest);color:var(--role-surface);}
+.reception-portal .mvp-badge-new {background:var(--role-line);color:var(--role-forest);}
