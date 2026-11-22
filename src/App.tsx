@@ -65,10 +65,9 @@ import { AuthScreen } from './components/AuthScreen';
 import { DynamicCursor } from './components/DynamicCursor';
 import { ClinicExperience } from './components/ClinicExperience';
 import { ClinicDirectory } from './components/ClinicDirectory';
+import { ClinicIllustration } from './components/ClinicIllustration';
+import './components/clinic-polish.css';
 import { ThemeToggle } from './components/ThemeToggle';
-import receptionScene from './assets/cartoons/10-03-reception.webp';
-import consultScene from './assets/cartoons/11-04-consultation.webp';
-import doctorScene from './assets/cartoons/8-01-doctor.webp';
 
 // ==========================================
 // 0. INITIAL SAAS TENANTS & STRUCTURE
@@ -693,8 +692,8 @@ const PatientPortal: React.FC<PatientPortalProps> = ({ onBackToHome, tenant, dem
       <main className="max-w-5xl mx-auto px-4 py-8">
         {activeTab === 'dashboard' && (
           <div className="patient-stack grid gap-6 items-start">
-            <img className="portal-scene" src={consultScene} alt="" width={1238} height={928} loading="lazy" />
-            <div><PatientMvpStatus doctorName={tenant.doctorName} clinicName={tenant.clinicName} /></div>
+            <ClinicIllustration kind="ticket" className="portal-art" />
+            <div><PatientMvpStatus doctorName={tenant.doctorName} clinicName={tenant.clinicName} onBook={onBackToHome} /></div>
             <div className="patient-instructions bg-white border border-[#dce3d7] rounded-2xl p-4 flex gap-4 items-start">
               <CheckCircle2 className="text-[#214f45] shrink-0 mt-0.5" size={24} />
               <div>
@@ -912,7 +911,7 @@ const ReceptionPortal: React.FC<ReceptionPortalProps> = ({ onBackToHome, tenant,
         <div className="reception-workspace max-w-4xl mx-auto space-y-6">
           
           {/* Header Bar */}
-          <img className="portal-scene" src={receptionScene} alt="" width={1238} height={928} loading="lazy" />
+          <ClinicIllustration kind="ticket" className="portal-art" />
           <div className="reception-header bg-white p-6 rounded-2xl shadow-sm border border-[#dce3d7] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -2057,7 +2056,7 @@ const DoctorPortal: React.FC<DoctorPortalProps> = ({ onBackToHome, tenant, demoB
       <div className="max-w-5xl mx-auto space-y-6">
         
         {/* Doctor Header Bar */}
-        <img className="portal-scene" src={doctorScene} alt="" width={1238} height={928} loading="lazy" />
+        <ClinicIllustration kind="doctor" className="portal-art" />
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#dce3d7] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-[#214f45] text-white flex items-center justify-center font-bold text-xl shadow-md">
@@ -3137,4 +3136,4 @@ export default function App() {
 
     </div>
   );
-    }
+        }
