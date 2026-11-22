@@ -1,3 +1,4 @@
+import {PILOT,pilotBookings,pilotSubscribe,pilotLastId,ownPilotBooking,pilotRole,addPilotBooking,updatePilotBooking,confirmPilot,callPilot,finishPilot} from './pilotBackend';
 // ============================================================
 // DEV-COPY ONLY — Stage 1 local implementation (approved scope).
 // Shared booking store for the booking -> reception -> queue -> turn chain.
@@ -44,6 +45,7 @@ function channel(): BroadcastChannel | null {
 }
 
 export function loadBookings(): MvpBooking[] {
+  if(PILOT) return pilotBookings();
   // Fresh copy: listener-driven re-renders rely on reference change even
   // when the underlying cache array was not rebuilt (patient mirror path).
   if (FS_MODE) return [...fsCache];
@@ -83,7 +85,7 @@ function persist(list: MvpBooking[]) {
 // confirming an already-confirmed request keeps its turn; two
 // concurrent confirms never share a turn.
 // ============================================================
-const FS_MODE =
+const FS_MODE = !PILOT &&
   typeof window !== 'undefined' &&
   ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname) &&
   new URLSearchParams(window.location.search).get('backend') === 'firestore';
@@ -177,7 +179,7 @@ function attachOwnListener(id: string) {
   }, (err: any) => { console.error('MVP own-booking listener failed', err); fsOwnBooking = null; (window as any).__mvpOwnBooking = null; (window as any).__mvpOwnError = String(err); localListeners.forEach((fn) => fn()); });
 }
 
-export function isFsListDenied(): boolean { return fsListDenied; }
+export function isFsListDenied(): boolean { return PILOT ? pilotRole()==='patient' : fsListDenied; }
 export function getFsPublicQueue() { return fsPublicCache; }
 export function getFsOwnBooking(): MvpBooking | null { return fsOwnBooking; }
 
@@ -198,6 +200,7 @@ async function fsRun(mutate: () => Promise<void>) {
 // can never share a turn; a repeated confirm keeps the existing turn.
 const FS_COUNTER = 'clinics/demo-clinic-1/meta/turnCounter';
 export async function confirmBookingFs(id: string): Promise<void> {
+ if(PILOT) return confirmPilot(id);
   await fsRun(async () => {
     await fsApi.runTransaction(fsDb, async (tx: any) => {
       const ref = fsApi.doc(fsDb, FS_COL, id);
@@ -225,6 +228,7 @@ export async function confirmBookingFs(id: string): Promise<void> {
 // can never seat a second patient; reception finishes the current one first.
 const FS_QSTATE = 'clinics/demo-clinic-1/meta/queueState';
 export async function callNextFs(): Promise<void> {
+ if(PILOT) return callPilot();
   await fsRun(async () => {
     for (let attempt = 0; attempt < 5; attempt++) {
       const snap = await fsApi.getDocs(fsApi.collection(fsDb, FS_COL));
@@ -232,7 +236,7 @@ export async function callNextFs(): Promise<void> {
       // must also block admission. Concurrent new entries are serialized below.
       if (snap.docs.some((d: any) => d.data().status === 'in-consult')) return;
       const candidate = snap.docs
-        .map((d: any) => ({ id: d.id, ...(d.data() as MvpBooking) }))
+        .map((d: any) => ({ ...(d.data() as MvpBooking), id: d.id }))
         .filter((b: MvpBooking) => b.status === 'arrived' || b.status === 'confirmed')
         .sort((a: MvpBooking, b: MvpBooking) => (a.turn ?? 99) - (b.turn ?? 99))[0];
       if (!candidate) return;
@@ -267,6 +271,7 @@ export async function callNextFs(): Promise<void> {
 
 // Finish the in-consult patient and free the examination room atomically.
 export async function finishBookingFs(id: string): Promise<void> {
+ if(PILOT) return finishPilot(id);
   await fsRun(async () => {
     await fsApi.runTransaction(fsDb, async (tx: any) => {
       const stateRef = fsApi.doc(fsDb, FS_QSTATE);
@@ -336,7 +341,7 @@ export async function callNextLocal(): Promise<void> {
   }
 }
 
-export const isFsMode = () => FS_MODE;
+export const isFsMode = () => PILOT || FS_MODE;
 
 if (FS_MODE) {
   void initFs();
@@ -350,7 +355,8 @@ export function addBooking(data: {
   type: string;
   date: string;
   note: string;
-}): MvpBooking {
+}): MvpBooking | Promise<MvpBooking> {
+  if(PILOT) return addPilotBooking(data);
   const booking: MvpBooking = {
     id: `mvp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
     name: data.name,
@@ -389,6 +395,7 @@ export function addBooking(data: {
 }
 
 export function getLastBookingId(): string | null {
+ if(PILOT) return pilotLastId();
   try {
     return localStorage.getItem(MVP_LAST_KEY);
   } catch {
@@ -400,6 +407,7 @@ export function updateBooking(
   id: string,
   patch: Partial<Pick<MvpBooking, 'status' | 'turn'>>,
 ) {
+  if(PILOT) { void updatePilotBooking(id,patch).catch(()=>{}); return; }
   if (FS_MODE) {
     // optimistic cache; reverted automatically if the rules deny the write
     fsCache = fsCache.map((b) => (b.id === id ? { ...b, ...patch, updatedAt: Date.now() } : b));
@@ -430,6 +438,7 @@ export function nextTurn(list: MvpBooking[]): number {
 
 // Subscribe to live changes (BroadcastChannel + storage event fallback).
 export function subscribeBookings(onChange: () => void): () => void {
+ if(PILOT) return pilotSubscribe(onChange);
   if (FS_MODE) void initFs();
   const c = channel();
   const handler = () => onChange();
@@ -445,6 +454,7 @@ export function subscribeBookings(onChange: () => void): () => void {
 
 // Dev-screenshot / demo seeding: two fake bookings through the chain.
 export function seedMvpDemo() {
+ if(PILOT) return;
   if (FS_MODE) return; // emulator mode seeds after the first snapshot (see initFs)
   if (loadBookings().length > 0) return;
   const now = Date.now();
