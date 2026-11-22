@@ -6,8 +6,8 @@
 
 @layer base {
   ::selection {
-    background-color: #bae6fd;
-    color: #0369a1;
+    background-color: #f0d79a;
+    color: #173b36;
   }
 
   /* Custom Light Blue & White Scrollbar */
@@ -16,15 +16,15 @@
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: #f0f9ff;
+    background: #edf1e8;
   }
   ::-webkit-scrollbar-thumb {
-    background: #7dd3fc;
+    background: #e5bc62;
     border-radius: 9999px;
-    border: 2px solid #f0f9ff;
+    border: 2px solid #edf1e8;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #38bdf8;
+    background: #ae8735;
   }
 }
 
@@ -33,13 +33,13 @@
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .glow-on-hover:hover {
-  box-shadow: 0 10px 30px -5px rgba(14, 165, 233, 0.25);
-  border-color: #7dd3fc;
+  box-shadow: 0 10px 30px -5px rgba(174, 135, 53, 0.25);
+  border-color: #e5bc62;
   transform: translateY(-2px);
 }
 
 /* Shared accessibility and responsive controls, without changing portal behavior. */
-html{font-family:'Cairo',Tahoma,Arial,sans-serif;scroll-padding-top:100px}body{margin:0}button,a,input,select,textarea{touch-action:manipulation}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #087f76;outline-offset:3px}.legacy-switcher{max-width:calc(100vw - 32px);overflow-x:auto}.directory-filter{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:white;border:1px solid #e3e8f0;padding:20px;border-radius:12px;font-size:.85rem;margin-bottom:24px}.directory-filter select{min-height:48px;border:1px solid #c9d3df;border-radius:8px;padding:8px 12px;max-width:100%;background:#fff;color:#0b1220;margin-inline-start:auto}.directory-count{font-size:.8rem;margin-bottom:20px!important}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html{font-family:'Cairo',Tahoma,Arial,sans-serif;scroll-padding-top:100px}body{margin:0}button,a,input,select,textarea{touch-action:manipulation}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #ae8735;outline-offset:3px}.legacy-switcher{max-width:calc(100vw - 32px);overflow-x:auto}.directory-filter{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:white;border:1px solid #dce3d7;padding:20px;border-radius:12px;font-size:.85rem;margin-bottom:24px}.directory-filter select{min-height:48px;border:1px solid #cfd8c9;border-radius:8px;padding:8px 12px;max-width:100%;background:#fff;color:#173b36;margin-inline-start:auto}.directory-count{font-size:.8rem;margin-bottom:20px!important}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 :root { --font-sans:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif; }
 html,body,.font-sans,.clinic-app,.clinic-warm { font-family:var(--font-sans);font-synthesis:none; }
 button,input,select,textarea {font-family:inherit;}
