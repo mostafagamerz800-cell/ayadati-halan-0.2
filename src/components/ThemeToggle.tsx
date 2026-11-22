@@ -11,7 +11,7 @@ function readTheme(): 'light' | 'dark' {
   }
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({inline=false}:{inline?:boolean}) {
   const [theme, setTheme] = useState<'light' | 'dark'>(readTheme);
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -21,7 +21,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      className="theme-toggle"
+      className={inline ? 'theme-toggle theme-toggle-inline' : 'theme-toggle'}
       onClick={() => setTheme(dark ? 'light' : 'dark')}
       aria-label={dark ? 'التبديل إلى الوضع الفاتح' : 'التبديل إلى الوضع الداكن'}
       title={dark ? 'الوضع الفاتح' : 'الوضع الداكن'}
