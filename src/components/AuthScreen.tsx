@@ -102,7 +102,7 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0F9FF] via-[#E0F2FE] to-[#F8FCFF] relative flex items-center justify-center p-4 sm:p-6 font-sans text-sky-950 selection:bg-sky-200 selection:text-sky-900 overflow-hidden">
+    <div className="auth-root min-h-screen bg-gradient-to-br from-[#edf1e8] via-[#edf1e8] to-[#f9fefc] relative flex items-center justify-center p-4 sm:p-6 font-sans text-sky-950 selection:bg-sky-200 selection:text-sky-900 overflow-hidden">
       
       {/* Soft Ambient Light Blue Glowing Blobs */}
       <div className="absolute top-10 left-1/4 w-96 h-96 bg-sky-300/20 rounded-full blur-3xl pointer-events-none" />
@@ -123,7 +123,7 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
           </p>
         </div>
 
-        {onPreviewClinic && <button type="button" onClick={onPreviewClinic} className="w-full mb-4 min-h-12 rounded-full bg-[#0F4C81] text-white text-sm font-bold px-5 py-3">استكشف واجهة العيادة الجديدة · Clinic preview</button>}
+        {onPreviewClinic && <button type="button" onClick={onPreviewClinic} className="w-full mb-4 min-h-12 rounded-full bg-[#214f45] text-white text-sm font-bold px-5 py-3">استكشف واجهة العيادة الجديدة · Clinic preview</button>}
 
         {/* Connection configuration is not proof of backend security or live bookings. */}
         {!isPlaceholderAuth ? (
@@ -150,7 +150,7 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
         )}
 
         {/* Main Card */}
-        <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(14,165,233,0.15)] border border-sky-100 overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(174,135,53,0.15)] border border-sky-100 overflow-hidden">
           
           {/* Top Toggle: Sign In vs Sign Up */}
           <div className="grid grid-cols-2 p-1.5 bg-sky-50/70 border-b border-sky-100 gap-1 text-center font-bold text-xs sm:text-sm">
@@ -512,7 +512,7 @@ export const AuthScreen: React.FC<{ onPreviewClinic?: () => void }> = ({ onPrevi
 
         {/* Bottom subtle copyright */}
         <p className="text-center text-xs text-sky-700/60 mt-6">
-          &copy; {new Date().getFullYear()} Ayadati Halan • Light Blue & White Medical Theme
+          &copy; {new Date().getFullYear()} Ayadati Halan • Cream & Forest Medical Theme
         </p>
       </div>
     </div>
